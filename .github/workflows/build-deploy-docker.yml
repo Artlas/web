@@ -1,6 +1,8 @@
 name: Build & publish to Github Registry
 
 on:
+    pull_request:
+        branches: ["main"]
     push:
         branches: ["main"]
 
@@ -11,6 +13,18 @@ jobs:
         steps:
             - name: Check out the repo
               uses: actions/checkout@v3
+
+            - name: Determine Tag
+              run: |
+                  echo "TAG=staging" >> $GITHUB_ENV
+                  echo "docker=artlas-staging" >> $GITHUB_ENV
+              if: github.event_name == 'pull_request'
+
+            - name: Determine Tag2
+              run: |
+                  echo "TAG=prod" >> $GITHUB_ENV
+                  echo "docker=artlas-production" >> $GITHUB_ENV
+              if: github.event_name != 'pull_request'
 
             - name: Set up Python
               uses: actions/setup-python@v4
