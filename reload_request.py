@@ -15,4 +15,9 @@ json = {
     'tag': sys.argv[2]
 } 
 x = requests.post("https://docker.fournierfamily.ovh/to_reload",headers=headers, json=json)
-print(x.content.decode("utf-8"))
+result = x.content.decode("utf-8")
+print(result)
+if(int(result) == 200):
+    exit(0)
+else:
+    exit(1)
