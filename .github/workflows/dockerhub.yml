@@ -2,9 +2,9 @@ name: Build & publish to dockerhub
 
 on:
     push:
-        branches: ["master"]
+        branches: ["main"]
     pull_request:
-        branches: ["master"]
+        branches: ["main"]
 
 jobs:
     push_to_registry:
