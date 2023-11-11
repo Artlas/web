@@ -40,5 +40,5 @@ jobs:
               run: |
                   pip3 install google-auth
                   export IAP_CLIENT_ID=${{ secrets.IAP_CLIENT_ID }}
-                  export GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GCP_SERVICE_ACCOUNT}}
+                  export GOOGLE_APPLICATION_CREDENTIALS=service_account_deploy.json
                   python3 reload_request.py artlas-production prod
