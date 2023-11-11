@@ -28,6 +28,14 @@ jobs:
                   push: true
                   tags: ghcr.io/artlas/web:prod
 
+            - name: install and decrypt ejson
+              run: |
+                  wget https://github.com/Shopify/ejson/releases/download/v1.4.1/ejson_1.4.1_linux_amd64.tar.gz
+                  tar -xf ejson_1.4.1_linux_amd64.tar.gz
+                  mkdir -p /opt/ejson/keys
+                  echo ${{ secrets.EJSON_PRIVATE }} > /opt/ejson/keys/${{ secrets.EJSON_PUBLIC }}
+                  ./ejson decrypt service_account_deploy.ejson -o service_account_deploy.json
+
             - name: "Reload docker on server"
               run: |
                   pip3 install google-auth
