@@ -12,6 +12,9 @@ jobs:
             - name: Check out the repo
               uses: actions/checkout@v3
 
+            - name: Set up Python
+              uses: actions/setup-python@v4
+
             - name: Login to Docker Hub
               uses: docker/login-action@v3
               with:
@@ -24,3 +27,10 @@ jobs:
               with:
                   push: true
                   tags: ghcr.io/artlas/web:prod
+
+            - name: "Reload docker on server"
+              run: |
+                  pip3 install google-auth
+                  export IAP_CLIENT_ID=${{ secrets.IAP_CLIENT_ID }}
+                  export GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GCP_SERVICE_ACCOUNT}}
+                  python3 reload_request.py artlas-production prod
