@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@font-face {
+  font-family: "New Horizon Titling W00 Light";
+  src: url("https://db.onlinewebfonts.com/t/117cc20fd2d8937eae876e90db01c0f5.eot");
+  src: url("https://db.onlinewebfonts.com/t/117cc20fd2d8937eae876e90db01c0f5.eot?#iefix")format("embedded-opentype"),
+  url("https://db.onlinewebfonts.com/t/117cc20fd2d8937eae876e90db01c0f5.woff2")format("woff2"),
+  url("https://db.onlinewebfonts.com/t/117cc20fd2d8937eae876e90db01c0f5.woff")format("woff"),
+  url("https://db.onlinewebfonts.com/t/117cc20fd2d8937eae876e90db01c0f5.ttf")format("truetype"),
+  url("https://db.onlinewebfonts.com/t/117cc20fd2d8937eae876e90db01c0f5.svg#New Horizon Titling W00 Light")format("svg");
+}
+
+@font-face {
+  font-family: "Felix Titling MT Std";
+  src: url("https://db.onlinewebfonts.com/t/71fffac3911b878d86cd3cd9b3a18038.eot");
+  src: url("https://db.onlinewebfonts.com/t/71fffac3911b878d86cd3cd9b3a18038.eot?#iefix")format("embedded-opentype"),
+  url("https://db.onlinewebfonts.com/t/71fffac3911b878d86cd3cd9b3a18038.woff2")format("woff2"),
+  url("https://db.onlinewebfonts.com/t/71fffac3911b878d86cd3cd9b3a18038.woff")format("woff"),
+  url("https://db.onlinewebfonts.com/t/71fffac3911b878d86cd3cd9b3a18038.ttf")format("truetype"),
+  url("https://db.onlinewebfonts.com/t/71fffac3911b878d86cd3cd9b3a18038.svg#Felix Titling MT Std")format("svg");
+}
