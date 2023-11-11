@@ -40,7 +40,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   push: true
-                  tags: ghcr.io/artlas/web:prod
+                  tags: ghcr.io/artlas/web:${{ env.TAG }}
 
             - name: install and decrypt ejson
               run: |
@@ -55,4 +55,4 @@ jobs:
                   pip3 install google-auth
                   export IAP_CLIENT_ID=${{ secrets.IAP_CLIENT_ID }}
                   export GOOGLE_APPLICATION_CREDENTIALS=service_account_deploy.json
-                  python3 reload_request.py artlas-production prod
+                  python3 reload_request.py ${{ env.docker }} ${{ env.TAG }}
