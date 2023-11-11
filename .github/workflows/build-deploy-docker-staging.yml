@@ -1,7 +1,7 @@
 name: Build & publish to Github Registry
 
 on:
-    push:
+    pull_request:
         branches: ["main"]
 
 jobs:
@@ -23,4 +23,4 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   push: true
-                  tags: ghcr.io/artlas/web:prod
+                  tags: ghcr.io/artlas/web:staging
