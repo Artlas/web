@@ -13,7 +13,7 @@ json = {
     'name': sys.argv[1],
     'image': 'ghcr.io/artlas/web',
     'tag': sys.argv[2]
-} 
+}
 x = requests.post("https://docker.fournierfamily.ovh/to_reload",headers=headers, json=json)
 result = x.content.decode("utf-8")
 print(result)
