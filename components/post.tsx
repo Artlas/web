@@ -28,7 +28,7 @@ export default function Post({ title, description, mediaUrl }: PostProps) {
                 <Image src={mediaUrl} alt={title} layout="fill" objectFit="cover" className="rounded-lg" />
             </div>
             <div className="p-4">
-                <p className="text-gray-600 dark:text-slate-300">{description}</p>
+                <p className="text-gray-600 dark:text-slate-200">{description}</p>
                 <div className="flex justify-between items-center mt-4">
                     <button className={`flex items-center space-x-2 ${liked ? "text-red-500" : "text-gray-500 dark:text-slate-300"}`} onClick={handleLikeClick}>
                         <FaHeart className="h-5 w-5" />
