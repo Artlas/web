@@ -1,4 +1,3 @@
-"use client";
 import { useState } from "react";
 import { FaHeart, FaShareAlt, FaPlusCircle, FaCheckCircle } from "react-icons/fa";
 import Image from "next/image";
@@ -12,15 +11,12 @@ interface PostProps {
 export default function Post({ title, description, mediaUrl }: PostProps) {
     const [liked, setLiked] = useState(false);
     const [listed, setListed] = useState(false);
-
     const handleLikeClick = () => {
         setLiked(!liked);
     };
-
     const handleListClick = () => {
         setListed(!listed);
     };
-
     return (
         <div className="bg-white dark:bg-black rounded-xl shadow-lg dark:shadow-none border dark:border-stone-700 p-4 mt-4">
             <h2 className="text-lg font-bold mb-2">{title}</h2>
@@ -30,23 +26,23 @@ export default function Post({ title, description, mediaUrl }: PostProps) {
             <div className="p-4">
                 <p className="text-gray-600 dark:text-slate-200">{description}</p>
                 <div className="flex justify-between items-center mt-4">
-                    <button className={`flex items-center space-x-2 ${liked ? "text-red-500" : "text-gray-500 dark:text-slate-300"}`} onClick={handleLikeClick}>
+                    <button className={`flex items-center space-x-2 ${liked ? "text-red-500" : "text-gray-500 dark:text-slate-300"}`} onClick={handleLikeClick} type="button">
                         <FaHeart className="h-5 w-5" />
                         <span className="sr-only">{"J'aime"}</span>
                     </button>
-                    <button className={`flex items-center space-x-2 ${listed ? "text-black dark:text-white" : "text-gray-500 dark:text-slate-300"}`} onClick={handleListClick}>
+                    <button className={`flex items-center space-x-2 ${listed ? "text-black dark:text-white" : "text-gray-500 dark:text-slate-300"}`} onClick={handleListClick} type="button">
                         {listed ? (
                             <div className="flex flex-row justify-between gap-2">
-                                <FaCheckCircle className="h-5 w-5" /> <span>Dans ma liste</span>
+                                <FaCheckCircle className="h-5 w-5" /> <span className="hidden sm:flex">Dans ma liste</span>
                             </div>
                         ) : (
                             <div className="flex flex-row justify-between gap-2">
                                 <FaPlusCircle className="h-5 w-5" />
-                                <span>Ajouter à ma liste</span>
+                                <span className="hidden sm:flex">Ajouter à ma liste</span>
                             </div>
                         )}
                     </button>
-                    <button className="flex items-center space-x-2 text-gray-500 dark:text-slate-300">
+                    <button className="flex items-center space-x-2 text-gray-500 dark:text-slate-300" type="button">
                         <FaShareAlt className="h-5 w-5" />
                         <span>Partager</span>
                     </button>
