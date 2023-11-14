@@ -2,8 +2,11 @@ import SideNavigation from "./sideNavigation";
 import Image from "next/image";
 import Link from "next/link";
 import { SlMenu } from "react-icons/sl";
-import { FaUserCircle, FaCompass, FaPlus, FaSearch, FaUser } from "react-icons/fa";
-import { HiLibrary } from "react-icons/hi";
+import { FaUserCircle } from "react-icons/fa";
+import { FaCompass, FaRegCompass, FaUser, FaRegUser } from "react-icons/fa6";
+import { HiLibrary, HiOutlineLibrary } from "react-icons/hi";
+import { PiPlusBold, PiPlus } from "react-icons/pi";
+import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -85,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <div className="relative flex flex-col w-full bg-white dark:bg-black ">
             <div className="text-black dark:text-white h-screen flex w-full bg-white dark:bg-black">
-                <div className={`${sidePanel ? "flex" : "hidden"} w-[275px] h-full flex-col bg-stone-100 dark:bg-stone-950 z-[60]`}>
+                <div className={`${sidePanel ? "translate-x-0 w-[275px]" : "translate-x-[-275px] w-[0px]"}  h-full flex flex-col bg-stone-100 dark:bg-stone-950 z-[60]  ease-in-out duration-300`}>
                     <div className="inline-flex dark:hidden flex-col pt-2 text-gray-600 dark:text-gray-200 my-6 px-8">
                         <Link href="/">
                             <Image src="/ARtlas2_short.png" alt="Artlas logo" width={340} height={148} />
@@ -102,13 +105,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
                 <div className="flex flex-1 flex-col overflow-y-auto">
                     <div
-                        className={`sticky top-0 flex flex-shrink-0 bg-stone-100 dark:bg-stone-950 h-[75px] text-black dark:text-white ${""} z-30 border-b-2 border-solid border-stone-200 dark:border-stone-800 `}
+                        className={`sticky top-0 flex flex-shrink-0 bg-stone-100 dark:bg-stone-950 h-[55px] sm:h-[75px] text-black dark:text-white ${""} z-30 border-b-2 border-solid border-stone-200 dark:border-stone-800 `}
                     >
                         <div className="z-50 flex flex-shrink-0 w-full">
                             <button
                                 type="button"
                                 px-2
-                                className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker px-5 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
+                                className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker px-[11px] sm:px-5 sm:ml-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                                 onClick={() => {
                                     setSidePanel(!sidePanel);
                                 }}
@@ -126,7 +129,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                                         onClick={() => handleUserMenu()}
                                     >
-                                        {user ? <></> : <FaUserCircle size={44} />}
+                                        {user ? <></> : <FaUserCircle size={44} className="w-8 h-8 sm:w-11 sm:h-11" />}
                                         <span className="sr-only">Open user menu</span>
                                     </button>
                                 </div>
@@ -146,41 +149,47 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         </div>
                     </div>
                     <nav
-                        className={`sm:hidden sticky bottom-0 flex flex-shrink-0 bg-stone-100 dark:bg-stone-950 h-[75px] text-black dark:text-white ${""} z-30 border-t-2 border-solid border-stone-200 dark:border-stone-800 justify-between px-2 py-1`}
+                        className={`sm:hidden sticky bottom-0 flex flex-shrink-0 bg-stone-100 dark:bg-stone-950 h-[55px] text-black dark:text-white ${
+                            sidePanel ? "blur-xl pointer-events-none brightness-75 sm:brightness-100 " : "pointer-events-auto brightness-100"
+                        } z-30 border-t-2 border-solid border-stone-200 dark:border-stone-800 justify-between px-2 py-1`}
                     >
                         <Link
                             href="/"
-                            className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
+                            className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 mt-[1px] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                         >
-                            <HiLibrary size={50} />
+                            {name !== "discover" && name !== "newpost" && name !== "search" && name !== "profile" && name !== "404" ? (
+                                <HiLibrary size={44} className="w-[36px] h-[36px]" />
+                            ) : (
+                                <HiOutlineLibrary size={44} className="w-[36px] h-[36px]" />
+                            )}
                             <span className="sr-only">Accueil</span>
                         </Link>
                         <Link
                             href="/discover"
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                         >
-                            <FaCompass size={44} />
+                            {name === "discover" ? <FaCompass size={44} className="w-7 h-7" /> : <FaRegCompass size={44} className="w-7 h-7" />}
                             <span className="sr-only">Decouvrir</span>
                         </Link>
                         <Link
                             href="/newpost"
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                         >
-                            <FaPlus size={44} />
+                            {name === "newpost" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
                             <span className="sr-only">Poster</span>
                         </Link>
                         <Link
                             href="/search"
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                         >
-                            <FaSearch size={44} />
+                            {name === "search" ? <IoSearch size={44} className="w-7 h-7 " /> : <IoSearchOutline size={44} className="w-7 h-7 " />}
                             <span className="sr-only">Rechercher</span>
                         </Link>
                         <Link
                             href="/profile"
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                         >
-                            <FaUser size={44} />
+                            {name === "profile" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
                             <span className="sr-only">Profil</span>
                         </Link>
                     </nav>

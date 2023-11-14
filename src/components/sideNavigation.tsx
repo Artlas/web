@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import { useState, useEffect } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function SideNavigation({ navigationInfo, reducedPanel }: Props) {
-    const [categories, setCategories] = React.useState(navigationInfo.categories);
+    const [categories, setCategories] = useState(navigationInfo.categories);
 
     function handleCategory(name: string) {
         setCategories(categories.map((category) => (category.name === name ? { ...category, isShown: !category.isShown } : category)));
@@ -23,6 +23,11 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
     const routeName = useRouter().pathname.split("/")[1];
     const currentCategory = useRouter().query.category;
     const currentSubCategory = useRouter().query.subcategory;
+
+    useEffect(() => {
+        setCategories(categories.map((category) => (category.name !== currentCategory ? { ...category, isShown: false } : category)));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [navigationInfo, currentCategory]);
 
     return (
         <div className="flex flex-col w-full text-black dark:text-white mt-2 ">
@@ -40,7 +45,7 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                             } border-2 focus:rounded-lg focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none`}
                             type="button"
                         >
-                            <span>Mon Feed</span>
+                            <span className="md:text-xl">Mon Feed</span>
                         </Link>
                     </div>
                     {categories.map((category) => {
@@ -55,7 +60,7 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                                     } focus:rounded-lg focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none`}
                                     type="button"
                                 >
-                                    <span>
+                                    <span className="md:text-xl">
                                         {category.name
                                             .split(" ")
                                             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -76,12 +81,9 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                                                                     ? "font-bold"
                                                                     : ""
                                                                 : "hover:text-stone-800 dark:hover:text-stone-300 hover:font-bold"
-                                                        }  `}
+                                                        } md:text-lg `}
                                                     >
-                                                        {item
-                                                            .split(" ")
-                                                            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                                                            .join(" ")}
+                                                        {item === "all" ? "Tous" : item.charAt(0).toUpperCase() + item.slice(1)}
                                                     </span>
                                                 </Link>
                                             );
