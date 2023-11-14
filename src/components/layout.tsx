@@ -1,3 +1,4 @@
+import SideNavigation from "./sideNavigation";
 import Image from "next/image";
 import Link from "next/link";
 import { SlMenu } from "react-icons/sl";
@@ -6,7 +7,15 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-    const name = useRouter().pathname.split("/")[1];
+    let name = useRouter().pathname.split("/")[1];
+    const currentCategory = useRouter().query.category;
+    const currentSubCategory = useRouter().query.subcategory;
+    if (name[0] === "[") {
+        if (currentCategory && currentSubCategory) {
+            if (currentSubCategory !== "all") name = currentCategory + " / " + currentSubCategory;
+            else name = String(currentCategory);
+        }
+    }
     const [sectionName, setSectionName] = useState(name || "Artlas");
     const [user, setUser] = useState(null);
 
@@ -22,8 +31,58 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     //TODO: Nav bar
 
+    const navigationInfo = {
+        categories: [
+            {
+                name: "cinema",
+                items: ["all", "films", "series", "courts-metrages"],
+                isShown: false,
+            },
+            {
+                name: "musique",
+                items: ["all", "musiques", "albums", "artistes"],
+                isShown: false,
+            },
+            {
+                name: "arts plastiques",
+                items: ["all", "peintures", "sculptures", "dessins", "gravures"],
+                isShown: false,
+            },
+            {
+                name: "arts de la scene",
+                items: ["all", "theatre", "danse", "opera", "cirque"],
+                isShown: false,
+            },
+            {
+                name: "litterature",
+                items: ["all", "livres", "romans", "poesie", "bandes dessinees", "mangas"],
+                isShown: false,
+            },
+            {
+                name: "photographie",
+                items: ["all", "photos", "photographes"],
+                isShown: false,
+            },
+            {
+                name: "architecture",
+                items: ["all", "batiments", "architectes"],
+                isShown: false,
+            },
+            {
+                name: "jeux video",
+                items: ["all", "jeux", "developpeurs", "consoles", "steam", "pc"],
+                isShown: false,
+            },
+            {
+                name: "cuisine",
+                items: ["all", "française", "italienne", "japonaise", "chinoise", "indienne", "mexicaine", "espagnole", "americaine", "vegane", "vegetarienne"],
+                isShown: false,
+            },
+        ],
+    };
+
     return (
-        <div className="relative flex flex-col w-full bg-white dark:bg-black">
+        <div className="relative flex flex-col w-full bg-white dark:bg-black ">
             <div className="text-black dark:text-white h-screen flex w-full bg-white dark:bg-black">
                 <div className={`${sidePanel ? "flex" : "hidden"} w-[275px] h-full flex-col bg-stone-100 dark:bg-stone-950 z-[60]`}>
                     <div className="inline-flex dark:hidden flex-col pt-2 text-gray-600 dark:text-gray-200 my-6 px-8">
@@ -36,7 +95,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <Image src="/ARtlas3_short.png" alt="Artlas logo dark" width={340} height={148} />
                         </Link>
                     </div>
-                    <nav className="flex-1 pb-4 items-stretch flex flex-col h-full overflow-y-auto"></nav>
+                    <nav className="flex-1 pb-4 items-stretch flex flex-col h-full overflow-y-auto">
+                        <SideNavigation navigationInfo={navigationInfo} reducedPanel={false} />
+                    </nav>
                 </div>
                 <div className="flex flex-1 flex-col overflow-y-auto">
                     <div
