@@ -14,6 +14,8 @@ interface Props {
     reducedPanel: boolean;
 }
 
+//TODO: For SM screens, the side navigation labels should be hidden and replaced by icons
+
 export default function SideNavigation({ navigationInfo, reducedPanel }: Props) {
     const [categories, setCategories] = useState(navigationInfo.categories);
 

@@ -1,4 +1,5 @@
 import SideNavigation from "./sideNavigation";
+import SearchBar from "./searchbar";
 import Image from "next/image";
 import Link from "next/link";
 import { SlMenu } from "react-icons/sl";
@@ -21,16 +22,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }
     }
     const [sectionName, setSectionName] = useState(name || "Artlas");
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<{ name: string } | null>(null);
 
     useEffect(() => {
         setSectionName(name || "Artlas");
     }, [name]);
     const [sidePanel, setSidePanel] = useState(true);
-    const [userMenu, setUserMenu] = useState(true);
+    const [userMenu, setUserMenu] = useState(false);
+    const [mobileUserMenu, setMobileUserMenu] = useState(false);
 
     const handleUserMenu = () => {
         setUserMenu(!userMenu);
+    };
+
+    const handleMobileUserMenu = () => {
+        setMobileUserMenu(!mobileUserMenu);
     };
 
     //TODO: Nav bar
@@ -123,16 +129,73 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 <h1 className="text-lg md:text-3xl hidden sm:flex items-center truncate flex-1 font-artlas-logo">{sectionName}</h1>
                             </div>
                             <div className="flex items-center justify-end gap-4 pr-4">
-                                <div className="flex flex-shrink-0 items-center gap-4">
+                                <div className="hidden sm:flex flex-shrink-0 items-center gap-4">
+                                    <SearchBar placeholder="Rechercher" />
+                                    <Link
+                                        href="/discover"
+                                        className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
+                                    >
+                                        <FaCompass size={43} />
+                                    </Link>
                                     <button
                                         type="button"
                                         className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                                         onClick={() => handleUserMenu()}
                                     >
-                                        {user ? <></> : <FaUserCircle size={44} className="w-8 h-8 sm:w-11 sm:h-11" />}
+                                        {user ? <div className="w-[44px] h-[44px] rounded-full bg-stone-300 dark:bg-stone-700"></div> : <FaUserCircle size={44} className="w-8 h-8 sm:w-11 sm:h-11" />}
                                         <span className="sr-only">Open user menu</span>
                                     </button>
                                 </div>
+                                <div className="flex sm:hidden items-center justify-center w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800">
+                                    <Image src="/Logo seul.png" alt="Artlas logo" width={40} height={40} className="rounded-full" />
+                                </div>
+                                {userMenu && (
+                                    <div
+                                        className={`absolute right-0 ${
+                                            user ? "mt-[262px]" : "mt-[118px]"
+                                        } w-48 bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-b-md border-2 border-solid border-t-0 border-stone-200 dark:border-stone-800 z-50 overflow-hidden`}
+                                    >
+                                        <div className="py-1">
+                                            {user ? (
+                                                <div>
+                                                    <Link href="/profile" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800">
+                                                        Profil
+                                                    </Link>
+                                                    <Link href="/friends" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800">
+                                                        Mes amis
+                                                    </Link>
+                                                    <Link href="/mylists" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800">
+                                                        Mes listes
+                                                    </Link>
+                                                    <Link href="/settings" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800">
+                                                        Paramètres
+                                                    </Link>
+                                                    {/* <Link href="/logout" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800">
+                                                Déconnexion
+                                            </Link>
+                                            //TODO: Temporary, remove when login is implemented*/}
+                                                    <button
+                                                        onClick={() => setUser(null)}
+                                                        className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
+                                                    >
+                                                        Déconnexion
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                // <Link href="/login" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800">
+                                                //     Connexion
+                                                // </Link>
+                                                // TODO: Temporary, remove when login is implemented
+                                                <button
+                                                    onClick={() => setUser({ name: "oui" })}
+                                                    className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
+                                                >
+                                                    Connexion
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="hidden sm:flex absolute pointer-events-none rounded-tl-3xl w-[40px] z-40 top-[73px] h-[calc(100vh-75px)] border-2 border-l-1 border-r-0 border-b-0 border-solid  border-stone-200 dark:border-stone-800 shadow-[-10px_-10px_0px_0px_rgba(0,0,0,0.3)] shadow-stone-100 dark:shadow-[#0c0a09]" />
@@ -143,7 +206,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 sidePanel ? "blur-xl pointer-events-none brightness-75 sm:brightness-100 " : "pointer-events-auto brightness-100"
                             }  sm:blur-none sm:pointer-events-auto`}
                         >
-                            <div className="flex  bg-white dark:bg-black min-h-screen h-full w-full p-8">
+                            <div className="flex  bg-white dark:bg-black min-h-screen h-full w-full p-8 z-50">
                                 <div className="w-full">{children}</div>
                             </div>
                         </div>
@@ -157,7 +220,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             href="/"
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 mt-[1px] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                         >
-                            {name !== "discover" && name !== "newpost" && name !== "search" && name !== "profile" && name !== "404" ? (
+                            {name !== "discover" && name !== "newpost" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" ? (
                                 <HiLibrary size={44} className="w-[36px] h-[36px]" />
                             ) : (
                                 <HiOutlineLibrary size={44} className="w-[36px] h-[36px]" />
@@ -186,10 +249,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <span className="sr-only">Rechercher</span>
                         </Link>
                         <Link
-                            href="/profile"
+                            href={user ? "/mobileUserMenu" : "/login"}
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                         >
-                            {name === "profile" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                            {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
                             <span className="sr-only">Profil</span>
                         </Link>
                     </nav>
