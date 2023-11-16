@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Post from "../components/post";
+import { useState, useEffect } from "react";
 
 export default function Home() {
     return (

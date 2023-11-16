@@ -28,6 +28,7 @@ export default function SearchBar({ placeholder }: SearchBarProps) {
                 className="flex rounded-r-full px-4 py-2 md:px-6 lg:px-7 bg-black dark:bg-white border-2 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                 type="submit"
                 onClick={handleSearch}
+                id="searchButton"
             >
                 <IoSearchOutline className="w-5 h-5 md:w-6 md:h-6 xl:w-7 xl:h-7" />
                 <span className="sr-only">Rechercher</span>

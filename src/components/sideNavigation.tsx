@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
@@ -6,8 +7,10 @@ import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 interface Props {
     navigationInfo: {
         categories: {
+            id: number;
             name: string;
             items: string[];
+            miniatureLink: string;
             isShown: boolean;
         }[];
     };
@@ -34,7 +37,61 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
     return (
         <div className="flex flex-col w-full text-black dark:text-white mt-2 ">
             {reducedPanel ? (
-                <></>
+                <div className="space-y-2">
+                    <div>
+                        <Link
+                            href={"/monfeed"}
+                            className={`flex flex-row justify-between items-center p-2 mx-4 rounded-full overflow-hidden ${
+                                routeName === "monfeed"
+                                    ? "bg-black dark:bg-white border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black"
+                                    : "bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800"
+                            } border-2 focus:rounded-full focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none`}
+                            type="button"
+                            id="monfeedNavigationLink"
+                        >
+                            <Image src="" alt="MonFeed" width={24} height={24} />
+                        </Link>
+                    </div>
+                    {categories.map((category) => {
+                        return (
+                            <div className="flex flex-col text-black dark:text-white" key={category.name + "Small" + category.id}>
+                                <button
+                                    onClick={() => handleCategory(category.name)}
+                                    className={`flex flex-row justify-between items-center mx-4 rounded-full overflow-hidden border-2 ${
+                                        category.isShown
+                                            ? "bg-black dark:bg-white border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black"
+                                            : "bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800"
+                                    } focus:rounded-full focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none`}
+                                    type="button"
+                                    id={category.name + "CategoryNavigationButtonSmall" + category.id}
+                                >
+                                    <Image src={category.miniatureLink} alt={category.name} width={40} height={40} className="rounded-full" />
+                                    <span className="sr-only">{category.name}</span>
+                                </button>
+
+                                {category.isShown ? (
+                                    <div className="flex flex-col mx-6">
+                                        {category.items.map((item) => {
+                                            return (
+                                                <Link
+                                                    href={"/" + category.name + "/" + item}
+                                                    className="flex flex-row justify-between items-center"
+                                                    key={category.name + item}
+                                                    type="button"
+                                                    id={category.name + item + "NavigationLinkSmall"}
+                                                >
+                                                    <Image src="/Star-Wars-Prequels.jpg" alt={item} width={15} height={15} className="mb-1 mt-2 mx-auto rounded-full" />
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
             ) : (
                 <div className="space-y-2 ">
                     <div>
@@ -46,13 +103,14 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                                     : "bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800"
                             } border-2 focus:rounded-lg focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none`}
                             type="button"
+                            id="monfeedNavigationLink"
                         >
                             <span className="md:text-xl">Mon Feed</span>
                         </Link>
                     </div>
                     {categories.map((category) => {
                         return (
-                            <div className="flex flex-col text-black dark:text-white" key={category.name}>
+                            <div className="flex flex-col text-black dark:text-white" key={category.name + category.id}>
                                 <button
                                     onClick={() => handleCategory(category.name)}
                                     className={`flex flex-row justify-between items-center p-2 mx-4 rounded-lg border-2 ${
@@ -61,6 +119,7 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                                             : "bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800"
                                     } focus:rounded-lg focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none`}
                                     type="button"
+                                    id={category.name + "CategoryNavigationButton" + category.id}
                                 >
                                     <span className="md:text-xl">
                                         {category.name
@@ -75,7 +134,13 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                                     <div className="flex flex-col mx-6">
                                         {category.items.map((item) => {
                                             return (
-                                                <Link href={"/" + category.name + "/" + item} className="flex flex-row justify-between items-center" key={category.name + item} type="button">
+                                                <Link
+                                                    href={"/" + category.name + "/" + item}
+                                                    className="flex flex-row justify-between items-center"
+                                                    key={category.name + item}
+                                                    type="button"
+                                                    id={category.name + item + "NavigationLink"}
+                                                >
                                                     <span
                                                         className={`${
                                                             currentSubCategory === item
