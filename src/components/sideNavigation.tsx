@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
+import { TbPhotoCircle } from "react-icons/tb";
 
 interface Props {
     navigationInfo: {
@@ -16,8 +17,6 @@ interface Props {
     };
     reducedPanel: boolean;
 }
-
-//TODO: For SM screens, the side navigation labels should be hidden and replaced by icons
 
 export default function SideNavigation({ navigationInfo, reducedPanel }: Props) {
     const [categories, setCategories] = useState(navigationInfo.categories);
@@ -41,15 +40,15 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                     <div>
                         <Link
                             href={"/monfeed"}
-                            className={`flex flex-row justify-between items-center p-2 mx-4 rounded-full overflow-hidden ${
+                            className={`flex flex-row justify-between items-center mx-4 rounded-full overflow-hidden border-2 ${
                                 routeName === "monfeed"
                                     ? "bg-black dark:bg-white border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black"
                                     : "bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800"
-                            } border-2 focus:rounded-full focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none`}
+                            } focus:rounded-full focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none`}
                             type="button"
-                            id="monfeedNavigationLink"
+                            id="monfeedNavigationLinkSmall"
                         >
-                            <Image src="" alt="MonFeed" width={24} height={24} />
+                            <TbPhotoCircle className="text-4xl m-[1px]" />
                         </Link>
                     </div>
                     {categories.map((category) => {
@@ -75,12 +74,14 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                                             return (
                                                 <Link
                                                     href={"/" + category.name + "/" + item}
-                                                    className="flex flex-row justify-between items-center"
+                                                    className={`flex flex-row justify-between items-center rounded-full mb-1 mt-2 py-[5px]  ${
+                                                        currentSubCategory === item ? "border border-black dark:border-white" : ""
+                                                    }`}
                                                     key={category.name + item}
                                                     type="button"
                                                     id={category.name + item + "NavigationLinkSmall"}
                                                 >
-                                                    <Image src="/Star-Wars-Prequels.jpg" alt={item} width={15} height={15} className="mb-1 mt-2 mx-auto rounded-full" />
+                                                    <Image src={`https://picsum.photos/4${category.id}`} alt={item} width={15} height={15} className="mx-auto rounded-full" />
                                                 </Link>
                                             );
                                         })}

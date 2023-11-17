@@ -85,7 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         if (size.width < 1024 && size.width > 640) {
             setReducedPanel(true);
         }
-    }, [size]);
+    }, [size, name]);
 
     const handleSidePanel = () => {
         setSidePanel(!sidePanel);
@@ -99,63 +99,63 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 id: 1,
                 name: "cinema",
                 items: ["all", "films", "series", "courts-metrages"],
-                miniatureLink: "/ARtlas4.png",
+                miniatureLink: "https://picsum.photos/100",
                 isShown: false,
             },
             {
                 id: 2,
                 name: "musique",
                 items: ["all", "musiques", "albums", "artistes"],
-                miniatureLink: "/ARtlas4.png",
+                miniatureLink: "https://picsum.photos/200",
                 isShown: false,
             },
             {
                 id: 3,
                 name: "arts plastiques",
                 items: ["all", "peintures", "sculptures", "dessins", "gravures"],
-                miniatureLink: "/ARtlas4.png",
+                miniatureLink: "https://picsum.photos/201",
                 isShown: false,
             },
             {
                 id: 4,
                 name: "arts de la scene",
                 items: ["all", "theatre", "danse", "opera", "cirque"],
-                miniatureLink: "",
+                miniatureLink: "https://picsum.photos/202",
                 isShown: false,
             },
             {
                 id: 5,
                 name: "litterature",
                 items: ["all", "livres", "romans", "poesie", "bandes dessinees", "mangas"],
-                miniatureLink: "",
+                miniatureLink: "https://picsum.photos/203",
                 isShown: false,
             },
             {
                 id: 6,
                 name: "photographie",
                 items: ["all", "photos", "photographes"],
-                miniatureLink: "",
+                miniatureLink: "https://picsum.photos/204",
                 isShown: false,
             },
             {
                 id: 7,
                 name: "architecture",
                 items: ["all", "batiments", "architectes"],
-                miniatureLink: "",
+                miniatureLink: "https://picsum.photos/205",
                 isShown: false,
             },
             {
                 id: 8,
                 name: "jeux video",
                 items: ["all", "jeux", "developpeurs", "consoles", "steam", "pc"],
-                miniatureLink: "",
+                miniatureLink: "https://picsum.photos/206",
                 isShown: false,
             },
             {
                 id: 9,
                 name: "cuisine",
                 items: ["all", "française", "italienne", "japonaise", "chinoise", "indienne", "mexicaine", "espagnole", "americaine", "vegane", "vegetarienne"],
-                miniatureLink: "",
+                miniatureLink: "https://picsum.photos/207",
                 isShown: false,
             },
         ],
@@ -169,14 +169,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         !sidePanel && !reducedPanel ? "translate-x-[-275px] w-[0px]" : ""
                     } ${!sidePanel && reducedPanel ? "translate-x-[-75px] w-[0px]" : ""} h-full flex flex-col bg-stone-100 dark:bg-stone-950 z-[60]  ease-in-out duration-300`}
                 >
-                    <div className="inline-flex dark:hidden flex-col pt-2 text-gray-600 dark:text-gray-200 my-6 px-8">
+                    <div className={`inline-flex dark:hidden flex-col pt-2 text-gray-600 dark:text-gray-200 ${!reducedPanel ? "my-6 px-8" : " mx-auto"}`}>
                         <Link href="/" id="openHomePageLightLink">
-                            <Image src="/ARtlas2_short.png" alt="Artlas logo" width={340} height={148} />
+                            {!reducedPanel ? (
+                                <Image src="/ARtlas2_short.png" alt="Artlas logo" width={size.width < 640 ? "153" : "340"} height={size.width < 640 ? "67" : "148"} />
+                            ) : (
+                                <Image src="/ARtlas1_no_bg.png" alt="Artlas logo" width={70} height={70} className="" />
+                            )}
                         </Link>
                     </div>
-                    <div className="hidden dark:inline-flex flex-col pt-2 text-gray-600 dark:text-gray-200 my-6 px-8">
+                    <div className={`hidden dark:inline-flex flex-col pt-2 text-gray-600 dark:text-gray-200 ${!reducedPanel ? "my-6 px-8" : " mx-auto"}`}>
                         <Link href="/" id="openHomePageDarkLink">
-                            <Image src="/ARtlas3_short.png" alt="Artlas logo dark" width={340} height={148} />
+                            {!reducedPanel ? (
+                                <Image src="/ARtlas3_short_no_bg.png" alt="Artlas logo" width={size.width < 640 ? "153" : "340"} height={size.width < 640 ? "67" : "148"} />
+                            ) : (
+                                <Image src="/ARtlas4_no_bg.png" alt="Artlas logo" width={70} height={70} className="" />
+                            )}
                         </Link>
                     </div>
                     <nav className="flex-1 pb-4 items-stretch flex flex-col h-full overflow-y-auto justify-between">
@@ -185,7 +193,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             {reducedPanel ? (
                                 <button
                                     onClick={() => setReducedPanel(false)}
-                                    className="flex flex-row justify-between items-center mx-4 rounded-lg overflow-hidden border-2  bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800  focus:rounded-lg focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none"
+                                    className="flex flex-row justify-between items-center mx-4 rounded-lg overflow-hidden border-2  mt-1 bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800  focus:rounded-lg focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none"
                                     type="button"
                                     id="reduceCategoryNavigationButton"
                                 >
@@ -195,7 +203,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             ) : (
                                 <button
                                     onClick={() => setReducedPanel(true)}
-                                    className="flex flex-row justify-between items-center p-2 mx-4 rounded-lg border-2 bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800
+                                    className="flex flex-row justify-between items-center p-2 mx-4 rounded-lg border-2 mt-2 bg-stone-200 dark:bg-stone-900 border-stone-300 dark:border-stone-700 hover:bg-stone-300 dark:hover:bg-stone-800
                                 focus:rounded-lg focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 focus:outline-none w-full"
                                     type="button"
                                     id="developpCategoryNavigationButton"
