@@ -1,9 +1,10 @@
 import { UserContext } from "./userContext";
 import Layout from "./layout";
 import Login from "../pages/login";
-import { useState, useContext } from "react";
+import Signup from "../pages/signup";
+import { useContext } from "react";
 
 export default function LoginHandler({ children }: { children: React.ReactNode }) {
-    const { user, userNeeded, connected } = useContext(UserContext);
-    return userNeeded && !connected ? <Login></Login> : <Layout>{children}</Layout>;
+    const { user, userNeeded, connected, signup } = useContext(UserContext);
+    return userNeeded && !connected ? signup ? <Signup /> : <Login /> : <Layout>{children}</Layout>;
 }

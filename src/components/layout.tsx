@@ -307,6 +307,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                         onClick={() => logout()}
                                                         className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="logoutButton"
+                                                        type="button"
                                                     >
                                                         Déconnexion
                                                     </button>

@@ -7,6 +7,8 @@ interface UserContextState {
     userNeeded: boolean;
     setUserNeeded: (value: boolean) => void;
     connected: boolean;
+    signup: boolean;
+    setSignup: (value: boolean) => void;
 }
 
 // Define the type for the user information
@@ -24,6 +26,8 @@ export const UserContext = createContext<UserContextState>({
     userNeeded: false,
     setUserNeeded: () => {},
     connected: false,
+    signup: false,
+    setSignup: () => {},
 });
 
 // Create a provider component to wrap your app with the user context
@@ -31,6 +35,7 @@ export const UserProvider: React.FC = ({ children }: any) => {
     const [user, setUser] = useState<UserInfo | null>(null);
     const [userNeeded, setUserNeeded] = useState<boolean>(false);
     const [connected, setConnected] = useState<boolean>(false);
+    const [signup, setSignup] = useState<boolean>(false);
 
     // Function to handle user login
     const login = (username: string, password: string) => {
@@ -43,6 +48,8 @@ export const UserProvider: React.FC = ({ children }: any) => {
         };
         setUser(user);
         setConnected(true);
+        setSignup(false);
+
         console.log("Login successful with username: " + username + " and password: " + password + "");
         console.log("User info: ", user);
     };
@@ -56,5 +63,5 @@ export const UserProvider: React.FC = ({ children }: any) => {
         setConnected(false);
     };
 
-    return <UserContext.Provider value={{ user, login, logout, userNeeded, setUserNeeded, connected }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ user, login, logout, userNeeded, setUserNeeded, connected, signup, setSignup }}>{children}</UserContext.Provider>;
 };
