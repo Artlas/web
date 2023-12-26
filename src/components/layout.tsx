@@ -1,5 +1,6 @@
 import SideNavigation from "./sideNavigation";
 import SearchBar from "./searchbar";
+import { UserContext } from "./userContext";
 import Image from "next/image";
 import Link from "next/link";
 import { SlMenu } from "react-icons/sl";
@@ -10,9 +11,10 @@ import { PiPlusBold, PiPlus } from "react-icons/pi";
 import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { TbLayoutSidebarLeftExpandFilled, TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const { user, logout, setUserNeeded, connected, userNeeded } = useContext(UserContext);
     let name = useRouter().pathname.split("/")[1];
     const currentCategory = useRouter().query.category;
     const currentSubCategory = useRouter().query.subcategory;
@@ -23,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }
     }
     const [sectionName, setSectionName] = useState(name || "Artlas");
-    const [user, setUser] = useState<{ name: string } | null>(null);
+    //const [user, setUser] = useState<{ name: string } | null>(null);
 
     function useWindowSize() {
         // Initialize state with undefined width/height so server and client renders match
@@ -91,7 +93,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         setSidePanel(!sidePanel);
     };
 
-    //TODO: Nav bar
+    const handleConnect = () => {
+        setUserNeeded(true);
+        console.log("needed ?" + userNeeded + " connected? " + connected);
+    };
 
     const navigationInfo = {
         categories: [
@@ -222,7 +227,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <div className="z-50 flex flex-shrink-0 w-full">
                             <button
                                 type="button"
-                                px-2
                                 className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker px-[11px] sm:px-5 sm:ml-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                                 onClick={() => {
                                     handleSidePanel();
@@ -270,28 +274,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                     <Link
                                                         href="/profile"
                                                         className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
-                                                        id="openProfileMobileLink"
+                                                        id="openProfileLink"
                                                     >
                                                         Profil
                                                     </Link>
                                                     <Link
                                                         href="/friends"
                                                         className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
-                                                        id="openFriendsMobileLink"
+                                                        id="openFriendsLink"
                                                     >
                                                         Mes amis
                                                     </Link>
                                                     <Link
                                                         href="/mylists"
                                                         className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
-                                                        id="openMyListsMobileLink"
+                                                        id="openMyListsLink"
                                                     >
                                                         Mes listes
                                                     </Link>
                                                     <Link
                                                         href="/settings"
                                                         className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
-                                                        id="openSettingsMobileLink"
+                                                        id="openSettingsLink"
                                                     >
                                                         Paramètres
                                                     </Link>
@@ -300,9 +304,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                             </Link>
                                             //TODO: Temporary, remove when login is implemented*/}
                                                     <button
-                                                        onClick={() => setUser(null)}
+                                                        onClick={() => logout()}
                                                         className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
-                                                        id="logoutMobileButton"
+                                                        id="logoutButton"
                                                     >
                                                         Déconnexion
                                                     </button>
@@ -313,9 +317,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                 // </Link>
                                                 // TODO: Temporary, remove when login is implemented
                                                 <button
-                                                    onClick={() => setUser({ name: "oui" })}
+                                                    onClick={() => handleConnect()}
                                                     className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
-                                                    id="loginMobileButton"
+                                                    id="loginButton"
                                                 >
                                                     Connexion
                                                 </button>
