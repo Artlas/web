@@ -353,7 +353,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 mt-[1px] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                             id="openHomePageMobileLink"
                         >
-                            {name !== "discover" && name !== "newpost" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" ? (
+                            {name !== "discover" && name !== "poster" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" ? (
                                 <HiLibrary size={44} className="w-[36px] h-[36px]" />
                             ) : (
                                 <HiOutlineLibrary size={44} className="w-[36px] h-[36px]" />
@@ -369,11 +369,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <span className="sr-only">Decouvrir</span>
                         </Link>
                         <Link
-                            href="/newpost"
+                            href="/poster"
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                             id="openNewpostMobileLink"
                         >
-                            {name === "newpost" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
+                            {name === "poster" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
                             <span className="sr-only">Poster</span>
                         </Link>
                         <Link
