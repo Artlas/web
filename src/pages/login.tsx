@@ -17,7 +17,6 @@ const LoginPage: React.FC = () => {
         // TODO: Perform login logic here
         login(username, password);
         console.log("Login successful with username: " + username + " and password: " + password + "");
-        redirect();
     };
 
     const loginGoogle = () => {

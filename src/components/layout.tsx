@@ -243,6 +243,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 <div className="hidden sm:flex flex-shrink-0 items-center gap-4">
                                     <SearchBar placeholder="Rechercher" />
                                     <Link
+                                        href="/poster"
+                                        className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
+                                        id="openNewpostMobileLink"
+                                    >
+                                        <PiPlusBold size={43} />
+                                    </Link>
+                                    <Link
                                         href="/discover"
                                         className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                                         id="openDiscoverLink"
@@ -299,10 +306,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                     >
                                                         Paramètres
                                                     </Link>
-                                                    {/* <Link href="/logout" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800" id="logoutMobileLink">
-                                                Déconnexion
-                                            </Link>
-                                            //TODO: Temporary, remove when login is implemented*/}
                                                     <button
                                                         onClick={() => logout()}
                                                         className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
@@ -313,14 +316,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                     </button>
                                                 </div>
                                             ) : (
-                                                // <Link href="/login" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800" id="loginMobileLink">
-                                                //     Connexion
-                                                // </Link>
-                                                // TODO: Temporary, remove when login is implemented
                                                 <button
                                                     onClick={() => handleConnect()}
                                                     className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                     id="loginButton"
+                                                    type="button"
                                                 >
                                                     Connexion
                                                 </button>
@@ -384,14 +384,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             {name === "search" ? <IoSearch size={44} className="w-7 h-7 " /> : <IoSearchOutline size={44} className="w-7 h-7 " />}
                             <span className="sr-only">Rechercher</span>
                         </Link>
-                        <Link
-                            href={user ? "/mobileUserMenu" : "/login"}
-                            className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
-                            id="openUserMenuMobileLink"
-                        >
-                            {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
-                            <span className="sr-only">Profil</span>
-                        </Link>
+                        {connected ? (
+                            <Link
+                                href={"/mobileUserMenu"}
+                                className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
+                                id="openUserMenuMobileLink"
+                            >
+                                {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                                <span className="sr-only">Profil</span>
+                            </Link>
+                        ) : (
+                            <button
+                                onClick={() => handleConnect()}
+                                className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
+                                id="loginMobileButton"
+                                type="button"
+                            >
+                                {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                                <span className="sr-only">Profil</span>
+                            </button>
+                        )}
                     </nav>
                 </div>
             </div>
