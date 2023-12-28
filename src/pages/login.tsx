@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-black text-black dark:text-white">
-            <div className="bg-white dark:bg-stone-900 p-2 rounded shadow-md">
+            <div className="bg-white dark:bg-stone-900 p-2 rounded shadow-md" id="loginForm">
                 <button
                     id="loginCloseButton"
                     className=" dark:bg-black bg-stone-100 dark:border-black border-white dark:hover:bg-stone-800 hover:bg-stone-200 dark:text-white text-black px-3 py-2 rounded-full"

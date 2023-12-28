@@ -332,7 +332,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         </div>
                         <div className="hidden sm:flex absolute pointer-events-none rounded-tl-3xl w-[40px] z-40 top-[73.2px] h-[calc(100vh-75px)] border-2 border-l-1 border-r-0 border-b-0 border-solid  border-stone-200 dark:border-stone-800 shadow-[-10px_-10px_0px_0px_rgba(0,0,0,0.3)] shadow-stone-100 dark:shadow-[#0c0a09]" />
                     </div>
-                    <div className="flex flex-1 flex-col bg-stone-100 dark:bg-stone-950">
+                    <div className="flex flex-1 flex-col bg-stone-100 dark:bg-stone-950" id="HomeView">
                         <div
                             className={`flex flex-col flex-grow  ${
                                 sidePanel ? "blur-xl pointer-events-none brightness-75 sm:brightness-100 " : "pointer-events-auto brightness-100"
