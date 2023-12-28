@@ -141,7 +141,7 @@ export default function Poster({ category, subcategory }: Props) {
                         id="categoryInputPostCreationForm"
                         value={selectedCategory}
                         onChange={handleCategoryChange}
-                        className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
+                        className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-pointer appearance-none"
                         required
                     >
                         <option value="">Choisir une catégorie</option>
@@ -161,7 +161,7 @@ export default function Poster({ category, subcategory }: Props) {
                             id="subcategoryInputPostCreationForm"
                             value={selectedSubcategory}
                             onChange={handleSubcategoryChange}
-                            className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
+                            className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-pointer appearance-none"
                             required
                         >
                             <option value="">Choisir une sous-catégorie</option>
@@ -182,7 +182,7 @@ export default function Poster({ category, subcategory }: Props) {
                         id="dateInputPostCreationForm"
                         value={date}
                         onChange={handleDateChange}
-                        className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
+                        className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-text"
                     />
                 </div>
 
@@ -228,7 +228,7 @@ export default function Poster({ category, subcategory }: Props) {
                             multiple
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
+                            className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-pointer"
                         />
                     </div>
                 ) : (
