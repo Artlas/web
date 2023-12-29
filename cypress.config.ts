@@ -16,6 +16,7 @@ function getConfig() {
 }
 
 export default defineConfig({
+  projectId: '9kayp7',
     e2e: {
         setupNodeEvents(on, config) {
             // implement node event listeners here
