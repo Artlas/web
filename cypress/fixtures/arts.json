@@ -1,0 +1,33 @@
+{
+    "arts": [
+        {
+            "type": "Cinema",
+            "categories": ["*", "Films", "Series", "Courts-metrages"]
+        },
+        {
+            "type": "Musique",
+            "categories": ["*", "Musique", "Albums", "Artistes"]
+        },
+        {
+            "type": "Arts Plastiques",
+            "categories": ["*", "Peintures", "Sculptures", "Dessins", "Gravures"]
+        },
+        {
+            "type": "Litterature",
+            "categories": ["*", "Livres", "Romans", "Poesie", "Bandes dessinnees", "Mangas"]
+        },
+        {
+            "type": "Architectures",
+            "categories": ["*", "Batiments", "Architectes"]
+        },
+
+        {
+            "type": "Jeux vidéo",
+            "categories": ["*", "Jeux", "Developpeurs", "Consoles", "Steam", "Pc"]
+        },
+        {
+            "type": "Cuisine",
+            "categories": ["*", "Française", "Italienne", "Japonaise", "Chinoise", "Indienne", "Mexicaine", "Espagnole", "Americaine", "Vegane", "Vegetarienne"]
+        }
+    ]
+}
