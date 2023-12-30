@@ -33,6 +33,25 @@ Cypress.Commands.add("login", (idUser, userPassword) => {
     cy.contains("Bienvenue sur Artlas");
     cy.checkIfLoggedIn();
 });
+Cypress.Commands.add("loginWithBasicUser", () => {
+    cy.get("#openUserMenuButton").click();
+    cy.get("#loginButton").should("exist");
+    cy.get("#loginButton").click();
+    cy.get("#loginForm").should("exist");
+    cy.get("#usernameLoginInput").should("exist");
+    cy.get("#passwordLoginInput").should("exist");
+    const idUser = Cypress.env("baseIdUser")
+    const userPassword= Cypress.env("baseUserPassword");
+    cy.get("#usernameLoginInput").type(idUser);
+    cy.get("#passwordLoginInput").type(userPassword);
+    console.log("ID Utilisateur :" + idUser);
+    console.log("Mot de passe :" + userPassword);
+    cy.get("#loginLoginButton").should("exist");
+    cy.get("#loginLoginButton").click();
+    cy.get("#HomeView").should("exist");
+    cy.contains("Bienvenue sur Artlas");
+    cy.checkIfLoggedIn();
+});
 
 Cypress.Commands.add("logout", () => {
     cy.get("#openUserMenuButton").click();
@@ -100,6 +119,7 @@ declare global {
         interface Chainable {
             customVisitHomePage(): Chainable<void>;
             login(idUser: string, userPassword: string): Chainable<void>;
+            loginWithBasicUser(): Chainable<void>;
             checkForLoginPossibilities(): Chainable<void>;
             checkIfLoggedIn(): Chainable<void>;
             displayFriendsMenu(): Chainable<void>;
