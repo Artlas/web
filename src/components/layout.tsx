@@ -237,7 +237,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 <SlMenu size={24} />
                             </button>
                             <div className="flex-1 flex justify-end sm:justify-between z-40 gap-4 px-2">
-                                <h1 className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-3xl hidden sm:flex items-center truncate flex-1 font-artlas-logo">{sectionName}</h1>
+                                <h1 className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-3xl hidden sm:flex items-center truncate flex-1 font-artlas-logo selection:bg-stone-900 selection:text-stone-100 selection:dark:bg-white selection:dark:text-stone-900 ">
+                                    {sectionName}
+                                </h1>
                             </div>
                             <div className="flex items-center justify-end gap-4 pr-4">
                                 <div className="hidden sm:flex flex-shrink-0 items-center gap-4">
@@ -339,7 +341,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             }  sm:blur-none sm:pointer-events-auto`}
                         >
                             <div className="flex  bg-white dark:bg-black min-h-screen h-full w-full p-8 z-50">
-                                <div className="w-full">{children}</div>
+                                <div className="w-full selection:bg-stone-900 selection:text-stone-100 selection:dark:bg-white selection:dark:text-stone-900 ">{children}</div>
                             </div>
                         </div>
                     </div>

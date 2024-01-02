@@ -228,7 +228,9 @@ export default function Poster({ category, subcategory }: Props) {
                             multiple
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-pointer"
+                            className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-pointer
+                            file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-1 file:border-solid file:border-black dark:file:border-white file:text-sm file:font-semibold file:bg-white dark:file:bg-black file:text-gray-700 hover:file:bg-stone-200
+                            dark:file:text-gray-100 dark:hover:file:bg-stone-800 file:cursor-pointer"
                         />
                     </div>
                 ) : (
