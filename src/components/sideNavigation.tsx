@@ -126,7 +126,8 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                                         {category.name
                                             .split(" ")
                                             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                                            .join(" ")}
+                                            .join(" ")
+                                            .replaceAll("_", " ")}
                                     </span>
                                     {category.isShown ? <IoIosArrowDown /> : <IoIosArrowForward />}
                                 </button>

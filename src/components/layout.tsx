@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const size = useWindowSize();
 
     useEffect(() => {
-        setSectionName(name || "Artlas");
+        setSectionName(name.replaceAll("_", " ") || "Artlas");
     }, [name]);
     const [sidePanel, setSidePanel] = useState(true);
     const [reducedPanel, setReducedPanel] = useState(true);
