@@ -98,7 +98,7 @@ const LoginPage: React.FC = () => {
                     </form>
                     <p className="mb-2">
                         {"Vous n'avez pas de compte ? "}
-                        <button type="button" onClick={() => setSignup(true)}>
+                        <button type="button" id="createAccount" onClick={() => setSignup(true)}>
                             <span className="text-blue-600 dark:text-sky-300 visited:text-indigo-400 hover:border-b hover:border-blue-600 dark:hover:border-sky-300 hover:visited:border-indigo-400 cursor-pointer">
                                 Créer un compte
                             </span>

@@ -1,4 +1,4 @@
-describe("1-2-CheckProfile", () => {
+describe("Vérifier les menus lié au profil", () => {
     beforeEach(() => {
         cy.customVisitHomePage();
         cy.loginWithBasicUser();

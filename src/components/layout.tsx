@@ -116,14 +116,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             },
             {
                 id: 3,
-                name: "arts plastiques",
+                name: "arts_plastiques",
                 items: ["all", "peintures", "sculptures", "dessins", "gravures"],
                 miniatureLink: "https://picsum.photos/201",
                 isShown: false,
             },
             {
                 id: 4,
-                name: "arts de la scene",
+                name: "arts_de_la_scene",
                 items: ["all", "theatre", "danse", "opera", "cirque"],
                 miniatureLink: "https://picsum.photos/202",
                 isShown: false,
@@ -131,7 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {
                 id: 5,
                 name: "litterature",
-                items: ["all", "livres", "romans", "poesie", "bandes dessinees", "mangas"],
+                items: ["all", "livres", "romans", "poesie", "bandes_dessinees", "mangas"],
                 miniatureLink: "https://picsum.photos/203",
                 isShown: false,
             },
@@ -151,7 +151,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             },
             {
                 id: 8,
-                name: "jeux video",
+                name: "jeux_video",
                 items: ["all", "jeux", "developpeurs", "consoles", "steam", "pc"],
                 miniatureLink: "https://picsum.photos/206",
                 isShown: false,

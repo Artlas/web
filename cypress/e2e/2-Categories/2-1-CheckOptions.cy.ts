@@ -1,41 +1,49 @@
 //TODO
-// Mettre photographie dans arts plastiques
+
 //Peut etre réduire le nombre de trucs en cuisine
-// Enlever Steam peut etre ?
 
-//section-
-
-describe("2-1-CheckOptions", () => {
-    let artsData: any;
+interface ArtData {
+    arts: Array<{
+        type: string;
+        categories: string[];
+    }>;
+}
+describe("Accès pages", () => {
     beforeEach(() => {
         cy.customVisitHomePage();
         cy.loginWithBasicUser();
-        cy.fixture("arts").as("artsData");
+        cy.log("MESSAGE");
     });
     it("L'utilisateur peut se connecter et accéder à la page Discover", () => {
-        cy.wait(1000);
-        //cy.get("#openSidePanelButton").click();
         cy.get("#openDiscoverLink").click();
         cy.get("#discoverView").should("exist");
     });
     it("L'utilisateur peut se connecter et accéder à la page principale des films", () => {
-        // cy.get("#openSidePanelButton").click();
         cy.get("#cinemaCategoryNavigationButton1").click();
         cy.get("#cinemaallNavigationLink").click();
-        //cy.get("#moviesView").should("exist");
     });
+});
+describe("Accès aux pages des catégories d'art", () => {
+    let artsData: ArtData;
     before(() => {
-        cy.fixture("arts").as("artsData");
+        cy.customVisitHomePage();
+        cy.loginWithBasicUser();
+        cy.fixture("arts").then((data: ArtData) => {
+            artsData = data;
+        });
     });
-    beforeEach(() => {
-        for (const art of artsData.arts) {
-            for (const category of art.categories) {
-                it(`Test pour la catégorie ${category} dans ${art.type}`, () => {
-                    // Votre logique de test pour 'category' dans 'art.type'
-                    cy.visit(`/art/${art.type}/${category}`);
-                    // D'autres assertions ou commandes pour cette catégorie spécifique
-                });
-            }
+
+    it("Test de l'accessibilité de toutes les catégories répertoriées",  () => {
+        if (!artsData) {
+            throw new Error("Les données de fixture n'ont pas été chargées");
         }
+        artsData.arts.forEach((art, typeIndex) => {
+            const categoryId = `${art.type.toLowerCase()}CategoryNavigationButton${typeIndex + 1}`;
+            cy.get(`#${categoryId}`).click();
+            art.categories.forEach((category, index) => {
+                const categoryLinkId = `${art.type.toLowerCase()}${category}NavigationLink`;
+                cy.get(`#${categoryLinkId}`).click();
+            });
+        });
     });
 });

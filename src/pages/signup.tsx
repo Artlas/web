@@ -61,7 +61,7 @@ const SignupPage: React.FC = () => {
                         <span className="sr-only">Revenir à Artlas</span>
                     </div>
                 </button>
-                <div className="px-6 pb-6">
+                <div className="px-6 pb-6" id="createAccountForm">
                     <h2 className="text-2xl font-bold mb-4 text-center">{"S'inscrire"}</h2>
                     <form className="space-y-4 mb-2 ">
                         <div>

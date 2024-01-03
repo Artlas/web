@@ -40,8 +40,8 @@ Cypress.Commands.add("loginWithBasicUser", () => {
     cy.get("#loginForm").should("exist");
     cy.get("#usernameLoginInput").should("exist");
     cy.get("#passwordLoginInput").should("exist");
-    const idUser = Cypress.env("baseIdUser")
-    const userPassword= Cypress.env("baseUserPassword");
+    const idUser = Cypress.env("baseUser").id;
+    const userPassword = Cypress.env("baseUser").password;
     cy.get("#usernameLoginInput").type(idUser);
     cy.get("#passwordLoginInput").type(userPassword);
     console.log("ID Utilisateur :" + idUser);
@@ -53,6 +53,27 @@ Cypress.Commands.add("loginWithBasicUser", () => {
     cy.checkIfLoggedIn();
 });
 
+Cypress.Commands.add("createBasicUser", () => {
+    cy.get("#createAccount").click();
+    cy.get("#createAccountForm").should("exist");
+    cy.get("#usernameSignupInput").should("exist");
+    cy.get("#usernameSignupInput").type(Cypress.env("baseUser").id);
+    cy.get("#emailSignupInput").should("exist");
+    cy.get("#emailSignupInput").type(Cypress.env("baseUser").email);
+    cy.get("#firstNameSignupInput").should("exist");
+    cy.get("#firstNameSignupInput").type(Cypress.env("baseUser").firstName);
+    cy.get("#lastNameSignupInput").should("exist");
+    cy.get("#lastNameSignupInput").type(Cypress.env("baseUser").lastName);
+    cy.get("#birthDateSignupInput").should("exist");
+    cy.get("#birthDateSignupInput").type(Cypress.env("baseUser").birthDate);
+    cy.get("#addressSignupInput").should("exist");
+    cy.get("#addressSignupInput").type(Cypress.env("baseUser").address);
+    cy.get("#passwordSignupInput").should("exist");
+    cy.get("#passwordSignupInput").type(Cypress.env("baseUser").password);
+    cy.get("#loginLoginButton").should("exist");
+    cy.get("#loginLoginButton").click();
+    cy.get("#HomeView").should("exist");
+});
 Cypress.Commands.add("logout", () => {
     cy.get("#openUserMenuButton").click();
     cy.get("#logoutButton").should("exist");
@@ -127,6 +148,7 @@ declare global {
             displaySettingsMenu(): Chainable<void>;
             logout(): Chainable<void>;
             displayListsMenu(): Chainable<void>;
+            createBasicUser(): Chainable<void>;
         }
     }
 }

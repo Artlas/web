@@ -1,33 +1,41 @@
 {
     "arts": [
         {
-            "type": "Cinema",
-            "categories": ["*", "Films", "Series", "Courts-metrages"]
+            "type": "cinema",
+            "categories": ["all", "films", "series", "courts-metrages"]
         },
         {
-            "type": "Musique",
-            "categories": ["*", "Musique", "Albums", "Artistes"]
+            "type": "musique",
+            "categories": ["all", "musiques", "albums", "artistes"]
         },
         {
-            "type": "Arts Plastiques",
-            "categories": ["*", "Peintures", "Sculptures", "Dessins", "Gravures"]
+            "type": "arts_plastiques",
+            "categories": ["all", "peintures", "sculptures", "dessins", "gravures"]
         },
         {
-            "type": "Litterature",
-            "categories": ["*", "Livres", "Romans", "Poesie", "Bandes dessinnees", "Mangas"]
+            "type": "arts_de_la_scene",
+            "categories": ["all", "theatre", "danse", "opera", "cirque"]
         },
         {
-            "type": "Architectures",
-            "categories": ["*", "Batiments", "Architectes"]
+            "type": "litterature",
+            "categories": ["all", "livres", "romans", "poesie", "bandes_dessinees", "mangas"]
+        },
+        {
+            "type": "photographie",
+            "categories": ["all", "photographes", "photos"]
+        },
+        {
+            "type": "architecture",
+            "categories": ["all", "batiments", "architectes"]
+        },
+        {
+            "type": "jeux_video",
+            "categories": ["all", "jeux", "developpeurs", "consoles", "steam", "pc"]
         },
 
         {
-            "type": "Jeux vidéo",
-            "categories": ["*", "Jeux", "Developpeurs", "Consoles", "Steam", "Pc"]
-        },
-        {
-            "type": "Cuisine",
-            "categories": ["*", "Française", "Italienne", "Japonaise", "Chinoise", "Indienne", "Mexicaine", "Espagnole", "Americaine", "Vegane", "Vegetarienne"]
+            "type": "cuisine",
+            "categories": ["all", "française", "italienne", "japonaise", "chinoise", "indienne", "mexicaine", "espagnole", "americaine", "vegane", "vegetarienne"]
         }
     ]
 }
