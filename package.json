@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cy:open:dev": "CYPRESS_ENV=development cypress open",
+    "cy:open:staging": "CYPRESS_ENV=staging cypress open",
+    "cy:open:prod": "CYPRESS_ENV=production cypress open",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "start-server-and-test dev http://localhost:3000 cypress:open"
   },
   "dependencies": {
     "next": "14.0.2",
@@ -22,9 +28,11 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "cypress": "^13.6.2",
     "eslint": "^8",
     "eslint-config-next": "14.0.2",
     "postcss": "^8",
+    "start-server-and-test": "^2.0.3",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }

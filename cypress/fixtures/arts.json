@@ -1,0 +1,41 @@
+{
+    "arts": [
+        {
+            "type": "cinema",
+            "categories": ["all", "films", "series", "courts-metrages"]
+        },
+        {
+            "type": "musique",
+            "categories": ["all", "musiques", "albums", "artistes"]
+        },
+        {
+            "type": "arts_plastiques",
+            "categories": ["all", "peintures", "sculptures", "dessins", "gravures"]
+        },
+        {
+            "type": "arts_de_la_scene",
+            "categories": ["all", "theatre", "danse", "opera", "cirque"]
+        },
+        {
+            "type": "litterature",
+            "categories": ["all", "livres", "romans", "poesie", "bandes_dessinees", "mangas"]
+        },
+        {
+            "type": "photographie",
+            "categories": ["all", "photographes", "photos"]
+        },
+        {
+            "type": "architecture",
+            "categories": ["all", "batiments", "architectes"]
+        },
+        {
+            "type": "jeux_video",
+            "categories": ["all", "jeux", "developpeurs", "consoles", "steam", "pc"]
+        },
+
+        {
+            "type": "cuisine",
+            "categories": ["all", "française", "italienne", "japonaise", "chinoise", "indienne", "mexicaine", "espagnole", "americaine", "vegane", "vegetarienne"]
+        }
+    ]
+}

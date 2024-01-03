@@ -41,7 +41,7 @@ const LoginPage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-black text-black dark:text-white">
-            <div className="bg-white dark:bg-stone-900 p-2 rounded shadow-md">
+            <div className="bg-white dark:bg-stone-900 p-2 rounded shadow-md" id="loginForm">
                 <button
                     id="loginCloseButton"
                     className=" dark:bg-black bg-stone-100 dark:border-black border-white dark:hover:bg-stone-800 hover:bg-stone-200 dark:text-white text-black px-3 py-2 rounded-full"
@@ -97,7 +97,7 @@ const LoginPage: React.FC = () => {
                     </form>
                     <p className="mb-2">
                         {"Vous n'avez pas de compte ? "}
-                        <button type="button" onClick={() => setSignup(true)}>
+                        <button type="button" id="createAccount" onClick={() => setSignup(true)}>
                             <span className="text-blue-600 dark:text-sky-300 visited:text-indigo-400 hover:border-b hover:border-blue-600 dark:hover:border-sky-300 hover:visited:border-indigo-400 cursor-pointer">
                                 Créer un compte
                             </span>
