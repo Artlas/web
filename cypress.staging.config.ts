@@ -5,6 +5,15 @@ export const stagingConfig = {
     env: {
         fixturesFolder: "cypress/fixtures",
         DEBUG: "cypress:*",
+        baseUser: {
+            id: "Nico",
+            email: "nico@gmail.com",
+            firstName: "Nico",
+            lastName: "DL",
+            birthDate: "2000-05-05",
+            address: "Paris",
+            password: "password",
+        },
     },
     retries: {
         runMode: 1,

@@ -5,8 +5,15 @@ export const devConfig = {
     env: {
         fixturesFolder: "cypress/fixtures",
         DEBUG: "cypress:*",
-        baseIdUser: "Nico",
-        baseUserPassword: "password",
+        baseUser: {
+            id: "Nico",
+            email: "nico@gmail.com",
+            firstName: "Nico",
+            lastName: "DL",
+            birthDate: "2000-05-05",
+            address: "Paris",
+            password: "password",
+        },
     },
     retries: {
         runMode: 2,
