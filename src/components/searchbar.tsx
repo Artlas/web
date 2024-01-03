@@ -6,6 +6,7 @@ interface SearchBarProps {
     placeholder: string;
 }
 
+//TODO: Sanitize search term
 export default function SearchBar({ placeholder }: SearchBarProps) {
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();

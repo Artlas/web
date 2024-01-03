@@ -18,14 +18,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     let name = useRouter().pathname.split("/")[1];
     const currentCategory = useRouter().query.category;
     const currentSubCategory = useRouter().query.subcategory;
+    const currentPost = useRouter().query.id;
     if (name[0] === "[") {
         if (currentCategory && currentSubCategory) {
             if (currentSubCategory !== "all") name = currentCategory + " / " + currentSubCategory;
             else name = String(currentCategory);
         }
     }
+    if (name === "post") {
+        //TODO: get the post title from the database
+        name = "post / " + currentPost; // temporary, to be replaced by the post title
+    }
     const [sectionName, setSectionName] = useState(name || "Artlas");
-    //const [user, setUser] = useState<{ name: string } | null>(null);
 
     function useWindowSize() {
         // Initialize state with undefined width/height so server and client renders match
@@ -237,11 +241,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 <SlMenu size={24} />
                             </button>
                             <div className="flex-1 flex justify-end sm:justify-between z-40 gap-4 px-2">
-                                <h1 className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-3xl hidden sm:flex items-center truncate flex-1 font-artlas-logo">{sectionName}</h1>
+                                <h1 className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-3xl hidden sm:flex items-center truncate flex-1 font-artlas-logo selection:bg-stone-900 selection:text-stone-100 selection:dark:bg-white selection:dark:text-stone-900 ">
+                                    {sectionName}
+                                </h1>
                             </div>
                             <div className="flex items-center justify-end gap-4 pr-4">
                                 <div className="hidden sm:flex flex-shrink-0 items-center gap-4">
                                     <SearchBar placeholder="Rechercher" />
+                                    <Link
+                                        href="/poster"
+                                        className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
+                                        id="openNewpostMobileLink"
+                                    >
+                                        <PiPlusBold size={43} />
+                                    </Link>
                                     <Link
                                         href="/discover"
                                         className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
@@ -299,10 +312,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                     >
                                                         Paramètres
                                                     </Link>
-                                                    {/* <Link href="/logout" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800" id="logoutMobileLink">
-                                                Déconnexion
-                                            </Link>
-                                            //TODO: Temporary, remove when login is implemented*/}
                                                     <button
                                                         onClick={() => logout()}
                                                         className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
@@ -313,14 +322,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                     </button>
                                                 </div>
                                             ) : (
-                                                // <Link href="/login" className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800" id="loginMobileLink">
-                                                //     Connexion
-                                                // </Link>
-                                                // TODO: Temporary, remove when login is implemented
                                                 <button
                                                     onClick={() => handleConnect()}
                                                     className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                     id="loginButton"
+                                                    type="button"
                                                 >
                                                     Connexion
                                                 </button>
@@ -339,7 +345,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             }  sm:blur-none sm:pointer-events-auto`}
                         >
                             <div className="flex  bg-white dark:bg-black min-h-screen h-full w-full p-8 z-50">
-                                <div className="w-full">{children}</div>
+                                <div className="w-full selection:bg-stone-900 selection:text-stone-100 selection:dark:bg-white selection:dark:text-stone-900 ">{children}</div>
                             </div>
                         </div>
                     </div>
@@ -353,7 +359,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 mt-[1px] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                             id="openHomePageMobileLink"
                         >
-                            {name !== "discover" && name !== "newpost" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" ? (
+                            {name !== "discover" && name !== "poster" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" ? (
                                 <HiLibrary size={44} className="w-[36px] h-[36px]" />
                             ) : (
                                 <HiOutlineLibrary size={44} className="w-[36px] h-[36px]" />
@@ -369,11 +375,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <span className="sr-only">Decouvrir</span>
                         </Link>
                         <Link
-                            href="/newpost"
+                            href="/poster"
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                             id="openNewpostMobileLink"
                         >
-                            {name === "newpost" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
+                            {name === "poster" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
                             <span className="sr-only">Poster</span>
                         </Link>
                         <Link
@@ -384,14 +390,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             {name === "search" ? <IoSearch size={44} className="w-7 h-7 " /> : <IoSearchOutline size={44} className="w-7 h-7 " />}
                             <span className="sr-only">Rechercher</span>
                         </Link>
-                        <Link
-                            href={user ? "/mobileUserMenu" : "/login"}
-                            className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
-                            id="openUserMenuMobileLink"
-                        >
-                            {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
-                            <span className="sr-only">Profil</span>
-                        </Link>
+                        {connected ? (
+                            <Link
+                                href={"/mobileUserMenu"}
+                                className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
+                                id="openUserMenuMobileLink"
+                            >
+                                {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                                <span className="sr-only">Profil</span>
+                            </Link>
+                        ) : (
+                            <button
+                                onClick={() => handleConnect()}
+                                className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
+                                id="loginMobileButton"
+                                type="button"
+                            >
+                                {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                                <span className="sr-only">Profil</span>
+                            </button>
+                        )}
                     </nav>
                 </div>
             </div>

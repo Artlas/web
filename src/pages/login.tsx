@@ -17,7 +17,6 @@ const LoginPage: React.FC = () => {
         // TODO: Perform login logic here
         login(username, password);
         console.log("Login successful with username: " + username + " and password: " + password + "");
-        redirect();
     };
 
     const loginGoogle = () => {
@@ -51,7 +50,7 @@ const LoginPage: React.FC = () => {
                 >
                     <div>
                         <FaArrowLeft className="inline-block mb-1" />
-                        <span className="ml-2">Revenir à Artlas</span>
+                        <span className="sr-only">Revenir à Artlas</span>
                     </div>
                 </button>
                 <div className="px-6 pb-6">
