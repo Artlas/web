@@ -18,14 +18,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     let name = useRouter().pathname.split("/")[1];
     const currentCategory = useRouter().query.category;
     const currentSubCategory = useRouter().query.subcategory;
+    const currentPost = useRouter().query.id;
     if (name[0] === "[") {
         if (currentCategory && currentSubCategory) {
             if (currentSubCategory !== "all") name = currentCategory + " / " + currentSubCategory;
             else name = String(currentCategory);
         }
     }
+    if (name === "post") {
+        //TODO: get the post title from the database
+        name = "post / " + currentPost; // temporary, to be replaced by the post title
+    }
     const [sectionName, setSectionName] = useState(name || "Artlas");
-    //const [user, setUser] = useState<{ name: string } | null>(null);
 
     function useWindowSize() {
         // Initialize state with undefined width/height so server and client renders match

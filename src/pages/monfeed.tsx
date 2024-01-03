@@ -15,7 +15,7 @@ export default function Monfeed() {
     };
 
     const tempPost2 = {
-        id: 1,
+        id: 2,
         title: "Star Wars",
         description: "Star Wars 3 trailer",
         category: "Cinema",
@@ -27,7 +27,7 @@ export default function Monfeed() {
     };
 
     const tempPost3 = {
-        id: 1,
+        id: 3,
         title: "Twitch.tv",
         description: "Une video de twitch",
         category: "Cinema",
@@ -39,7 +39,7 @@ export default function Monfeed() {
     };
 
     const tempPost4 = {
-        id: 1,
+        id: 4,
         title: "Dailymotion",
         description: "Une video de daily motion à la verticale",
         category: "Cinema",
