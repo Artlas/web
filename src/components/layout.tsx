@@ -1,12 +1,14 @@
 import SideNavigation from "./sideNavigation";
 import SearchBar from "./searchbar";
+import FloatingSearchBar from "./floatingSearchbar";
 import { UserContext } from "./userContext";
 import Image from "next/image";
 import Link from "next/link";
 import { SlMenu } from "react-icons/sl";
 import { FaUserCircle } from "react-icons/fa";
-import { FaCompass, FaRegCompass, FaUser, FaRegUser } from "react-icons/fa6";
+import { FaCompass, FaRegCompass, FaUser, FaRegUser, FaMagnifyingGlass } from "react-icons/fa6";
 import { HiLibrary, HiOutlineLibrary } from "react-icons/hi";
+import { PiMagnifyingGlass } from "react-icons/pi";
 import { PiPlusBold, PiPlus } from "react-icons/pi";
 import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { TbLayoutSidebarLeftExpandFilled, TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
@@ -29,6 +31,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         //TODO: get the post title from the database
         name = "post / " + currentPost; // temporary, to be replaced by the post title
     }
+    if (name === "search") {
+        name = "recherche";
+    }
+    if (name === "discover") name = "dé couvrir"; //NOTE: the space is intentional, it's due to the font that doesn't handle the accent properly
+    if (name === "mobileUserMenu") name = "profil";
     const [sectionName, setSectionName] = useState(name || "Artlas");
 
     function useWindowSize() {
@@ -70,6 +77,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const [reducedPanel, setReducedPanel] = useState(true);
     const [userMenu, setUserMenu] = useState(false);
     const [mobileUserMenu, setMobileUserMenu] = useState(false);
+    const [floatingSearchBar, setFloatingSearchBar] = useState(false);
+    const [outlineLibrary, setOutlineLibrary] = useState(true);
 
     const handleUserMenu = () => {
         setUserMenu(!userMenu);
@@ -92,6 +101,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             setReducedPanel(true);
         }
     }, [size, name]);
+
+    useEffect(() => {
+        name !== "discover" && name !== "poster" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" && name !== "post" && name !== "profil"
+            ? setOutlineLibrary(true)
+            : setOutlineLibrary(false);
+    }, [name]);
 
     const handleSidePanel = () => {
         setSidePanel(!sidePanel);
@@ -228,7 +243,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <div
                         className={`sticky top-0 flex flex-shrink-0 bg-stone-100 dark:bg-stone-950 h-[55px] sm:h-[75px] text-black dark:text-white ${""} z-30 border-b-2 border-solid border-stone-200 dark:border-stone-800 `}
                     >
-                        <div className="z-50 flex flex-shrink-0 w-full">
+                        <div className="z-50 flex flex-shrink-0 w-full justify-between">
                             <button
                                 type="button"
                                 className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker px-[11px] sm:px-5 sm:ml-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
@@ -240,14 +255,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 <span className="sr-only">Open main menu</span>
                                 <SlMenu size={24} />
                             </button>
-                            <div className="flex-1 flex justify-end sm:justify-between z-40 gap-4 px-2">
-                                <h1 className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-3xl hidden sm:flex items-center truncate flex-1 font-artlas-logo selection:bg-stone-900 selection:text-stone-100 selection:dark:bg-white selection:dark:text-stone-900 ">
+                            <div className="sm:flex-1 flex justify-end sm:justify-between z-40 gap-4 px-2">
+                                <h1 className="text-base lg:text-lg xl:text-2xl 2xl:text-3xl my-auto sm:flex items-center truncate flex-1 font-artlas-logo selection:bg-stone-900 selection:text-stone-100 selection:dark:bg-white selection:dark:text-stone-900 ">
                                     {sectionName}
                                 </h1>
                             </div>
                             <div className="flex items-center justify-end gap-4 pr-4">
                                 <div className="hidden sm:flex flex-shrink-0 items-center gap-4">
-                                    <SearchBar placeholder="Rechercher" />
+                                    <button
+                                        className="flex md:hidden text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
+                                        type="button"
+                                        id="openFloatingSearchBar"
+                                        onClick={() => setFloatingSearchBar(!floatingSearchBar)}
+                                    >
+                                        <PiMagnifyingGlass size={43} />
+                                        <span className="sr-only">Open floating search bar</span>
+                                    </button>
+                                    <div className="hidden md:flex">
+                                        <SearchBar placeholder="Rechercher" />
+                                    </div>
                                     <Link
                                         href="/poster"
                                         className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
@@ -275,6 +301,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 <div className="flex sm:hidden items-center justify-center w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800">
                                     <Image src="/Logo seul.png" alt="Artlas logo" width={40} height={40} className="rounded-full" />
                                 </div>
+                                {floatingSearchBar && (
+                                    <div className=" md:hidden absolute mr-2 sm:mr-20 px-1 mt-[108px] sm:mt-[128px] bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-b-md border-2 border-solid border-t-0 border-stone-200 dark:border-stone-800 z-50 overflow-hidden">
+                                        <FloatingSearchBar placeholder="Rechercher" />
+                                    </div>
+                                )}
                                 {userMenu && (
                                     <div
                                         className={`absolute right-0 ${
@@ -359,11 +390,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 mt-[1px] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
                             id="openHomePageMobileLink"
                         >
-                            {name !== "discover" && name !== "poster" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" ? (
-                                <HiLibrary size={44} className="w-[36px] h-[36px]" />
-                            ) : (
-                                <HiOutlineLibrary size={44} className="w-[36px] h-[36px]" />
-                            )}
+                            {outlineLibrary ? <HiLibrary size={44} className="w-[36px] h-[36px]" /> : <HiOutlineLibrary size={44} className="w-[36px] h-[36px]" />}
                             <span className="sr-only">Accueil</span>
                         </Link>
                         <Link
@@ -382,21 +409,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             {name === "poster" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
                             <span className="sr-only">Poster</span>
                         </Link>
-                        <Link
-                            href="/search"
+                        <button
+                            type="button"
+                            onClick={() => setFloatingSearchBar(!floatingSearchBar)}
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
-                            id="openSearchMobileLink"
+                            id="openSearchMobileButton"
                         >
-                            {name === "search" ? <IoSearch size={44} className="w-7 h-7 " /> : <IoSearchOutline size={44} className="w-7 h-7 " />}
+                            {name === "search" || floatingSearchBar ? <IoSearch size={44} className="w-7 h-7 " /> : <IoSearchOutline size={44} className="w-7 h-7 " />}
                             <span className="sr-only">Rechercher</span>
-                        </Link>
+                        </button>
                         {connected ? (
                             <Link
                                 href={"/mobileUserMenu"}
                                 className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                                 id="openUserMenuMobileLink"
                             >
-                                {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                                {name === "profile" || name === "profil" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
                                 <span className="sr-only">Profil</span>
                             </Link>
                         ) : (
@@ -406,7 +434,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 id="loginMobileButton"
                                 type="button"
                             >
-                                {name === "profile" || name === "mobileUserMenu" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                                {name === "profile" || name === "profil" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
                                 <span className="sr-only">Profil</span>
                             </button>
                         )}
