@@ -22,13 +22,27 @@ export default NextAuth({
         }),
     ],
     callbacks: {
-        async signIn({ user, account, profile }: { user: any; account: any; profile?: Profile }) {
+        async signIn({ user, account, profile }: { user: any; account: any; profile?: any }) {
             console.log("User Info:", user);
             console.log("Account Info:", account);
             console.log("Profile Info:", profile);
             const email = user.email;
             const name = user.name;
             const image = user.image;
+            console.log(profile.given_name);
+
+            // TODO
+           
+            /**
+             *  Faire tourner en premier une fois pour avoir les infos puis attribuer chaque a info à user pour le user contexte
+            *Penser au fait qu'il faut rendre le mot de passe facultatif pour la connexion concernant les requetes car pas besoin
+            */
+
+            /*console.log("Email "+ email)
+            console.log("Name "+ name)
+            //console.log("Image "+ image)
+            console.log("User "+ user)*/
+
             return true; // If true connexion reussie
         },
     },

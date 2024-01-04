@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
-import { validatePassword , validateLogin, checkUserInDatabase} from "../utils/validators";
+import { validatePassword, validateLogin, checkUserInDatabase, hashPasswordSha256 } from "../utils/validators";
 import { signIn } from "next-auth/react";
 
 const LoginPage: React.FC = () => {
@@ -11,37 +11,37 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState("");
 
     let router = useRouter();
+
     function redirect() {
         router.push("/");
     }
 
     const handleLogin = () => {
+        let hashedPassword;
         // TODO: Perform login logic here
         // Check le password en appelant validatePassword et si true appeler login
         if (!validatePassword(password)) {
             alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
             return;
         }
-        if(validateLogin(username)){
-            // Case id
-           /** let user = checkUserInDatabase(password,username,undefined)
-            if(user.error=null){
-
-            } */
-            checkUserInDatabase(password,username,undefined)
-            login(username, password);
-            console.log("Login successful with username: " + username + " and password: " + password + "");}
         else{
-            let user = checkUserInDatabase(password,undefined,username)
-            login(username, password);
-            console.log("Login successful with Email: " + username + " and password: " + password + "");
-      
+            console.log("Password validated");
+            hashedPassword = hashPasswordSha256(password);
         }
-       /* else {
-           
-            login(username, password);
+        ///TODO
+        /**
+         * TO TEST
+         *Le check de l'error se fait apres response
+         */
+        if (validateLogin(username)) {
+            let user = checkUserInDatabase(hashedPassword, username, undefined);
+            login(username, hashedPassword);
             console.log("Login successful with username: " + username + " and password: " + password + "");
-        }*/
+        } else {
+            let user = checkUserInDatabase(hashedPassword, undefined, username);
+            login(username, hashedPassword);
+            console.log("Login successful with Email: " + username + " and password: " + password + "");
+        }
     };
 
     const loginGoogle = () => {
@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
             Faire session cookie pour préserver les informations post reload ou redirection
             Modifier par la suite la fonction
         */
-        //signIn("google");
+        signIn("google");
         console.log("Login with Google");
         login("test", "test");
     };
