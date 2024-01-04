@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
+import { validatePassword } from "../utils/validators";
+import { signIn } from "next-auth/react";
 
 const LoginPage: React.FC = () => {
     const { login, setSignup, setUserNeeded } = useContext(UserContext);
@@ -15,13 +17,25 @@ const LoginPage: React.FC = () => {
 
     const handleLogin = () => {
         // TODO: Perform login logic here
-        login(username, password);
-        console.log("Login successful with username: " + username + " and password: " + password + "");
+        // Check le password en appelant validatePassword et si true appeler login
+        if (!validatePassword(password)) {
+            alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
+            return;
+        } else {
+            login(username, password);
+            console.log("Login successful with username: " + username + " and password: " + password + "");
+        }
     };
 
     const loginGoogle = () => {
-        // TODO: Perform Google login logic here
+        // TODO:
+        /**
+            Faire session cookie pour préserver les informations post reload ou redirection
+            Modifier par la suite la fonction
+        */
+        //signIn("google");
         console.log("Login with Google");
+        login("test", "test");
     };
 
     const loginMicrosoft = () => {
