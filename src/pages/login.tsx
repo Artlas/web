@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
-import { validatePassword } from "../utils/validators";
+import { validatePassword , validateLogin, checkUserInDatabase} from "../utils/validators";
 import { signIn } from "next-auth/react";
 
 const LoginPage: React.FC = () => {
@@ -21,10 +21,27 @@ const LoginPage: React.FC = () => {
         if (!validatePassword(password)) {
             alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
             return;
-        } else {
+        }
+        if(validateLogin(username)){
+            // Case id
+           /** let user = checkUserInDatabase(password,username,undefined)
+            if(user.error=null){
+
+            } */
+            checkUserInDatabase(password,username,undefined)
+            login(username, password);
+            console.log("Login successful with username: " + username + " and password: " + password + "");}
+        else{
+            let user = checkUserInDatabase(password,undefined,username)
+            login(username, password);
+            console.log("Login successful with Email: " + username + " and password: " + password + "");
+      
+        }
+       /* else {
+           
             login(username, password);
             console.log("Login successful with username: " + username + " and password: " + password + "");
-        }
+        }*/
     };
 
     const loginGoogle = () => {
