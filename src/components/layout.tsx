@@ -103,7 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     }, [size, name]);
 
     useEffect(() => {
-        name !== "discover" && name !== "poster" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" && name !== "post" && name !== "profil"
+        name !== "dé couvrir" && name !== "poster" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" && name !== "post" && name !== "profil"
             ? setOutlineLibrary(true)
             : setOutlineLibrary(false);
     }, [name]);
@@ -398,7 +398,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                             id="openDicoverMobileLink"
                         >
-                            {name === "discover" ? <FaCompass size={44} className="w-7 h-7" /> : <FaRegCompass size={44} className="w-7 h-7" />}
+                            {name === "dé couvrir" ? <FaCompass size={44} className="w-7 h-7" /> : <FaRegCompass size={44} className="w-7 h-7" />}
                             <span className="sr-only">Decouvrir</span>
                         </Link>
                         <Link
