@@ -15,6 +15,11 @@ interface UserContextState {
 interface UserInfo {
     username: string;
     email: string;
+    familyName: string;
+    name: string;
+    acceptCookies: boolean;
+    autoPlayDiaporamas?: boolean;
+    avatar?: string;
     //TODO: Add any other properties you need for the user
 }
 
@@ -44,8 +49,14 @@ export const UserProvider: React.FC = ({ children }: any) => {
         const user: UserInfo = {
             username,
             email: "example@example.com",
+            familyName: "Doe",
+            name: "John",
+            acceptCookies: true,
+            autoPlayDiaporamas: false,
+            avatar: "https://picsum.photos/200",
             // Set other user properties as needed
         };
+        if (username === "") user.username = "Anonymous";
         setUser(user);
         setConnected(true);
         setSignup(false);

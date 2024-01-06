@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import E404 from "./404";
 import { useState, useContext } from "react";
 import { UserContext } from "../components/userContext";
 import { useRouter } from "next/router";
@@ -20,7 +21,7 @@ export default function MobileUserMenu({}: Props) {
         redirect();
     };
 
-    return (
+    return connected ? (
         <div
             className={`flex ${""} w-full justify-center bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-md border-2 border-solid  border-stone-200 dark:border-stone-800 z-50 overflow-hidden`}
         >
@@ -51,5 +52,7 @@ export default function MobileUserMenu({}: Props) {
                 </button>
             </div>
         </div>
+    ) : (
+        <E404 />
     );
 }

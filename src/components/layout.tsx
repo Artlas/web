@@ -31,11 +31,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         //TODO: get the post title from the database
         name = "post / " + currentPost; // temporary, to be replaced by the post title
     }
-    if (name === "search") {
-        name = "recherche";
-    }
+    if (name === "search") name = "recherche";
     if (name === "discover") name = "dé couvrir"; //NOTE: the space is intentional, it's due to the font that doesn't handle the accent properly
+    if (name === "settings") name = "paramè tres";
     if (name === "mobileUserMenu") name = "profil";
+    if (name === "profil" && !connected) name = "404";
     const [sectionName, setSectionName] = useState(name || "Artlas");
 
     function useWindowSize() {
@@ -93,6 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             setSidePanel(true);
         } else {
             setSidePanel(false);
+            setUserMenu(false);
         }
         if (size.width > 1024 || size.width < 640) {
             setReducedPanel(false);
@@ -103,9 +104,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     }, [size, name]);
 
     useEffect(() => {
-        name !== "dé couvrir" && name !== "poster" && name !== "search" && name !== "profile" && name !== "mobileUserMenu" && name !== "404" && name !== "post" && name !== "profil"
+        name !== "dé couvrir" &&
+        name !== "poster" &&
+        name !== "search" &&
+        name !== "profile" &&
+        name !== "mobileUserMenu" &&
+        name !== "404" &&
+        name !== "post" &&
+        name !== "profil" &&
+        name !== "paramè tres"
             ? setOutlineLibrary(true)
             : setOutlineLibrary(false);
+        setUserMenu(false);
     }, [name]);
 
     const handleSidePanel = () => {
@@ -424,7 +434,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                                 id="openUserMenuMobileLink"
                             >
-                                {name === "profile" || name === "profil" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                                {name === "profile" || name === "profil" || name === "paramè tres" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
                                 <span className="sr-only">Profil</span>
                             </Link>
                         ) : (
