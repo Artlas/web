@@ -1,5 +1,5 @@
 import { request } from "https";
-import {createHash} from "crypto";
+import { createHash } from "crypto";
 
 // validators.ts
 export const validatePassword = (password: string): boolean => {
@@ -14,12 +14,10 @@ export const validatePassword = (password: string): boolean => {
 };
 
 export const validateLogin = (login: string): boolean => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$|^[a-zA-Z0-9._-]+$/;
-    if (regex.test(login)) return false;
-    else return true;
+    const regex = /\b[A-Z0-9._-]+@[A-Z0-9][A-Z0-9.-]{0,61}[A-Z0-9]\.[A-Z.]{2,6}\b|^[a-zA-Z0-9._-]+$/;
+    return regex.test(login.toLowerCase());
 };
 
-export const hashPasswordSha256 = (password: string): string =>{
+export const hashPasswordSha256 = (password: string): string => {
     return createHash("sha256").update(password).digest("hex");
 };
-

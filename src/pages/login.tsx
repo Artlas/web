@@ -12,7 +12,7 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState("");
 
     let router = useRouter();
-
+    let connectedUser: UserInfo;
     function redirect() {
         router.push("/");
     }
@@ -21,47 +21,56 @@ const LoginPage: React.FC = () => {
             Faire session cookie pour préserver les informations post reload ou redirection
             Modifier par la suite la fonction
     */
-    const handleLogin = () => {
-        let hashedPassword = password;
-        // TODO: Perform login logic here
-        // Check le password en appelant validatePassword et si true appeler login
-        /*  if (!validatePassword(password)) {
+    function setConnectedUser(userData: any) {
+        connectedUser = {
+            username: userData?.id ?? "",
+            email: userData?.mail ?? "",
+            fname: userData?.firstName ?? "",
+            lname: userData?.lastName ?? "",
+            image: userData?.image ?? "",
+            address: userData?.address ?? "",
+            birthdate: userData?.birthdate ?? "",
+            token: userData?.token ?? "",
+            permission: userData?.permission ?? "",
+        };
+        return connectedUser;
+    }
+    const handleLogin = (event: { preventDefault: () => void }) => {
+        event.preventDefault(); // empêche un reload
+        let hashedPassword;
+        if (!validatePassword(password)) {
             alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
             return;
-        }
-        else{
+        } else {
             console.log("Password validated");
             hashedPassword = hashPasswordSha256(password);
-        }*/
-        //TODO
-        /**
-         * TO TEST
-         *Le check de l'error se fait apres response
-         */
-        // if (validateLogin(username)) {
-        /*const user: UserInfo = {
-                username: username,
-                email: "nico@mail.com";
-
-           }*/ checkUserInDatabase(hashedPassword, username, undefined)
-            .then((user) => {
-                console.log(user);
-                login(username, hashedPassword);
-                console.log("Login successful with username: " + username + " and password: " + password + "");
-                // Autres logiques avec user
-            })
-            .catch((error) => {
-                console.error("Erreur lors de la récupération de l'utilisateur:", error);
-                // Gérer l'erreur
-            });
-        //
-      
-        /*} else {
-            //let user = checkUserInDatabase(hashedPassword, undefined, username);
-            // console.log(user)
-            login(username, hashedPassword);
-            console.log("Login successful with Email: " + username + " and password: " + password + "");
-        }*/
+        }
+        if (validateLogin(username)) {
+            alert(username + " pas mail");
+            checkUserInDatabase(hashedPassword, username, undefined)
+                .then((data) => {
+                    const userData = data.user;
+                    connectedUser = setConnectedUser(userData);
+                    login(connectedUser);
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                    // Gérer l'erreur
+                });
+        } else {
+            alert(username + " mail");
+            checkUserInDatabase(hashedPassword, undefined, username)
+                .then((data) => {
+                    const userData = data.user;
+                    connectedUser = setConnectedUser(userData);
+                    login(connectedUser);
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                    // Gérer l'erreur
+                });
+            console.log(connectedUser.email);
+        }
     };
     // TODO: Perform SSO login logic here
     /**
@@ -70,7 +79,6 @@ const LoginPage: React.FC = () => {
     const loginGoogle = () => {
         signIn("google");
         console.log("Login with Google");
-        login("test", "test");
     };
 
     const loginMicrosoft = () => {
@@ -134,7 +142,7 @@ const LoginPage: React.FC = () => {
                         <div className="flex flex-col justify-between items-center">
                             <button
                                 id="loginLoginButton"
-                                type="button" //! Shoud be "submit" but causes a page reload
+                                type="submit" //! Shoud be "submit" but causes a page reload
                                 className="bg-black dark:bg-white border-2 rounded-md py-2 px-4 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                                 onClick={handleLogin}
                             >

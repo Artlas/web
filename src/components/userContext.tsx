@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react";
 // Define the initial state for the user context
 interface UserContextState {
     user: UserInfo | null;
-    login: (username: string, password: string) => void;
+    login: (user: UserInfo) => void;
     logout: () => void;
     userNeeded: boolean;
     setUserNeeded: (value: boolean) => void;
@@ -15,13 +15,13 @@ interface UserContextState {
 export interface UserInfo {
     username: string;
     email: string;
-    password?: string;
     fname?: string;
     lname?: string;
     image?: string;
     address?: string;
     birthdate?: string;
-    //TODO: Add any other properties you need for the user
+    token: string;
+    permission: string;
 }
 
 // Create the user context
@@ -44,28 +44,20 @@ export const UserProvider: React.FC = ({ children }: any) => {
     const [signup, setSignup] = useState<boolean>(false);
 
     // Function to handle user login
-    const login = (username: string, password: string) => {
-        // Perform login logic here, e.g. making an API call
-        // Once the login is successful, update the user state
-        const user: UserInfo = {
-            username,
-            email: "example@example.com",
-            // Set other user properties as needed
-        };
+    const login = (user: UserInfo) => {
         setUser(user);
         setConnected(true);
         setSignup(false);
 
-        console.log("Login successful with username: " + username + " and password: " + password + "");
+        console.log("Login successful with username: " + user.username + " and email: " + user.email);
         console.log("User info: ", user);
     };
-    const ssoLogin = (userInfo: UserInfo) =>{
+    const ssoLogin = (userInfo: UserInfo) => {
         setUser(userInfo);
         setConnected(true);
         setSignup(false);
         console.log("Connexion SSO réussie:", userInfo);
-    }
-
+    };
 
     // Function to handle user logout
     const logout = () => {
