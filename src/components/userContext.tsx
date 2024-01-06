@@ -12,9 +12,15 @@ interface UserContextState {
 }
 
 // Define the type for the user information
-interface UserInfo {
+export interface UserInfo {
     username: string;
     email: string;
+    password?: string;
+    fname?: string;
+    lname?: string;
+    image?: string;
+    address?: string;
+    birthdate?: string;
     //TODO: Add any other properties you need for the user
 }
 
@@ -53,6 +59,13 @@ export const UserProvider: React.FC = ({ children }: any) => {
         console.log("Login successful with username: " + username + " and password: " + password + "");
         console.log("User info: ", user);
     };
+    const ssoLogin = (userInfo: UserInfo) =>{
+        setUser(userInfo);
+        setConnected(true);
+        setSignup(false);
+        console.log("Connexion SSO réussie:", userInfo);
+    }
+
 
     // Function to handle user logout
     const logout = () => {

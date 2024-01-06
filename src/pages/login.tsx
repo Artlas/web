@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
-import { UserContext } from "../components/userContext";
+import { UserContext, UserInfo } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
-import { validatePassword, validateLogin, checkUserInDatabase, hashPasswordSha256 } from "../utils/validators";
+import { checkUserInDatabase } from "../pages/api/userAPI";
+import { validatePassword, validateLogin, hashPasswordSha256 } from "../utils/validators";
 import { signIn } from "next-auth/react";
 
 const LoginPage: React.FC = () => {
@@ -15,53 +16,68 @@ const LoginPage: React.FC = () => {
     function redirect() {
         router.push("/");
     }
-
+    // TODO:
+    /**
+            Faire session cookie pour préserver les informations post reload ou redirection
+            Modifier par la suite la fonction
+    */
     const handleLogin = () => {
-        let hashedPassword;
+        let hashedPassword = password;
         // TODO: Perform login logic here
         // Check le password en appelant validatePassword et si true appeler login
-        if (!validatePassword(password)) {
+        /*  if (!validatePassword(password)) {
             alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
             return;
         }
         else{
             console.log("Password validated");
             hashedPassword = hashPasswordSha256(password);
-        }
-        ///TODO
+        }*/
+        //TODO
         /**
          * TO TEST
          *Le check de l'error se fait apres response
          */
-        if (validateLogin(username)) {
-            let user = checkUserInDatabase(hashedPassword, username, undefined);
-            login(username, hashedPassword);
-            console.log("Login successful with username: " + username + " and password: " + password + "");
-        } else {
-            let user = checkUserInDatabase(hashedPassword, undefined, username);
+        // if (validateLogin(username)) {
+        /*const user: UserInfo = {
+                username: username,
+                email: "nico@mail.com";
+
+           }*/ checkUserInDatabase(hashedPassword, username, undefined)
+            .then((user) => {
+                console.log(user);
+                login(username, hashedPassword);
+                console.log("Login successful with username: " + username + " and password: " + password + "");
+                // Autres logiques avec user
+            })
+            .catch((error) => {
+                console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                // Gérer l'erreur
+            });
+        //
+      
+        /*} else {
+            //let user = checkUserInDatabase(hashedPassword, undefined, username);
+            // console.log(user)
             login(username, hashedPassword);
             console.log("Login successful with Email: " + username + " and password: " + password + "");
-        }
+        }*/
     };
-
+    // TODO: Perform SSO login logic here
+    /**
+     * Check [...nextauth].ts
+     */
     const loginGoogle = () => {
-        // TODO:
-        /**
-            Faire session cookie pour préserver les informations post reload ou redirection
-            Modifier par la suite la fonction
-        */
         signIn("google");
         console.log("Login with Google");
         login("test", "test");
     };
 
     const loginMicrosoft = () => {
-        // TODO: Perform Microsoft login logic here
         console.log("Login with Microsoft");
     };
 
     const loginGithub = () => {
-        // TODO: Perform GitHub login logic here
         console.log("Login with GitHub");
     };
 
