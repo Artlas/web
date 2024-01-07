@@ -38,8 +38,8 @@ const DiscoverPost: React.FC<PostProps> = ({ id, title, description, category, s
     let router = useRouter();
 
     const handlePostClick = () => {
-        console.log("Clique sur l'arrière-plan de la div");
-        //router.push(`/post/${id}`);
+        //console.log("Clique sur l'arrière-plan de la div");
+        router.push(`/post/${id}`);
     };
 
     const handleOpenImage = () => {
