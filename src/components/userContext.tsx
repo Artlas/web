@@ -24,6 +24,8 @@ interface UserInfo {
     email: string;
     familyName: string;
     name: string;
+    birthdate?: Date | string;
+    address?: string;
     acceptCookies: boolean;
     autoPlayDiaporamas?: boolean;
     avatar?: string;
@@ -69,6 +71,8 @@ export const UserProvider: React.FC = ({ children }: any) => {
             email: "example@example.com",
             familyName: "Doe",
             name: "John",
+            birthdate: "1990-01-01",
+            address: "1, rue de la Paix, 75000 Paris",
             acceptCookies: true,
             autoPlayDiaporamas: true,
             avatar: "https://picsum.photos/200",
