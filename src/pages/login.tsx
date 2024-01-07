@@ -2,10 +2,10 @@ import React, { useContext, useState } from "react";
 import { UserContext, UserInfo } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
-import { checkUserInDatabase } from "../pages/api/userAPI";
+import { getUserInDatabase } from "../pages/api/userAPI";
 import { validatePassword, validateLogin, hashPasswordSha256 } from "../utils/validators";
 import { signIn } from "next-auth/react";
-
+import { setConnectedUser, connectUser } from "../utils/loginHandler";
 const LoginPage: React.FC = () => {
     const { login, setSignup, setUserNeeded } = useContext(UserContext);
     const [username, setUsername] = useState("");
@@ -21,58 +21,59 @@ const LoginPage: React.FC = () => {
             Faire session cookie pour préserver les informations post reload ou redirection
             Modifier par la suite la fonction
     */
-    function setConnectedUser(userData: any) {
-        connectedUser = {
-            username: userData?.id ?? "",
-            email: userData?.mail ?? "",
-            fname: userData?.firstName ?? "",
-            lname: userData?.lastName ?? "",
-            image: userData?.image ?? "",
-            address: userData?.address ?? "",
-            birthdate: userData?.birthdate ?? "",
-            token: userData?.token ?? "",
-            permission: userData?.permission ?? "",
-        };
-        return connectedUser;
-    }
+    //TODO
+    /**
+     * FIX BUG UTILISATEUR N'existant pas peut se co
+     */
     const handleLogin = (event: { preventDefault: () => void }) => {
         event.preventDefault(); // empêche un reload
         let hashedPassword;
-        if (!validatePassword(password)) {
-            alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
-            return;
-        } else {
-            console.log("Password validated");
-            hashedPassword = hashPasswordSha256(password);
-        }
-        if (validateLogin(username)) {
-            alert(username + " pas mail");
-            checkUserInDatabase(hashedPassword, username, undefined)
-                .then((data) => {
-                    const userData = data.user;
-                    connectedUser = setConnectedUser(userData);
-                    login(connectedUser);
-                })
-                .catch((error) => {
-                    console.error("Erreur lors de la récupération de l'utilisateur:", error);
-                    // Gérer l'erreur
-                });
-        } else {
-            alert(username + " mail");
-            checkUserInDatabase(hashedPassword, undefined, username)
-                .then((data) => {
-                    const userData = data.user;
-                    connectedUser = setConnectedUser(userData);
-                    login(connectedUser);
-                })
-                .catch((error) => {
-                    console.error("Erreur lors de la récupération de l'utilisateur:", error);
-                    // Gérer l'erreur
-                });
-            console.log(connectedUser.email);
+        try {
+            if (!validatePassword(password)) {
+                alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
+                return;
+            } else {
+                console.log("Password validated");
+                hashedPassword = hashPasswordSha256(password);
+                console.log(hashedPassword);
+            }
+            if (validateLogin(username)) {
+                getUserInDatabase(hashedPassword, username, undefined)
+                    .then((data) => {
+                        const userData = data.user;
+                        connectedUser = setConnectedUser(userData);
+                        login(connectedUser);
+                    })
+                    .catch((error) => {
+                        console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                    });
+            } else {
+                getUserInDatabase(hashedPassword, undefined, username)
+                    .then((data) => {
+                        const userData = data.user;
+                        connectedUser = setConnectedUser(userData);
+                        login(connectedUser);
+                    })
+                    .catch((error) => {
+                        console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                    });
+            }
+            //TODO
+            // WAITING FOR REFACTOR
+            // if (validateLogin(username)) {
+            //     connectedUser = connectUser(hashedPassword, username, undefined);
+            //     login(connectedUser);
+            // } else {
+            //     connectedUser = connectUser(hashedPassword, undefined, username);
+            //     login(connectedUser);
+            // }
+        } catch (error) {
+            console.error("Erreur lors de la récupération de l'utilisateur:", error);
+            throw error;
         }
     };
     // TODO: Perform SSO login logic here
+    // #region SSO
     /**
      * Check [...nextauth].ts
      */
@@ -88,7 +89,7 @@ const LoginPage: React.FC = () => {
     const loginGithub = () => {
         console.log("Login with GitHub");
     };
-
+    //#endregion
     const handleCloseLogin = () => {
         setUserNeeded(false);
         redirect();
@@ -142,7 +143,7 @@ const LoginPage: React.FC = () => {
                         <div className="flex flex-col justify-between items-center">
                             <button
                                 id="loginLoginButton"
-                                type="submit" //! Shoud be "submit" but causes a page reload
+                                type="submit"
                                 className="bg-black dark:bg-white border-2 rounded-md py-2 px-4 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                                 onClick={handleLogin}
                             >

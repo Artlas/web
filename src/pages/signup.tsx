@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
-import { UserContext } from "../components/userContext";
+import { UserContext, UserInfo } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
+import { validatePassword, validateLogin, hashPasswordSha256 } from "../utils/validators";
+import { createUserInDatabase, getUserInDatabase } from "./api/userAPI";
+import { connectUser, setConnectedUser } from "../utils/loginHandler";
 
 const SignupPage: React.FC = () => {
     const { login, setSignup, setUserNeeded } = useContext(UserContext);
@@ -17,29 +20,131 @@ const SignupPage: React.FC = () => {
     function redirect() {
         router.push("/");
     }
+    interface newUser {
+        id: string;
+        mail: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        address: string;
+        birthdate: string;
+    }
+    let newUser: newUser;
 
-    const handleLogin = () => {
+    let connectedUser: UserInfo;
+    let userCreated = false;
+
+    async function connectCreatedUser() {
+        try {
+            console.log(newUser);
+            const data = await getUserInDatabase(newUser.password, undefined, newUser.id);
+            const userData = data.user;
+            console.log(userData);
+            connectedUser = setConnectedUser(userData);
+            console.log(connectedUser);
+            login(connectedUser);
+        } catch (error) {
+            console.error("Erreur lors de la récupération de l'utilisateur:", error);
+        }
+    }
+    async function waitForUserToBeReady(email: string, password: string) {
+        let attempts = 0;
+        while (attempts < 5) {
+            try {
+                const data = await getUserInDatabase(password, undefined, email);
+                if (data && data.user) {
+                    return data.user; // L'utilisateur est prêt
+                }
+            } catch (error) {
+                // Si erreur autre que l'utilisateur non trouvé, lancer l'erreur
+
+                throw error;
+            }
+            // Attendre avant la prochaine vérification
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            attempts++;
+        }
+        throw new Error("L'utilisateur n'est pas prêt pour la connexion après plusieurs tentatives.");
+    }
+    const handleLogin = (event: { preventDefault: () => void }) => {
+        event.preventDefault(); // empêche un reload
         // TODO: Perform signup logic here
-        login(username, password);
-        console.log("Login successful with username: " + username + " and password: " + password + "");
-        redirect();
-    };
 
+        let hashedPassword;
+        if (!validatePassword(password)) {
+            alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
+            return;
+        } else {
+            console.log("Password validated");
+            console.log("Email: ", email);
+            hashedPassword = hashPasswordSha256(password);
+        }
+
+        if (!validateLogin(email)) {
+            newUser = {
+                id: username,
+                mail: email,
+                password: hashedPassword,
+                firstName: firstName,
+                lastName: lastName,
+                address: address,
+                birthdate: birthDate,
+            };
+            console.log("Before CreateUser ", newUser);
+            createUserInDatabase(newUser)
+                .then((data) => {
+                    console.log("After CreateUser ", newUser);
+                    console.log("User created: ", data);
+                    return waitForUserToBeReady(newUser.mail, newUser.password);
+                    // connectCreatedUser();
+                    // userCreated = true;
+                    // getUserInDatabase(newUser.password, undefined, newUser.id)
+                    //     .then((data) => {
+                    //         const userData = data.user;
+                    //         console.log(userData);
+                    //         connectedUser = setConnectedUser(userData);
+                    //         console.log(connectedUser);
+                    //         login(connectedUser);
+                    //     })
+                    //     .catch((error) => {
+                    //         console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                    //         // Gérer l'erreur
+                    //     });
+                })
+                .then((userData) => {
+                    // L'utilisateur est prêt, procéder à la connexion
+                    login(userData);
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de la création ou de la connexion de l'utilisateur:", error);
+                });
+        }
+        if (userCreated) {
+            console.log("L'user a été créé");
+            connectCreatedUser();
+        }
+        // if (userCreated) {
+        //     console.log("before connecting User");
+        //
+        //     console.log("after connecting User");
+        //     console.log(connectedUser);
+
+        // }
+    };
+    // TODO: Perform Google login logic here
+    //#region SSO
     const loginGoogle = () => {
-        // TODO: Perform Google login logic here
         console.log("Login with Google");
     };
 
     const loginMicrosoft = () => {
-        // TODO: Perform Microsoft login logic here
         console.log("Login with Microsoft");
     };
 
     const loginGithub = () => {
-        // TODO: Perform GitHub login logic here
         console.log("Login with GitHub");
     };
-
+    //#endregion
     const handleCloseLogin = () => {
         setUserNeeded(false);
         redirect();
@@ -165,7 +270,7 @@ const SignupPage: React.FC = () => {
                         <div className="flex flex-col justify-between items-center">
                             <button
                                 id="loginLoginButton"
-                                type="button" //! Shoud be "submit" but causes a page reload
+                                type="submit"
                                 className="bg-black dark:bg-white border-2 rounded-md py-2 px-4 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                                 onClick={handleLogin}
                             >

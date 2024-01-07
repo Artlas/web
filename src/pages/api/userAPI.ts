@@ -1,6 +1,6 @@
 import apiConfig from "./apiConfig.json";
 
-export const checkUserInDatabase = async (password: string, userId?: string, mail?: string) => {
+export const getUserInDatabase = async (password: string, userId?: string, mail?: string) => {
     const connectEndpoint = apiConfig.BASE_URL + apiConfig.LOGIN_ENDPOINT;
 
     async function getUserMail(password: string, mail: string) {
@@ -71,6 +71,7 @@ export const createUserInDatabase = async (userData: any) => {
     try {
         const response = await fetch(createEndpoint, {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
