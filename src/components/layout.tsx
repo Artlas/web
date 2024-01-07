@@ -5,8 +5,8 @@ import { UserContext } from "./userContext";
 import Image from "next/image";
 import Link from "next/link";
 import { SlMenu } from "react-icons/sl";
-import { FaUserCircle } from "react-icons/fa";
-import { FaCompass, FaRegCompass, FaUser, FaRegUser, FaMagnifyingGlass } from "react-icons/fa6";
+import { FaUserCircle, FaUserFriends, FaCog } from "react-icons/fa";
+import { FaCompass, FaRegCompass, FaUser, FaRegUser, FaMagnifyingGlass, FaTableList, FaUserSlash, FaDoorOpen } from "react-icons/fa6";
 import { HiLibrary, HiOutlineLibrary } from "react-icons/hi";
 import { PiMagnifyingGlass } from "react-icons/pi";
 import { PiPlusBold, PiPlus } from "react-icons/pi";
@@ -327,38 +327,43 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                 <div>
                                                     <Link
                                                         href="/profile"
-                                                        className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
+                                                        className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="openProfileLink"
                                                     >
+                                                        <FaUser size={16} className="inline mr-2" />
                                                         Profil
                                                     </Link>
                                                     <Link
                                                         href="/friends"
-                                                        className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
+                                                        className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="openFriendsLink"
                                                     >
+                                                        <FaUserFriends className="mr-2" size={16} />
                                                         Mes amis
                                                     </Link>
                                                     <Link
                                                         href="/mylists"
-                                                        className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
+                                                        className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="openMyListsLink"
                                                     >
+                                                        <FaTableList className="mr-2" size={16} />
                                                         Mes listes
                                                     </Link>
                                                     <Link
                                                         href="/settings"
-                                                        className="block px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
+                                                        className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="openSettingsLink"
                                                     >
+                                                        <FaCog className="mr-2" size={16} />
                                                         Paramètres
                                                     </Link>
                                                     <button
                                                         onClick={() => logout()}
-                                                        className="block px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
+                                                        className="flex px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="logoutButton"
                                                         type="button"
                                                     >
+                                                        <FaDoorOpen className="mr-2" size={16} />
                                                         Déconnexion
                                                     </button>
                                                 </div>
