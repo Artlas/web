@@ -53,14 +53,12 @@ const SignupPage: React.FC = () => {
             try {
                 const data = await getUserInDatabase(password, undefined, email);
                 if (data && data.user) {
-                    return data.user; // L'utilisateur est prêt
+                    return data.user;
                 }
             } catch (error) {
-                // Si erreur autre que l'utilisateur non trouvé, lancer l'erreur
-
                 throw error;
             }
-            // Attendre avant la prochaine vérification
+            // Attendre avant la prochaine vérification (on check 5 fois la connexion)
             await new Promise((resolve) => setTimeout(resolve, 1000));
             attempts++;
         }
@@ -119,17 +117,6 @@ const SignupPage: React.FC = () => {
                     console.error("Erreur lors de la création ou de la connexion de l'utilisateur:", error);
                 });
         }
-        if (userCreated) {
-            console.log("L'user a été créé");
-            connectCreatedUser();
-        }
-        // if (userCreated) {
-        //     console.log("before connecting User");
-        //
-        //     console.log("after connecting User");
-        //     console.log(connectedUser);
-
-        // }
     };
     // TODO: Perform Google login logic here
     //#region SSO

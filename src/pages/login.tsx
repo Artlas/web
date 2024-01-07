@@ -21,10 +21,7 @@ const LoginPage: React.FC = () => {
             Faire session cookie pour préserver les informations post reload ou redirection
             Modifier par la suite la fonction
     */
-    //TODO
-    /**
-     * FIX BUG UTILISATEUR N'existant pas peut se co
-     */
+
     const handleLogin = (event: { preventDefault: () => void }) => {
         event.preventDefault(); // empêche un reload
         let hashedPassword;
@@ -38,35 +35,24 @@ const LoginPage: React.FC = () => {
                 console.log(hashedPassword);
             }
             if (validateLogin(username)) {
-                getUserInDatabase(hashedPassword, username, undefined)
-                    .then((data) => {
-                        const userData = data.user;
-                        connectedUser = setConnectedUser(userData);
-                        login(connectedUser);
+                connectUser(hashedPassword, username)
+                    .then((connectedUser) => {
+                        if (connectedUser) login(connectedUser);
+                        else alert("La connexion a échoué");
                     })
                     .catch((error) => {
-                        console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                        console.error("Erreur lors de la connexion de l'utilisateur:", error);
                     });
             } else {
-                getUserInDatabase(hashedPassword, undefined, username)
-                    .then((data) => {
-                        const userData = data.user;
-                        connectedUser = setConnectedUser(userData);
-                        login(connectedUser);
+                connectUser(hashedPassword, undefined, username)
+                    .then((connectedUser) => {
+                        if (connectedUser) login(connectedUser);
+                        else alert("La connexion a échoué");
                     })
                     .catch((error) => {
-                        console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                        console.error("Erreur lors de la connexion de l'utilisateur:", error);
                     });
             }
-            //TODO
-            // WAITING FOR REFACTOR
-            // if (validateLogin(username)) {
-            //     connectedUser = connectUser(hashedPassword, username, undefined);
-            //     login(connectedUser);
-            // } else {
-            //     connectedUser = connectUser(hashedPassword, undefined, username);
-            //     login(connectedUser);
-            // }
         } catch (error) {
             console.error("Erreur lors de la récupération de l'utilisateur:", error);
             throw error;

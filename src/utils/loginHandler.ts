@@ -19,9 +19,10 @@ export async function connectUser(hashedPassword: string, username?: string, ema
     try {
         let data;
         if (email) {
-            data = await getUserInDatabase(hashedPassword, email, undefined);
+            // Supposons que getUserInDatabase attend (hashedPassword, username, email)
+            data = await getUserInDatabase(hashedPassword, undefined, email);
         } else if (username) {
-            data = await getUserInDatabase(hashedPassword, undefined, username);
+            data = await getUserInDatabase(hashedPassword, username, undefined);
         } else {
             throw new Error("Email et username sont nuls");
         }
@@ -30,7 +31,6 @@ export async function connectUser(hashedPassword: string, username?: string, ema
             throw new Error("Aucune donnée utilisateur retournée");
         }
 
-        console.log("email:", email, "username:", username);
         const connectedUser: UserInfo = setConnectedUser(data.user);
         return connectedUser;
     } catch (error) {
