@@ -359,7 +359,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                     </Link>
                                                     <button
                                                         onClick={() => logout()}
-                                                        className="flex px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
+                                                        className="flex px-4 py-2 text-sm pr-24 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 text-red-700 dark:text-red-400"
                                                         id="logoutButton"
                                                         type="button"
                                                     >
