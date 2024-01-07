@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { UserContext } from "../components/userContext";
 import { useRouter } from "next/router";
 import Masonry from "react-masonry-css";
 import DiscoverPost from "../components/discoverPost";
 
 const Profile: React.FC = () => {
-    const [autoPlaying, setAutoPlaying] = useState(true);
+    const { user, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
+    const [autoPlaying, setAutoPlaying] = useState(autoPlayDiaporamas || false);
 
-    const handleToggleAutoPlay = () => {
-        setAutoPlaying(!autoPlaying);
-    };
+    useEffect(() => {
+        setAutoPlayDiaporamas(autoPlaying);
+    }, [autoPlaying, setAutoPlayDiaporamas]);
+
+    useEffect(() => {
+        setAutoPlaying(autoPlayDiaporamas);
+    }, [autoPlayDiaporamas]);
 
     const breakpointColumnsObj = {
         default: 3,
@@ -82,8 +88,11 @@ const Profile: React.FC = () => {
             <div className="flex items-center">
                 <span className="mr-2">{"Lecture automatique des images des posts :"}</span>
                 <label className="flex items-center">
-                    <input type="checkbox" className="form-checkbox h-5 w-5 " checked={autoPlaying} onChange={handleToggleAutoPlay} />
-                    <span className="ml-2">{autoPlaying ? "Activé" : "Désactivé"}</span>
+                    <div className="relative cursor-pointer">
+                        <input type="checkbox" name="AutoPlay" id="AutoPlayDiaposSettingsToggle" className="peer sr-only" checked={autoPlaying} onChange={() => setAutoPlaying(!autoPlaying)} />
+                        <div className="peer h-5 w-9 rounded-full bg-gray-400 dark:bg-stone-600 after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 dark:after:border-stone-600 after:bg-white dark:after:bg-black after:transition-all after:content-[''] peer-checked:bg-black dark:peer-checked:bg-white peer-checked:after:translate-x-full peer-checked:after:border-white dark:peer-checked:after:border-black peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#AAAAAA88]"></div>
+                        <span className="sr-only">Toggle</span>
+                    </div>
                 </label>
             </div>
             <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
