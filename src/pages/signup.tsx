@@ -59,7 +59,7 @@ const SignupPage: React.FC = () => {
             alert("Votre email saisie n'est pas valide, veuillez entrer une adresse email correcte");
             return;
         } else {
-            console.log("Username validated");
+            console.log("Email validé");
         }
         const userExists = await checkUserExistence(email, username);
         if (!userExists) {
