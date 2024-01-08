@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
-import { UserContext, UserInfo } from "../components/userContext";
+import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
 import { validatePassword, validateLogin, hashPasswordSha256 } from "../utils/validators";
-import { createUserInDatabase, getUserInDatabase } from "./api/userAPI";
-import { connectUser, setConnectedUser } from "../utils/loginHandler";
+import { createUserInDatabase, checkIfUserExists } from "./api/userAPI";
+import { connectUser } from "../utils/loginHandler";
 
 const SignupPage: React.FC = () => {
     const { login, setSignup, setUserNeeded } = useContext(UserContext);
@@ -15,11 +15,7 @@ const SignupPage: React.FC = () => {
     const [lastName, setLastName] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [address, setAddress] = useState("");
-
     let router = useRouter();
-    function redirect() {
-        router.push("/");
-    }
     interface newUser {
         id: string;
         mail: string;
@@ -31,43 +27,25 @@ const SignupPage: React.FC = () => {
     }
     let newUser: newUser;
 
-    let connectedUser: UserInfo;
-    let userCreated = false;
+    function redirect() {
+        router.push("/");
+    }
+    async function checkUserExistence(email: string, username: string) {
+        const emailCheckResult = await checkIfUserExists(email, null);
+        if (emailCheckResult.userExists) {
+            alert("Un compte avec cet email existe déjà.");
+            return true;
+        }
+        const usernameCheckResult = await checkIfUserExists(null, username);
+        if (usernameCheckResult.userExists) {
+            alert("Un compte avec ce nom d'utilisateur existe déjà.");
+            return true;
+        }
+        return false;
+    }
 
-    async function connectCreatedUser() {
-        try {
-            console.log(newUser);
-            const data = await getUserInDatabase(newUser.password, undefined, newUser.id);
-            const userData = data.user;
-            console.log(userData);
-            connectedUser = setConnectedUser(userData);
-            console.log(connectedUser);
-            login(connectedUser);
-        } catch (error) {
-            console.error("Erreur lors de la récupération de l'utilisateur:", error);
-        }
-    }
-    async function waitForUserToBeReady(email: string, password: string) {
-        let attempts = 0;
-        while (attempts < 5) {
-            try {
-                const data = await getUserInDatabase(password, undefined, email);
-                if (data && data.user) {
-                    return data.user;
-                }
-            } catch (error) {
-                throw error;
-            }
-            // Attendre avant la prochaine vérification (on check 5 fois la connexion)
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            attempts++;
-        }
-        throw new Error("L'utilisateur n'est pas prêt pour la connexion après plusieurs tentatives.");
-    }
-    const handleLogin = (event: { preventDefault: () => void }) => {
+    const handleLogin = async (event: { preventDefault: () => void }) => {
         event.preventDefault(); // empêche un reload
-        // TODO: Perform signup logic here
-
         let hashedPassword;
         if (!validatePassword(password)) {
             alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
@@ -77,8 +55,14 @@ const SignupPage: React.FC = () => {
             console.log("Email: ", email);
             hashedPassword = hashPasswordSha256(password);
         }
-
-        if (!validateLogin(email)) {
+        if (validateLogin(email)) {
+            alert("Votre email saisie n'est pas valide, veuillez entrer une adresse email correcte");
+            return;
+        } else {
+            console.log("Username validated");
+        }
+        const userExists = await checkUserExistence(email, username);
+        if (!userExists) {
             newUser = {
                 id: username,
                 mail: email,
@@ -88,34 +72,18 @@ const SignupPage: React.FC = () => {
                 address: address,
                 birthdate: birthDate,
             };
-            console.log("Before CreateUser ", newUser);
-            createUserInDatabase(newUser)
-                .then((data) => {
-                    console.log("After CreateUser ", newUser);
-                    console.log("User created: ", data);
-                    return waitForUserToBeReady(newUser.mail, newUser.password);
-                    // connectCreatedUser();
-                    // userCreated = true;
-                    // getUserInDatabase(newUser.password, undefined, newUser.id)
-                    //     .then((data) => {
-                    //         const userData = data.user;
-                    //         console.log(userData);
-                    //         connectedUser = setConnectedUser(userData);
-                    //         console.log(connectedUser);
-                    //         login(connectedUser);
-                    //     })
-                    //     .catch((error) => {
-                    //         console.error("Erreur lors de la récupération de l'utilisateur:", error);
-                    //         // Gérer l'erreur
-                    //     });
-                })
-                .then((userData) => {
-                    // L'utilisateur est prêt, procéder à la connexion
-                    login(userData);
-                })
-                .catch((error) => {
-                    console.error("Erreur lors de la création ou de la connexion de l'utilisateur:", error);
-                });
+            try {
+                await createUserInDatabase(newUser);
+                console.log("User created");
+                const connectedUser = await connectUser(hashedPassword, undefined, email);
+                if (connectedUser) {
+                    login(connectedUser);
+                } else {
+                    console.error("Échec de la connexion de l'utilisateur.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la création ou de la connexion de l'utilisateur:", error);
+            }
         }
     };
     // TODO: Perform Google login logic here

@@ -3,5 +3,6 @@
     "LOGIN_ENDPOINT": "/user/connect",
     "REGISTER_ENDPOINT": "/user/add",
     "UPDATE_ENDPOINT": "/user/update",
-    "DELETE_ENDPOINT": "/user/delete"
+    "DELETE_ENDPOINT": "/user/delete",
+    "CHECK_ENDPOINT": "/user/check"
 }

@@ -20,7 +20,7 @@ const Profile: React.FC<ProfileProps> = ({ bio }) => {
                     <p>{user.permission}</p>
                     <p>{user.address}</p>
                     <p>{user.birthdate}</p>
-                    <p>{bio}</p>
+                    <p>{user.token}</p>
                     {/* Ajoutez ici d'autres informations de profil si nécessaire */}
                 </>
             ) : (

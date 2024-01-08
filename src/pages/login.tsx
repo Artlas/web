@@ -1,18 +1,18 @@
 import React, { useContext, useState } from "react";
-import { UserContext, UserInfo } from "../components/userContext";
+import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
-import { getUserInDatabase } from "../pages/api/userAPI";
 import { validatePassword, validateLogin, hashPasswordSha256 } from "../utils/validators";
 import { signIn } from "next-auth/react";
-import { setConnectedUser, connectUser } from "../utils/loginHandler";
+import { connectUser } from "../utils/loginHandler";
+
 const LoginPage: React.FC = () => {
     const { login, setSignup, setUserNeeded } = useContext(UserContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     let router = useRouter();
-    let connectedUser: UserInfo;
+
     function redirect() {
         router.push("/");
     }

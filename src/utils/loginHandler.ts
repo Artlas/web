@@ -38,34 +38,3 @@ export async function connectUser(hashedPassword: string, username?: string, ema
         throw error; // Propager l'erreur
     }
 }
-
-// export async function connectUser(hashedPassword: string, username?: string, email?: string) {
-//     let connectedUser: UserInfo;
-//     if (email != null) {
-//         checkUserInDatabase(hashedPassword, email, undefined)
-//             .then((data) => {
-//                 console.log("email:", email);
-//                 const userData = data.user;
-//                 connectedUser = setConnectedUser(userData);
-//                 //login(connectedUser);
-//             })
-//             .catch((error) => {
-//                 console.error("Erreur lors de la récupération de l'utilisateur:", error);
-//                 // Gérer l'erreur
-//             });
-//     }
-//     if (username != null) {
-//         checkUserInDatabase(hashedPassword, undefined, username)
-//             .then((data) => {
-//                 console.log("username:", username);
-//                 const userData = data.user;
-//                 connectedUser = setConnectedUser(userData);
-//                 //login(connectedUser);
-//             })
-//             .catch((error) => {
-//                 console.error("Erreur lors de la récupération de l'utilisateur:", error);
-//                 // Gérer l'erreur
-//             });
-//     }
-//     return connectedUser;
-// }
