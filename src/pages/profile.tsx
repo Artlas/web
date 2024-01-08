@@ -65,7 +65,7 @@ export default function Profile(){
                         <span className="m-3">Posts</span>
                     </button>
                     <button className={`p-1 rounded-lg ${clickedLiked ? "bg-black dark:bg-white text-white dark:text-black " : "text-black dark:text-white hover:bg-gray-800"}`} onClick={handleItemClickLiked} type="button"> 
-                        <span className="m-2">J'aime</span>
+                        <span className="m-2">J&apos;aime</span>
                     </button>
                     <button className={`p-1 rounded-lg ${clickedListe ? "bg-black dark:bg-white text-white dark:text-black " : "text-black dark:text-white hover:bg-gray-800"}`} onClick={handleItemClickListe} type="button"> 
                         <span className="m-2">Listes</span>
