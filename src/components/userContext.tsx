@@ -66,9 +66,9 @@ export const UserProvider: React.FC = ({ children }: any) => {
     // Function to handle user login
 
     const login = (user: UserInfo) => {
-        user.acceptCookies: true,
+        /* user.acceptCookies: true,
         user.autoPlayDiaporamas: true,
-        user.preferredTheme: "system", //"light",
+        user.preferredTheme: "system", //"light",*/
         setUser(user);
         setConnected(true);
         setSignup(false);
