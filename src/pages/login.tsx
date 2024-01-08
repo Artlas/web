@@ -2,6 +2,9 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
+import { validatePassword, validateLogin, hashPasswordSha256 } from "../utils/validators";
+import { signIn } from "next-auth/react";
+import { connectUser } from "../utils/loginHandler";
 
 const LoginPage: React.FC = () => {
     const { login, setSignup, setUserNeeded } = useContext(UserContext);
@@ -9,31 +12,70 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState("");
 
     let router = useRouter();
+
     function redirect() {
         router.push("/");
     }
+    // TODO:
+    /**
+            Faire session cookie pour préserver les informations post reload ou redirection
+            Modifier par la suite la fonction
+    */
 
-    const handleLogin = () => {
-        // TODO: Perform login logic here
-        login(username, password);
-        console.log("Login successful with username: " + username + " and password: " + password + "");
+    const handleLogin = (event: { preventDefault: () => void }) => {
+        event.preventDefault(); // empêche un reload
+        let hashedPassword;
+        try {
+            if (!validatePassword(password)) {
+                alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
+                return;
+            } else {
+                console.log("Password validated");
+                hashedPassword = hashPasswordSha256(password);
+                console.log(hashedPassword);
+            }
+            if (validateLogin(username)) {
+                connectUser(hashedPassword, username)
+                    .then((connectedUser) => {
+                        if (connectedUser) login(connectedUser);
+                        else alert("La connexion a échoué");
+                    })
+                    .catch((error) => {
+                        console.error("Erreur lors de la connexion de l'utilisateur:", error);
+                    });
+            } else {
+                connectUser(hashedPassword, undefined, username)
+                    .then((connectedUser) => {
+                        if (connectedUser) login(connectedUser);
+                        else alert("La connexion a échoué");
+                    })
+                    .catch((error) => {
+                        console.error("Erreur lors de la connexion de l'utilisateur:", error);
+                    });
+            }
+        } catch (error) {
+            console.error("Erreur lors de la récupération de l'utilisateur:", error);
+            throw error;
+        }
     };
-
+    // TODO: Perform SSO login logic here
+    // #region SSO
+    /**
+     * Check [...nextauth].ts
+     */
     const loginGoogle = () => {
-        // TODO: Perform Google login logic here
+        signIn("google");
         console.log("Login with Google");
     };
 
     const loginMicrosoft = () => {
-        // TODO: Perform Microsoft login logic here
         console.log("Login with Microsoft");
     };
 
     const loginGithub = () => {
-        // TODO: Perform GitHub login logic here
         console.log("Login with GitHub");
     };
-
+    //#endregion
     const handleCloseLogin = () => {
         setUserNeeded(false);
         redirect();
@@ -87,7 +129,7 @@ const LoginPage: React.FC = () => {
                         <div className="flex flex-col justify-between items-center">
                             <button
                                 id="loginLoginButton"
-                                type="button" //! Shoud be "submit" but causes a page reload
+                                type="submit"
                                 className="bg-black dark:bg-white border-2 rounded-md py-2 px-4 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                                 onClick={handleLogin}
                             >

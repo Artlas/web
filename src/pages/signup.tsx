@@ -2,6 +2,9 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
+import { validatePassword, validateLogin, hashPasswordSha256 } from "../utils/validators";
+import { createUserInDatabase, checkIfUserExists } from "./api/userAPI";
+import { connectUser } from "../utils/loginHandler";
 
 const SignupPage: React.FC = () => {
     const { login, setSignup, setUserNeeded } = useContext(UserContext);
@@ -12,34 +15,91 @@ const SignupPage: React.FC = () => {
     const [lastName, setLastName] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [address, setAddress] = useState("");
-
     let router = useRouter();
+    interface newUser {
+        id: string;
+        mail: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        address: string;
+        birthdate: string;
+    }
+    let newUser: newUser;
+
     function redirect() {
         router.push("/");
     }
+    async function checkUserExistence(email: string, username: string) {
+        const emailCheckResult = await checkIfUserExists(email, null);
+        if (emailCheckResult.userExists) {
+            alert("Un compte avec cet email existe déjà.");
+            return true;
+        }
+        const usernameCheckResult = await checkIfUserExists(null, username);
+        if (usernameCheckResult.userExists) {
+            alert("Un compte avec ce nom d'utilisateur existe déjà.");
+            return true;
+        }
+        return false;
+    }
 
-    const handleLogin = () => {
-        // TODO: Perform signup logic here
-        login(username, password);
-        console.log("Login successful with username: " + username + " and password: " + password + "");
-        redirect();
+    const handleLogin = async (event: { preventDefault: () => void }) => {
+        event.preventDefault(); // empêche un reload
+        let hashedPassword;
+        if (!validatePassword(password)) {
+            alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
+            return;
+        } else {
+            console.log("Password validated");
+            console.log("Email: ", email);
+            hashedPassword = hashPasswordSha256(password);
+        }
+        if (validateLogin(email)) {
+            alert("Votre email saisie n'est pas valide, veuillez entrer une adresse email correcte");
+            return;
+        } else {
+            console.log("Email validé");
+        }
+        const userExists = await checkUserExistence(email, username);
+        if (!userExists) {
+            newUser = {
+                id: username,
+                mail: email,
+                password: hashedPassword,
+                firstName: firstName,
+                lastName: lastName,
+                address: address,
+                birthdate: birthDate,
+            };
+            try {
+                await createUserInDatabase(newUser);
+                console.log("User created");
+                const connectedUser = await connectUser(hashedPassword, undefined, email);
+                if (connectedUser) {
+                    login(connectedUser);
+                } else {
+                    console.error("Échec de la connexion de l'utilisateur.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la création ou de la connexion de l'utilisateur:", error);
+            }
+        }
     };
-
+    // TODO: Perform Google login logic here
+    //#region SSO
     const loginGoogle = () => {
-        // TODO: Perform Google login logic here
         console.log("Login with Google");
     };
 
     const loginMicrosoft = () => {
-        // TODO: Perform Microsoft login logic here
         console.log("Login with Microsoft");
     };
 
     const loginGithub = () => {
-        // TODO: Perform GitHub login logic here
         console.log("Login with GitHub");
     };
-
+    //#endregion
     const handleCloseLogin = () => {
         setUserNeeded(false);
         redirect();
@@ -165,7 +225,7 @@ const SignupPage: React.FC = () => {
                         <div className="flex flex-col justify-between items-center">
                             <button
                                 id="loginLoginButton"
-                                type="button" //! Shoud be "submit" but causes a page reload
+                                type="submit"
                                 className="bg-black dark:bg-white border-2 rounded-md py-2 px-4 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                                 onClick={handleLogin}
                             >
