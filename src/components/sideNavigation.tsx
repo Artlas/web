@@ -152,7 +152,7 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
                                                                 : "hover:text-stone-800 dark:hover:text-stone-300 hover:font-bold"
                                                         } md:text-lg `}
                                                     >
-                                                        {item === "all" ? "Tous" : item.charAt(0).toUpperCase() + item.slice(1)}
+                                                        {item === "all" ? "Tous" : item.charAt(0).toUpperCase() + item.slice(1).replaceAll("_", " ")}
                                                     </span>
                                                 </Link>
                                             );

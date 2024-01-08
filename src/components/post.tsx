@@ -56,6 +56,7 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
                     handlePostClick();
                 }
             }}
+            id="postContainer"
         >
             <div
                 className="flex justify-between"
@@ -64,6 +65,7 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
                         handlePostClick();
                     }
                 }}
+                id="postHeaderContainer"
             >
                 <h2 className="text-lg font-bold mb-2 cursor-text">{title}</h2>
                 <span className="text-gray-600 dark:text-slate-200 text-xs cursor-text">{postDate.toLocaleDateString()}</span>
@@ -75,6 +77,7 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
                         handlePostClick();
                     }
                 }}
+                id="postCategoryContainer"
             >
                 <Link href={`/${category.toLowerCase()}/all`} id={`post${id}CategoryLink`}>
                     <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mr-2">{category}</span>
@@ -94,6 +97,7 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
                         handlePostClick();
                     }
                 }}
+                id="postIllustrationContainer"
             >
                 {/* Render carousel or video player based on illustration type
                 //TODO: Add a button to open the real image in full screen
@@ -133,6 +137,7 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
                         handlePostClick();
                     }
                 }}
+                id="postButtonsContainer"
             >
                 <button id={`post${id}LikeButton`} className={`flex items-center space-x-2 ${liked ? "text-red-500" : "text-gray-500 dark:text-slate-300"}`} onClick={handleLikeClick} type="button">
                     <FaHeart className="h-5 w-5" />

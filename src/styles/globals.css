@@ -105,3 +105,15 @@
   url("https://db.onlinewebfonts.com/t/71fffac3911b878d86cd3cd9b3a18038.svg#Felix Titling MT Std")format("svg");
 }
 
+
+@layer utilities {
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+     /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+    }
+  }
