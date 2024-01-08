@@ -1,7 +1,7 @@
 // pages/api/auth/[...nextauth].ts
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { checkUserInDatabase } from "../userAPI"
+import { getUserInDatabase } from "../userAPI"
 
 interface UserInfo {
     username: string;
