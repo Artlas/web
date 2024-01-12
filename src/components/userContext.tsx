@@ -3,7 +3,7 @@ import { useTheme } from "next-themes";
 // Define the initial state for the user context
 interface UserContextState {
     user: UserInfo | null;
-    login: (username: string, password: string) => void;
+    login: (user: UserInfo) => void;
     logout: () => void;
     userNeeded: boolean;
     setUserNeeded: (value: boolean) => void;
@@ -19,18 +19,19 @@ interface UserContextState {
 }
 
 // Define the type for the user information
-interface UserInfo {
+export interface UserInfo {
     username: string;
     email: string;
-    familyName: string;
-    name: string;
-    birthdate?: Date | string;
+    fname?: string;
+    lname?: string;
+    image?: string;
     address?: string;
-    acceptCookies: boolean;
+    birthdate?: Date | string;
+    token: string;
+    permission: string;
+    acceptCookies?: boolean;
     autoPlayDiaporamas?: boolean;
-    avatar?: string;
     preferredTheme?: string;
-    //TODO: Add any other properties you need for the user
 }
 
 // Create the user context
@@ -63,23 +64,11 @@ export const UserProvider: React.FC = ({ children }: any) => {
     const { setTheme } = useTheme();
 
     // Function to handle user login
-    const login = (username: string, password: string) => {
-        // Perform login logic here, e.g. making an API call
-        // Once the login is successful, update the user state
-        const user: UserInfo = {
-            username,
-            email: "example@example.com",
-            familyName: "Doe",
-            name: "John",
-            birthdate: "1990-01-01",
-            address: "1, rue de la Paix, 75000 Paris",
-            acceptCookies: true,
-            autoPlayDiaporamas: true,
-            avatar: "https://picsum.photos/200",
-            preferredTheme: "system", //"light",
-            // Set other user properties as needed
-        };
-        if (username === "") user.username = "Anonymous";
+
+    const login = (user: UserInfo) => {
+        /* user.acceptCookies: true,
+        user.autoPlayDiaporamas: true,
+        user.preferredTheme: "system", //"light",*/
         setUser(user);
         setConnected(true);
         setSignup(false);
@@ -88,8 +77,14 @@ export const UserProvider: React.FC = ({ children }: any) => {
         setPreferredTheme(user.preferredTheme || "system");
         setTheme(user.preferredTheme || "system");
 
-        console.log("Login successful with username: " + username + " and password: " + password + "");
+        console.log("Login successful with username: " + user.username + " and email: " + user.email);
         console.log("User info: ", user);
+    };
+    const ssoLogin = (userInfo: UserInfo) => {
+        setUser(userInfo);
+        setConnected(true);
+        setSignup(false);
+        console.log("Connexion SSO réussie:", userInfo);
     };
 
     // Function to handle user logout

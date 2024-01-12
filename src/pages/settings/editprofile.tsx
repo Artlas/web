@@ -51,7 +51,7 @@ const EditProfile: React.FC = () => {
                 </div>
                 <div className="pb-4">
                     <label htmlFor="firstName" className="block font-medium">
-                        Prénom - actuel : {user?.name}
+                        Prénom - actuel : {user?.fname}
                     </label>
                     <input
                         id="firstNameSignupInput"
@@ -65,7 +65,7 @@ const EditProfile: React.FC = () => {
                 </div>
                 <div className="pb-4">
                     <label htmlFor="lastName" className="block font-medium">
-                        Nom de famille - actuel : {user?.familyName}
+                        Nom de famille - actuel : {user?.lname}
                     </label>
                     <input
                         id="lastNameSignupInput"

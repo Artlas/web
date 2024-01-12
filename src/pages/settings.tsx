@@ -44,13 +44,13 @@ export default function Settings({}: Props) {
 
     return connected ? (
         <div className="container xl:max-w-4xl mx-auto bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-md border-2 border-solid  border-stone-200 dark:border-stone-800 py-4">
-            {user?.avatar && <Image src={user?.avatar} alt="Artlas Logo" width={100} height={100} className="mx-auto rounded-full border-2 border-black dark:border-white mb-4" />}
+            {user?.image && <Image src={user?.image} alt="Artlas Logo" width={100} height={100} className="mx-auto rounded-full border-2 border-black dark:border-white mb-4" />}
             <div className="px-2">
                 <h2 className="text-xl font-bold mx-2">Mon compte</h2>
                 <ListElement icon={<FaUser className="mr-2" size={25} />} label={"Nom d'utilisateur"} content={<div className="select-all">{user?.username}</div>} />
                 <ListElement icon={<MdAttachEmail className="mr-2" size={25} />} label={"Email"} content={<div className="select-all">{user?.email}</div>} />
-                <ListElement icon={<MdFamilyRestroom className="mr-2" size={25} />} label={"Nom"} content={<div className="select-all">{user?.familyName}</div>} />
-                <ListElement icon={<FaUserTag className="mr-2" size={25} />} label={"Prénom"} content={<div className="select-all">{user?.name}</div>} />
+                <ListElement icon={<MdFamilyRestroom className="mr-2" size={25} />} label={"Nom"} content={<div className="select-all">{user?.lname}</div>} />
+                <ListElement icon={<FaUserTag className="mr-2" size={25} />} label={"Prénom"} content={<div className="select-all">{user?.fname}</div>} />
                 <ListElement icon={<FaUserEdit className="mr-2" size={25} />} label={"Modifier mes informations"} content={<IoMdArrowRoundForward size={30} />} href={"/settings/editprofile"} />
             </div>
 
