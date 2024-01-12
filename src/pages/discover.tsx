@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../components/userContext";
 import { useRouter } from "next/router";
 import Masonry from "react-masonry-css";
+import { Oeuvre } from "@/types/oeuvre";
 import DiscoverPost from "../components/discoverPost";
 
 const Profile: React.FC = () => {
@@ -26,8 +27,8 @@ const Profile: React.FC = () => {
         500: 1,
     };
 
-    const tempPost1 = {
-        id: 1,
+    const tempPost1: Oeuvre = {
+        _id: 1,
         title: "C'est très joli",
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
@@ -36,9 +37,11 @@ const Profile: React.FC = () => {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        likeCount: 0,
+        author: "Jean-Michel",
     };
-    const tempPost2 = {
-        id: 1,
+    const tempPost2: Oeuvre = {
+        _id: 1,
         title: "C'est très joli",
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
@@ -47,9 +50,11 @@ const Profile: React.FC = () => {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        likeCount: 0,
+        author: "Jean-Michel",
     };
-    const tempPost3 = {
-        id: 1,
+    const tempPost3: Oeuvre = {
+        _id: 1,
         title: "C'est très joli",
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
@@ -58,9 +63,11 @@ const Profile: React.FC = () => {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        likeCount: 0,
+        author: "Jean-Michel",
     };
-    const tempPost4 = {
-        id: 1,
+    const tempPost4: Oeuvre = {
+        _id: 1,
         title: "C'est très joli",
         description:
             "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan. On essaye avec une deco un peu plus longue pour voir ce que ça donne avec un texte plus long, et beaucoup plus de mots, parce que là c'est vraiment pas assez long. Un peu de Wikipédia : La photographie de paysage est un genre de photographie dont l'objet est la prise de vue de paysage. Elle est, avec la photographie de famille et le portrait, un des genres de photographie artistique les plus pratiqués par les photographes amateurs. Il faut distinguer la photographie de paysages naturels de celle de paysages urbains.",
@@ -69,10 +76,12 @@ const Profile: React.FC = () => {
         illustration: ["https://picsum.photos/1600/800"],
         postDate: new Date(),
         releaseDate: new Date(),
+        likeCount: 0,
+        author: "Jean-Michel",
         isMediaTypeImages: true,
     };
-    const tempPost5 = {
-        id: 1,
+    const tempPost5: Oeuvre = {
+        _id: 1,
         title: "C'est très joli",
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
@@ -81,6 +90,8 @@ const Profile: React.FC = () => {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        likeCount: 0,
+        author: "Jean-Michel",
     };
 
     return (
