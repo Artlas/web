@@ -10,6 +10,7 @@ export default function Profile() {
     const [clickedLiked, setclickedLiked] = useState(false);
     const [clickedListe, setclickedListe] = useState(false);
     const [clickedTier, setclickedTier] = useState(false);
+
     const handleItemClickPost = () => {
         setclickedPost(true);
         setclickedLiked(false);

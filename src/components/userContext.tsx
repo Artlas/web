@@ -1,5 +1,6 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import { useCookies } from "react-cookie";
 // Define the initial state for the user context
 interface UserContextState {
     user: UserInfo | null;
@@ -62,7 +63,17 @@ export const UserProvider: React.FC = ({ children }: any) => {
     const [autoPlayDiaporamas, setAutoPlayDiaporamas] = useState<boolean>(false);
     const [preferredTheme, setPreferredTheme] = useState<string>("system");
     const { setTheme } = useTheme();
-
+    const [cookies, setCookie, removeCookie] = useCookies(["UserInfo"]);
+    useEffect(() => {
+        // Vérifiez si le cookie 'UserInfo' existe
+        if (cookies.UserInfo) {
+            // Si le cookie existe, utilisez ses données pour définir l'état 'user'
+            setUser(cookies.UserInfo);
+            setConnected(true);
+            console.log(user?.username);
+            // Définissez d'autres états basés sur les données du cookie si nécessaire
+        }
+    }, [cookies]);
     // Function to handle user login
 
     const login = (user: UserInfo) => {
@@ -72,6 +83,7 @@ export const UserProvider: React.FC = ({ children }: any) => {
         setUser(user);
         setConnected(true);
         setSignup(false);
+        setCookie("UserInfo", user, { path: "/" });
         setAcceptCookies(user.acceptCookies || false);
         setAutoPlayDiaporamas(user.autoPlayDiaporamas || false);
         setPreferredTheme(user.preferredTheme || "system");
@@ -94,6 +106,7 @@ export const UserProvider: React.FC = ({ children }: any) => {
         setUser(null);
         setUserNeeded(false);
         setConnected(false);
+        removeCookie("UserInfo", { path: "/" });
     };
 
     return (
