@@ -1,4 +1,5 @@
 import apiConfig from "./apiConfig.json";
+import { UserInfo } from "../../components/userContext";
 
 export const getUserInDatabase = async (password: string, userId?: string, mail?: string) => {
     const connectEndpoint = apiConfig.BASE_URL + apiConfig.LOGIN_ENDPOINT;
@@ -107,15 +108,30 @@ export const deleteUserInDatabase = async (userData: any) => {
     }
 };
 
-export const updateUserInDatabase = async (id: string, userData: any) => {
+export const updateUserInDatabase = async (connectedUser: UserInfo, userData: any) => {
     const updateEndPoint = apiConfig.BASE_URL + apiConfig.UPDATE_ENDPOINT;
+
+    //TODO
+    /**
+     * Recvoir un UserInfo, le comparer le UserInfo de la session, en fonction de
+     *  envoyer les parametres a modifier avec l'id de userInfo de base de la session
+     * Préparer nodeApi pour recevoir ce genre de requete
+     */
+    /*const newUser : UserInfo{
+
+    }*/
+    let requestBody = {
+        mail: userData.mail,
+        password: userData.password,
+    };
     try {
         const response = await fetch(updateEndPoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(id, ...userData),
+            // body: JSON.stringify(id, ...userData),
+            // REVOIR LA METHODE DU BODY
         });
 
         if (!response.ok) {

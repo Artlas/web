@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
-import { validatePassword, validateLogin, hashPasswordSha256 } from "../utils/validators";
+import { validatePassword, validateLogin, hashPasswordSha256, checkUserExistence } from "../utils/validators";
 import { createUserInDatabase, checkIfUserExists } from "./api/userAPI";
 import { connectUser } from "../utils/loginHandler";
 
@@ -29,19 +29,6 @@ const SignupPage: React.FC = () => {
 
     function redirect() {
         router.push("/");
-    }
-    async function checkUserExistence(email: string, username: string) {
-        const emailCheckResult = await checkIfUserExists(email, null);
-        if (emailCheckResult.userExists) {
-            alert("Un compte avec cet email existe déjà.");
-            return true;
-        }
-        const usernameCheckResult = await checkIfUserExists(null, username);
-        if (usernameCheckResult.userExists) {
-            alert("Un compte avec ce nom d'utilisateur existe déjà.");
-            return true;
-        }
-        return false;
     }
 
     const handleLogin = async (event: { preventDefault: () => void }) => {

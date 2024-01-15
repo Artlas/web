@@ -16,12 +16,6 @@ const LoginPage: React.FC = () => {
     function redirect() {
         router.push("/");
     }
-    // TODO:
-    /**
-            Faire session cookie pour préserver les informations post reload ou redirection
-            Modifier par la suite la fonction
-    */
-
     const handleLogin = (event: { preventDefault: () => void }) => {
         event.preventDefault(); // empêche un reload
         let hashedPassword;

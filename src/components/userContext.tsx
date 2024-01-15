@@ -65,13 +65,10 @@ export const UserProvider: React.FC = ({ children }: any) => {
     const { setTheme } = useTheme();
     const [cookies, setCookie, removeCookie] = useCookies(["UserInfo"]);
     useEffect(() => {
-        // Vérifiez si le cookie 'UserInfo' existe
         if (cookies.UserInfo) {
-            // Si le cookie existe, utilisez ses données pour définir l'état 'user'
             setUser(cookies.UserInfo);
             setConnected(true);
             console.log(user?.username);
-            // Définissez d'autres états basés sur les données du cookie si nécessaire
         }
     }, [cookies]);
     // Function to handle user login
@@ -83,7 +80,7 @@ export const UserProvider: React.FC = ({ children }: any) => {
         setUser(user);
         setConnected(true);
         setSignup(false);
-        setCookie("UserInfo", user, { path: "/" });
+        setCookie("UserInfo", user, { path: "/", maxAge: 1800 });
         setAcceptCookies(user.acceptCookies || false);
         setAutoPlayDiaporamas(user.autoPlayDiaporamas || false);
         setPreferredTheme(user.preferredTheme || "system");
@@ -106,7 +103,7 @@ export const UserProvider: React.FC = ({ children }: any) => {
         setUser(null);
         setUserNeeded(false);
         setConnected(false);
-        removeCookie("UserInfo", { path: "/" });
+        removeCookie("UserInfo", { path: "/", maxAge: 0 });
     };
 
     return (
