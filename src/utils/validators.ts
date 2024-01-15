@@ -10,7 +10,8 @@ export const validatePassword = (password: string): boolean => {
     const hasNumbers = /\d/.test(password);
     const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
+    //! TEMPORAIRE: pour permettre de se connecter avec le mot de passe "azerty"
+    return (password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars) || password === "azerty";
 };
 
 export const validateLogin = (login: string): boolean => {
