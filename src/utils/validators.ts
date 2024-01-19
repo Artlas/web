@@ -1,6 +1,7 @@
 import { request } from "https";
 import { createHash } from "crypto";
 import { checkIfUserExists } from "../pages/api/userAPI";
+import { MdElectricalServices } from "react-icons/md";
 // validators.ts
 export const validatePassword = (password: string): boolean => {
     // Implémentation de la validation du mot de passe
@@ -33,4 +34,8 @@ export async function checkUserExistence(email: string, username: string) {
         return true;
     }
     return false;
+}
+export function checkParameters(data: string) {
+    if (data != null) return true;
+    else return false;
 }

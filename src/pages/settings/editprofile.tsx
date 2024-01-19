@@ -2,7 +2,7 @@ import React from "react";
 import E404 from "../404";
 import { useState, useContext, useEffect } from "react";
 import { UserContext, UserInfo } from "../../components/userContext";
-import { validateLogin } from "@/src/utils/validators";
+import { validateLogin, checkParameters } from "@/src/utils/validators";
 import { checkIfUserExists, updateUserInDatabase } from "../api/userAPI";
 
 const EditProfile: React.FC = () => {
@@ -25,20 +25,24 @@ const EditProfile: React.FC = () => {
     };
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        let modifiedUser: UserInfo = {
-            username: username,
-            email: email,
-            fname: firstName,
-            lname: lastName,
-            birthdate: new Date(birthDate),
-            address: address,
-            token: user?.token ?? "",
-            permission: user?.permission ?? "",
-        };
         if (username != null && email != null) {
             alert("Vous ne pouvez pas modifier votre email et nom d'utilisateur en même temps ");
             return;
         }
+        /**
+         *
+         */
+        let modifiedUser: UserInfo = {
+            username: username ?? user?.username,
+            email: email ?? user?.email,
+            fname: firstName ?? user?.fname,
+            lname: lastName ?? user?.lname,
+            birthdate: new Date(birthDate) ?? user?.birthdate,
+            address: address ?? user?.address,
+            token: user?.token ?? "",
+            permission: user?.permission ?? "",
+        };
+
         if (email != null) {
             if (validateLogin(email)) {
                 alert("Votre email saisie n'est pas valide, veuillez entrer une adresse email correcte");

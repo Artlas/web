@@ -108,10 +108,47 @@ export const deleteUserInDatabase = async (userData: any) => {
     }
 };
 
-export const updateUserInDatabase = async (connectedUser: UserInfo, userData: any) => {
+export const updateUserInDatabase = async (userData: any, connectedUser: any) => {
     const updateEndPoint = apiConfig.BASE_URL + apiConfig.UPDATE_ENDPOINT;
 
     //TODO
+    let requestBody;
+    if (userData.email == connectedUser.email && userData.id != connectedUser.username) {
+        // je fais ma query par rapport a mon email de connected
+        // check tt les autres parametres
+        requestBody = {
+            username: userData.id,
+            email: connectedUser.email,
+            password: userData.password,
+            firstName: userData.fname,
+            lastName: userData.lname,
+            birthdate: userData.birthdate,
+            address: userData.address,
+        };
+    }
+    if (userData.email != connectedUser.email && userData.id == connectedUser.username) {
+        // je fais ma query par rapport a mon id de connected
+        // check tt les autres parametres
+        requestBody = {
+            username: connectedUser.id,
+            email: userData.email,
+            password: userData.password,
+            firstName: userData.fname,
+            lastName: userData.lname,
+            birthdate: userData.birthdate,
+            address: userData.address,
+        };
+    } else {
+        requestBody = {
+            username: userData.id,
+            email: userData.email,
+            password: userData.password,
+            firstName: userData.fname,
+            lastName: userData.lname,
+            birthdate: userData.birthdate,
+            address: userData.address,
+        };
+    }
     /**
      * Recvoir un UserInfo, le comparer le UserInfo de la session, en fonction de
      *  envoyer les parametres a modifier avec l'id de userInfo de base de la session
@@ -120,18 +157,14 @@ export const updateUserInDatabase = async (connectedUser: UserInfo, userData: an
     /*const newUser : UserInfo{
 
     }*/
-    let requestBody = {
-        mail: userData.mail,
-        password: userData.password,
-    };
+
     try {
         const response = await fetch(updateEndPoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            // body: JSON.stringify(id, ...userData),
-            // REVOIR LA METHODE DU BODY
+            body: JSON.stringify(requestBody),
         });
 
         if (!response.ok) {
