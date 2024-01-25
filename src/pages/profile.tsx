@@ -5,9 +5,9 @@ import DiscoverPost from "../components/discoverPost";
 import E404 from "./404";
 import Masonry from "react-masonry-css";
 import { UserContext } from "../components/userContext";
-import { Friend } from "../components/profile_des";
-import { Description } from "../components/profile_des";
-import { Liste } from "../components/profile_des";
+import { Friend } from "../components/profileDes";
+import { Description } from "../components/profileDes";
+import { Liste } from "../components/profileDes";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
@@ -167,9 +167,9 @@ export default function Profile() {
                         )}
                         {section === "liste" && (
                             <div className="max-w-[800px] mx-auto">
-                                <Liste listeName="Mes sculptures préférées" picture="/pp-image-ex.jpg" />
-                                <Liste listeName="Photos stylés" picture="/pp-image-ex.jpg" />
-                                <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" />
+                                <Liste listeName="Mes sculptures préférées" picture="/pp-image-ex.jpg" author="azerty" listId="la1" />
+                                <Liste listeName="Photos stylés" picture="/pp-image-ex.jpg" author="azerty" listId="la2" />
+                                <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" author="azerty" listId="la3" />
                             </div>
                         )}
                         {section === "galerie" && (

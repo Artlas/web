@@ -25,6 +25,8 @@ interface FriendProps {
 interface ListeProps {
     listeName: string;
     picture: string;
+    author: string;
+    listId: string;
 }
 
 export function Description({ photoProfile, userName, description, preference, loisir, birthday, account_birthday, address }: ProfileProps) {
@@ -59,16 +61,19 @@ export function Description({ photoProfile, userName, description, preference, l
     );
 }
 
-export function Liste({ listeName, picture }: ListeProps) {
+export function Liste({ listeName, picture, author, listId }: ListeProps) {
     return (
-        <div className="bg-stone-100 dark:bg-stone-950 text-black dark:text-white border-2 border-solid  border-stone-200 dark:border-stone-800 rounded-lg shadow-lg dark:shadow-none p-4 my-2 flex flex-row w-full container max-w-md lg:max-w-3xl lg:w-[280px] xl:w-[500px] 2xl:w-[700px] 3xl:w-[1000px] mx-auto">
+        <Link
+            href={`/list/${author}/${listId}`}
+            className="bg-stone-100 dark:bg-stone-950 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900 text-black dark:text-white border-2 border-solid  border-stone-200 dark:border-stone-800 rounded-lg shadow-lg dark:shadow-none p-4 my-2 flex flex-row w-full container max-w-md lg:max-w-3xl lg:w-[280px] xl:w-[500px] 2xl:w-[700px] 3xl:w-[1000px] mx-auto"
+        >
             <div className="w-24 h-24 relative">
                 <Image src={picture} alt={listeName} layout="fill" objectFit="cover" className="rounded-lg" />
             </div>
             <div className="p-2">
                 <h1>{listeName}</h1>
             </div>
-        </div>
+        </Link>
     );
 }
 

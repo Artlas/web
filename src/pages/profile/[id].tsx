@@ -3,9 +3,9 @@ import { Oeuvre } from "@/types/oeuvre";
 import Post from "../../components/post";
 import E404 from "../404";
 import { UserContext } from "../../components/userContext";
-import { Friend } from "../../components/profile_des";
-import { Description } from "../../components/profile_des";
-import { Liste } from "../../components/profile_des";
+import { Friend } from "../../components/profileDes";
+import { Description } from "../../components/profileDes";
+import { Liste } from "../../components/profileDes";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
