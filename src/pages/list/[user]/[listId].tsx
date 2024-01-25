@@ -148,6 +148,8 @@ const Liste: React.FC<Props> = ({ listData }) => {
     );
 };
 
+// TODO: define the getStaticPaths function
+/*
 // Define the getStaticPaths function
 export const getStaticPaths: GetStaticPaths = async () => {
     //TODO: fetch the list IDs from the API
@@ -181,5 +183,5 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
         },
     };
 };
-
+*/
 export default Liste;
