@@ -107,18 +107,18 @@ const Profile: React.FC = () => {
                 </label>
             </div>
             <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
-                <DiscoverPost {...tempPost2} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost3} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost4} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost5} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost2} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost3} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost4} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost5} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} />
-                <DiscoverPost {...tempPost2} autoPlaying={autoPlaying} />
+                <DiscoverPost {...tempPost2} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost3} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost4} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost5} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost2} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost3} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost4} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost5} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={true} />
+                <DiscoverPost {...tempPost2} autoPlaying={autoPlaying} scaleEffect={true} />
             </Masonry>
         </div>
     );

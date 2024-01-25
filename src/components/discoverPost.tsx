@@ -10,9 +10,24 @@ import { Oeuvre } from "@/types/oeuvre";
 
 interface DiscoverPostProps extends Oeuvre {
     autoPlaying: boolean;
+    scaleEffect: boolean;
 }
 
-const DiscoverPost: React.FC<DiscoverPostProps> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, autoPlaying, likeCount }) => {
+const DiscoverPost: React.FC<DiscoverPostProps> = ({
+    _id,
+    title,
+    description,
+    category,
+    subCategory,
+    illustration,
+    video,
+    postDate,
+    releaseDate,
+    isMediaTypeImages,
+    autoPlaying,
+    likeCount,
+    scaleEffect,
+}) => {
     const [liked, setLiked] = useState(false);
     const [listed, setListed] = useState(false);
     const [index, setIndex] = useState(0);
@@ -40,10 +55,10 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({ _id, title, description, ca
     };
 
     return (
-        <div className="my-3 sm:mx-1 hover:my-5">
+        <div className={`my-3 sm:mx-1 ${scaleEffect ? "hover:my-5" : ""} `}>
             <div
-                className="relative bg-white dark:bg-black  rounded-xl shadow-lg dark:shadow-none border dark:border-stone-700 group-hover:bg-[#121212AA]
-            cursor-pointer m-1 overflow-hidden group hover:shadow-xl hover:bg-[#121212AA] hover:scale-y-105 hover:z-10 transition duration-300 ease-in-out"
+                className={`relative bg-white dark:bg-black  rounded-xl shadow-lg dark:shadow-none border dark:border-stone-700 group-hover:bg-[#121212AA]
+            cursor-pointer m-1 overflow-hidden group hover:shadow-xl hover:bg-[#121212AA] ${scaleEffect ? "hover:scale-y-105 hover:z-10 transition duration-300 ease-in-out" : ""} `}
                 onClick={(e) => {
                     if (e.target === e.currentTarget) {
                         handlePostClick();
