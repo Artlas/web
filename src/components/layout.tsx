@@ -354,7 +354,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                     )}
                                 </div>
                                 {floatingSearchBar && (
-                                    <div className=" md:hidden absolute mr-2 sm:mr-20 px-1 mt-[108px] sm:mt-[128px] bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-b-md border-2 border-solid border-t-0 border-stone-200 dark:border-stone-800 z-50 overflow-hidden">
+                                    <div className=" md:hidden absolute mr-2 sm:mr-20 px-1 mt-[104px] sm:mt-[128px] bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-b-md border-2 border-solid border-t-0 border-stone-200 dark:border-stone-800 z-50 overflow-hidden">
                                         <FloatingSearchBar placeholder="Rechercher" />
                                     </div>
                                 )}

@@ -14,7 +14,7 @@ interface ProfileProps {
     loisir: string;
     birthday: string;
     account_birthday: string;
-    address: string;
+    address?: string;
 }
 
 interface FriendProps {
@@ -49,10 +49,12 @@ export function Description({ photoProfile, userName, description, preference, l
                 <Cake2LineIcon />
                 <span>{birthday}</span>
             </div>
-            <div className="flex flex-row p-2 space-x-1">
-                <Home4LineIcon />
-                <span>{address}</span>
-            </div>
+            {address && (
+                <div className="flex flex-row p-2 space-x-1">
+                    <Home4LineIcon />
+                    <span>{address}</span>
+                </div>
+            )}
             <div className="flex flex-row p-2 space-x-1">
                 <CalendarLineIcon />
                 <span>{account_birthday}</span>

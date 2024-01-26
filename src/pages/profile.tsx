@@ -103,7 +103,7 @@ export default function Profile() {
                             <Friend photoProfile="/pp-image-ex.jpg" userName="Jean-Michel" />
                         </div>
                     </div>
-                    <div className="flex flex-col px-1 ">
+                    <div className="flex flex-col px-1 w-full">
                         <div className="inline-flex flex-row text-xl justify-between space-x-2 mt-2 lg:mt-0 w-full max-w-sm mx-auto">
                             <button
                                 className={`p-1 rounded-lg ${
@@ -166,7 +166,7 @@ export default function Profile() {
                             </div>
                         )}
                         {section === "liste" && (
-                            <div className="max-w-[800px] mx-auto">
+                            <div className="max-w-[800px] mx-auto w-full">
                                 <Liste listeName="Mes sculptures préférées" picture="/pp-image-ex.jpg" author="azerty" listId="la1" />
                                 <Liste listeName="Photos stylés" picture="/pp-image-ex.jpg" author="azerty" listId="la2" />
                                 <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" author="azerty" listId="la3" />
