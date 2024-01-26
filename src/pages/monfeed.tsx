@@ -5,30 +5,6 @@ import apiConfig from "./api/apiConfig.json";
 import { useEffect } from "react";
 
 export default function Monfeed() {
-    async function getPosts() {
-        //TODO: Fix this so it works with the API correctly
-        try {
-            const response = await fetch(`${apiConfig.BASE_URL}/oeuvre/all`, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            console.log("Réponse de l'API :", response);
-            const data = await response.json();
-            console.log("Données des posts :", data);
-            return data;
-        } catch (error) {
-            console.error("Erreur lors de la récupération des posts:", error);
-            throw error;
-        }
-    }
-
-    useEffect(() => {
-        getPosts();
-    }, []);
-
     const tempPost1: Oeuvre = {
         _id: 1,
         title: "C'est très joli",
