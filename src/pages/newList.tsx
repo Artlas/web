@@ -62,7 +62,7 @@ const NewListForm: React.FC = () => {
                         type="submit"
                         id="createListButton"
                     >
-                        créer la liste
+                        Créer la liste
                     </button>
                 </div>
             </form>
