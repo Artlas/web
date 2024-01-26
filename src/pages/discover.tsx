@@ -37,7 +37,7 @@ const Profile: React.FC = () => {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
-        likeCount: 0,
+        likeCount: 5,
         author: "Jean-Michel",
     };
     const tempPost2: Oeuvre = {
@@ -63,7 +63,7 @@ const Profile: React.FC = () => {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
-        likeCount: 0,
+        likeCount: 3,
         author: "Jean-Michel",
     };
     const tempPost4: Oeuvre = {

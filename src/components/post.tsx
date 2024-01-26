@@ -9,12 +9,14 @@ import ReactPlayer from "react-player";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 
-const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages }) => {
+const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, likeCount }) => {
     const [liked, setLiked] = useState(false);
+    const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount); //TODO: Change this to the real like count from the database [likeCount]
     const [listed, setListed] = useState(false);
     const [index, setIndex] = useState(0);
     const handleLikeClick = () => {
         setLiked(!liked);
+        liked ? setDisplayedLikeCount(displayedLikeCount - 1) : setDisplayedLikeCount(displayedLikeCount + 1);
     };
     const handleListClick = () => {
         setListed(!listed);
@@ -126,13 +128,21 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 }}
                 id="postButtonsContainer"
             >
-                <button id={`post${_id}LikeButton`} className={`flex items-center space-x-2 ${liked ? "text-red-500" : "text-gray-500 dark:text-slate-300"}`} onClick={handleLikeClick} type="button">
+                <button
+                    id={`post${_id}LikeButton`}
+                    className={`flex items-center space-x-2 ${liked ? "text-red-500 active:text-red-600" : "text-gray-800 dark:text-slate-300 active:text-gray-950 active:dark:text-gray-400"}`}
+                    onClick={handleLikeClick}
+                    type="button"
+                >
                     <FaHeart className="h-5 w-5" />
                     <span className="hidden md:flex">{"J'aime"}</span>
+                    <span className="flex">{displayedLikeCount}</span>
                 </button>
                 <button
                     id={`post${_id}AddToListButton`}
-                    className={`flex items-center space-x-2 ${listed ? "text-black dark:text-white" : "text-gray-500 dark:text-slate-300"}`}
+                    className={`flex items-center space-x-2 ${
+                        listed ? "text-black dark:text-white active:text-gray-800 active:dark:text-gray-400" : "text-gray-800 dark:text-slate-300 active:text-gray-900 active:dark:text-gray-400"
+                    }`}
                     onClick={handleListClick}
                     type="button"
                 >
@@ -147,7 +157,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                         </div>
                     )}
                 </button>
-                <button id={`post${_id}ShareButton`} className="flex items-center space-x-2 text-gray-500 dark:text-slate-300" type="button">
+                <button id={`post${_id}ShareButton`} className="flex items-center space-x-2 text-gray-800 dark:text-gray-300 active:text-gray-900 active:dark:text-gray-400" type="button">
                     <FaShareAlt className="h-5 w-5" />
                     <span className="hidden sm:flex">Partager</span>
                 </button>

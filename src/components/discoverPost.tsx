@@ -29,11 +29,13 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
     scaleEffect,
 }) => {
     const [liked, setLiked] = useState(false);
+    const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount); //TODO: Change this to the real like count from the database [likeCount]
     const [listed, setListed] = useState(false);
     const [index, setIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const handleLikeClick = () => {
         setLiked(!liked);
+        liked ? setDisplayedLikeCount(displayedLikeCount - 1) : setDisplayedLikeCount(displayedLikeCount + 1);
     };
     const handleListClick = () => {
         setListed(!listed);
@@ -158,7 +160,7 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                 <div className="hidden group-hover:block group-hover:flex-col-reverse absolute bottom-1 align-bottom w-full px-2 overflow-hidden  z-20 ">
                     {/* Render like, add to list, and share buttons */}
                     <div
-                        className="flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 "
+                        className="flex justify-between items-center px-4 md:px-8 "
                         onClick={(e) => {
                             if (e.target === e.currentTarget) {
                                 handlePostClick();
@@ -169,16 +171,23 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         <div className="hover:bg-[#e1e1e188] dark:hover:bg-[#121212AA] flex justify-between items-center w-full py-1 px-2 rounded-full">
                             <button
                                 id={`discoverPost${_id}LikeButton`}
-                                className={`flex items-center space-x-2 ${liked ? "text-red-500" : "text-gray-800 dark:text-slate-300"}`}
+                                className={`flex items-center space-x-2 ${
+                                    liked ? "text-red-500 active:text-red-600" : "text-gray-800 dark:text-slate-300 active:text-gray-900 active:dark:text-gray-400"
+                                }`}
                                 onClick={handleLikeClick}
                                 type="button"
                             >
                                 <FaHeart className="h-5 w-5" />
                                 <span className="sr-only">{"J'aime"}</span>
+                                <span className="flex">{displayedLikeCount}</span>
                             </button>
                             <button
                                 id={`discoverPost${_id}AddToListButton`}
-                                className={`flex items-center space-x-2 ${listed ? "text-black dark:text-white" : "text-gray-800 dark:text-slate-300"}`}
+                                className={`flex items-center space-x-2 ${
+                                    listed
+                                        ? "text-black dark:text-white active:text-gray-800 active:dark:text-gray-400"
+                                        : "text-gray-800 dark:text-slate-300 active:text-gray-900 active:dark:text-gray-400"
+                                }`}
                                 onClick={handleListClick}
                                 type="button"
                             >
@@ -193,7 +202,11 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                                     </div>
                                 )}
                             </button>
-                            <button id={`discoverPost${_id}ShareButton`} className="flex items-center space-x-2 text-gray-800 dark:text-slate-300" type="button">
+                            <button
+                                id={`discoverPost${_id}ShareButton`}
+                                className="flex items-center space-x-2 text-gray-800 dark:text-gray-300 active:text-gray-900 active:dark:text-gray-400"
+                                type="button"
+                            >
                                 <FaShareAlt className="h-5 w-5" />
                                 <span className="sr-only">Partager</span>
                             </button>
