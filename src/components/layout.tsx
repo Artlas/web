@@ -39,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     if (name === "newList") name = "nouvelle liste";
     if (name === "editGalerie") name = "é diter mes galeries";
     if (name === "creationMenu") name = "nouveau";
+    if (name === "list") name = "liste";
     if (name === "profil" && !connected) name = "404";
     if (name === "profile" && connected) name = "profil";
     const [sectionName, setSectionName] = useState(name || "Artlas");
@@ -121,6 +122,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         name !== "post" &&
         name !== "nouveau" &&
         name !== "profil" &&
+        name !== "amis" &&
+        name !== "liste" &&
         name !== "paramè tres"
             ? setOutlineLibrary(true)
             : setOutlineLibrary(false);
@@ -128,9 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     }, [name]);
 
     useEffect(() => {
-        sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "nouveau" && sectionName !== "profil"
-            ? setDisplayReturnButton(true)
-            : setDisplayReturnButton(false);
+        sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "nouveau" ? setDisplayReturnButton(true) : setDisplayReturnButton(false);
     }, [sectionName]);
 
     const handleSidePanel = () => {
@@ -375,7 +376,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                         Profil
                                                     </Link>
                                                     <Link
-                                                        href="/friends"
+                                                        href="/amis"
                                                         className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="openFriendsLink"
                                                     >
@@ -484,7 +485,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                                 id="openUserMenuMobileLink"
                             >
-                                {name === "profile" || name === "profil" || name === "paramè tres" ? <FaUser size={44} className="w-7 h-7" /> : <FaRegUser size={44} className="w-7 h-7" />}
+                                {name === "profile" || name === "profil" || name === "amis" || name === "paramè tres" ? (
+                                    <FaUser size={44} className="w-7 h-7" />
+                                ) : (
+                                    <FaRegUser size={44} className="w-7 h-7" />
+                                )}
                                 <span className="sr-only">Profil</span>
                             </Link>
                         ) : (
