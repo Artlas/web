@@ -36,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     if (name === "discover") name = "dé couvrir"; //NOTE: the space is intentional, it's due to the font that doesn't handle the accent properly
     if (name === "settings") name = "paramè tres";
     if (name === "mobileUserMenu") name = "profil";
+    if (name === "creationMenu") name = "nouveau";
     if (name === "profil" && !connected) name = "404";
     if (name === "profile" && connected) name = "profil";
     const [sectionName, setSectionName] = useState(name || "Artlas");
@@ -114,6 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         name !== "mobileUserMenu" &&
         name !== "404" &&
         name !== "post" &&
+        name !== "nouveau" &&
         name !== "profil" &&
         name !== "paramè tres"
             ? setOutlineLibrary(true)
@@ -122,7 +124,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     }, [name]);
 
     useEffect(() => {
-        sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "poster" && sectionName !== "profil"
+        sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "nouveau" && sectionName !== "profil"
             ? setDisplayReturnButton(true)
             : setDisplayReturnButton(false);
     }, [sectionName]);
@@ -298,9 +300,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         <SearchBar placeholder="Rechercher" />
                                     </div>
                                     <Link
-                                        href="/poster"
+                                        href="/creationMenu"
                                         className="text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
-                                        id="openNewpostMobileLink"
+                                        id="openNewpostLink"
                                     >
                                         <PiPlusBold size={43} />
                                     </Link>
@@ -452,11 +454,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <span className="sr-only">Decouvrir</span>
                         </Link>
                         <Link
-                            href="/poster"
+                            href="/creationMenu"
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                             id="openNewpostMobileLink"
                         >
-                            {name === "poster" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
+                            {name === "poster" || name === "nouveau" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
                             <span className="sr-only">Poster</span>
                         </Link>
                         <button
