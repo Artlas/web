@@ -1,8 +1,17 @@
 {
-    "BASE_URL": "https://api.fournierfamily.ovh",
-    "LOGIN_ENDPOINT": "/user/connect",
-    "REGISTER_ENDPOINT": "/user/add",
-    "UPDATE_ENDPOINT": "/user/update",
-    "DELETE_ENDPOINT": "/user/delete",
-    "CHECK_ENDPOINT": "/user/check"
+    "LOGIN_USER_ENDPOINT": "/user/connect",
+    "REGISTER_USER_ENDPOINT": "/user/add",
+    "UPDATE_USER_ENDPOINT": "/user/update",
+    "DELETE_USER_ENDPOINT": "/user/delete",
+    "CHECK_USER_ENDPOINT": "/user/check",
+    "UPDATE_USER_PASSWORD_ENDPOINT": "/user/updatePassword",
+    "GET_ART_BASED_ID_USER_ENDPOINT": "/oeuvre/getIdUser",
+    "GET_ART_BASED_ID_ENDPOINT": "/oeuvre/getId",
+    "GET_ALL_ART_ENDPOINT": "/oeuvre/getAll",
+    "GET_CAT_ART_ENDPOINT": "/oeuvre/getCat",
+    "GET_ART_CAT_ENDPOINT": "/category/getCat",
+    "GET_ARTS_BASED_CAT_ENDPOINT": "/oeuvre/getArts",
+    "ADD_ART_ENDPOINT": "/oeuvre/addAdd",
+    "UPDATE_ART_ENDPOINT": "/oeuvre/updateArt",
+    "DELETE_ART_ENDPOINT": "/oeuvre/deleteArt"
 }
