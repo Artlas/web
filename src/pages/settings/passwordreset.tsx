@@ -2,6 +2,8 @@ import React from "react";
 import E404 from "../404";
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../components/userContext";
+import { validatePassword, hashPasswordSha256 } from "@/src/utils/validators";
+import { updatePasswordUser } from "../api/userAPI";
 
 const PasswordResetPage: React.FC = () => {
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
@@ -16,9 +18,22 @@ const PasswordResetPage: React.FC = () => {
         setNewPassword(event.target.value);
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        // TODO: Implement password reset logic here
+        if (newPassword != null) {
+            if (!validatePassword(newPassword)) {
+                alert("Votre mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre");
+                return;
+            } else {
+                const hashedPassword = hashPasswordSha256(newPassword);
+                try {
+                    await updatePasswordUser(hashedPassword);
+                } catch (error) {
+                    console.log("Error while updating password: ", error);
+                    throw error;
+                }
+            }
+        }
     };
 
     return connected ? (
