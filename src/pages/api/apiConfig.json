@@ -1,4 +1,5 @@
 {
+    "BASE_URL_API": "https://api.fournierfamily.ovh",
     "LOGIN_USER_ENDPOINT": "/user/connect",
     "REGISTER_USER_ENDPOINT": "/user/add",
     "UPDATE_USER_ENDPOINT": "/user/update",
