@@ -1,9 +1,36 @@
 import Image from "next/image";
+import { Oeuvre } from "@/types/oeuvre";
 import Post from "../components/post";
+import apiConfig from "./api/apiConfig.json";
+import { useEffect } from "react";
 
 export default function Monfeed() {
-    const tempPost1 = {
-        id: 1,
+    async function getPosts() {
+        //TODO: Fix this so it works with the API correctly
+        try {
+            const response = await fetch(`${apiConfig.BASE_URL}/oeuvre/all`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log("Réponse de l'API :", response);
+            const data = await response.json();
+            console.log("Données des posts :", data);
+            return data;
+        } catch (error) {
+            console.error("Erreur lors de la récupération des posts:", error);
+            throw error;
+        }
+    }
+
+    useEffect(() => {
+        getPosts();
+    }, []);
+
+    const tempPost1: Oeuvre = {
+        _id: 1,
         title: "C'est très joli",
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
@@ -12,10 +39,12 @@ export default function Monfeed() {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        author: "Jean-Michel",
+        likeCount: 0,
     };
 
-    const tempPost2 = {
-        id: 2,
+    const tempPost2: Oeuvre = {
+        _id: 2,
         title: "Star Wars",
         description: "Star Wars 3 trailer",
         category: "Cinema",
@@ -24,10 +53,12 @@ export default function Monfeed() {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        author: "Jean-Michel",
+        likeCount: 0,
     };
 
-    const tempPost3 = {
-        id: 3,
+    const tempPost3: Oeuvre = {
+        _id: 3,
         title: "Twitch.tv",
         description: "Une video de twitch",
         category: "Cinema",
@@ -36,10 +67,12 @@ export default function Monfeed() {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        author: "Jean-Michel",
+        likeCount: 0,
     };
 
-    const tempPost4 = {
-        id: 4,
+    const tempPost4: Oeuvre = {
+        _id: 4,
         title: "Dailymotion",
         description: "Une video de daily motion à la verticale",
         category: "Cinema",
@@ -48,6 +81,8 @@ export default function Monfeed() {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        author: "Jean-Michel",
+        likeCount: 0,
     };
 
     return (
