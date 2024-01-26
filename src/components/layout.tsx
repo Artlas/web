@@ -36,6 +36,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     if (name === "discover") name = "dé couvrir"; //NOTE: the space is intentional, it's due to the font that doesn't handle the accent properly
     if (name === "settings") name = "paramè tres";
     if (name === "mobileUserMenu") name = "profil";
+    if (name === "newList") name = "nouvelle liste";
+    if (name === "editGalerie") name = "é diter mes galeries";
     if (name === "creationMenu") name = "nouveau";
     if (name === "profil" && !connected) name = "404";
     if (name === "profile" && connected) name = "profil";
@@ -113,6 +115,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         name !== "search" &&
         name !== "profile" &&
         name !== "mobileUserMenu" &&
+        name !== "nouvelle liste" &&
+        name !== "é diter mes galeries" &&
         name !== "404" &&
         name !== "post" &&
         name !== "nouveau" &&
@@ -458,7 +462,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                             id="openNewpostMobileLink"
                         >
-                            {name === "poster" || name === "nouveau" ? <PiPlusBold size={44} className="w-7 h-7" /> : <PiPlus size={44} className="w-7 h-7" />}
+                            {name === "poster" || name === "nouveau" || name === "nouvelle liste" || name === "é diter mes galeries" ? (
+                                <PiPlusBold size={44} className="w-7 h-7" />
+                            ) : (
+                                <PiPlus size={44} className="w-7 h-7" />
+                            )}
                             <span className="sr-only">Poster</span>
                         </Link>
                         <button

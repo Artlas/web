@@ -13,8 +13,9 @@ import Link from "next/link";
 type Props = {};
 
 export default function CreationMenu({}: Props) {
-    const { user, userNeeded, connected, logout } = useContext(UserContext);
+    const { user, userNeeded, setUserNeeded, connected, logout } = useContext(UserContext);
 
+    setUserNeeded(true);
     let router = useRouter();
     function redirect() {
         router.push("/");
@@ -36,7 +37,7 @@ export default function CreationMenu({}: Props) {
                 <span className="text-center">Nouveau post</span>
             </Link>
             <Link
-                href="newListe"
+                href="newList"
                 className="flex flex-col bg-stone-100 dark:bg-stone-950 text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900 rounded-md border-2 border-solid  border-stone-200 dark:border-stone-800 py-4 w-full lg:max-w-md"
             >
                 <FaTableList className="mx-auto" size={100} />
