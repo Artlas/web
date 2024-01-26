@@ -10,6 +10,7 @@ import { FaCompass, FaRegCompass, FaUser, FaRegUser, FaMagnifyingGlass, FaTableL
 import { HiLibrary, HiOutlineLibrary } from "react-icons/hi";
 import { PiMagnifyingGlass } from "react-icons/pi";
 import { PiPlusBold, PiPlus } from "react-icons/pi";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { TbLayoutSidebarLeftExpandFilled, TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { useRouter } from "next/router";
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     if (name === "settings") name = "paramè tres";
     if (name === "mobileUserMenu") name = "profil";
     if (name === "profil" && !connected) name = "404";
+    if (name === "profile" && connected) name = "profil";
     const [sectionName, setSectionName] = useState(name || "Artlas");
 
     function useWindowSize() {
@@ -79,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const [mobileUserMenu, setMobileUserMenu] = useState(false);
     const [floatingSearchBar, setFloatingSearchBar] = useState(false);
     const [outlineLibrary, setOutlineLibrary] = useState(true);
+    const [displayReturnButton, setDisplayReturnButton] = useState(false);
 
     const handleUserMenu = () => {
         setUserMenu(!userMenu);
@@ -118,6 +121,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         setUserMenu(false);
     }, [name]);
 
+    useEffect(() => {
+        sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "poster" && sectionName !== "profil"
+            ? setDisplayReturnButton(true)
+            : setDisplayReturnButton(false);
+    }, [sectionName]);
+
     const handleSidePanel = () => {
         setSidePanel(!sidePanel);
     };
@@ -125,6 +134,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const handleConnect = () => {
         setUserNeeded(true);
         console.log("needed ?" + userNeeded + " connected? " + connected);
+    };
+
+    const handleReturnButton = () => {
+        window.history.back();
     };
 
     const navigationInfo = {
@@ -249,7 +262,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         </div>
                     </nav>
                 </div>
-                <div className="flex flex-1 flex-col overflow-y-auto">
+                <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                     <div
                         className={`sticky top-0 flex flex-shrink-0 bg-stone-100 dark:bg-stone-950 h-[55px] sm:h-[75px] text-black dark:text-white ${""} z-30 border-b-2 border-solid border-stone-200 dark:border-stone-800 `}
                     >
@@ -304,12 +317,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         onClick={() => handleUserMenu()}
                                         id="openUserMenuButton"
                                     >
-                                        {user ? <div className="w-[44px] h-[44px] rounded-full bg-stone-300 dark:bg-stone-700"></div> : <FaUserCircle size={44} className="w-8 h-8 sm:w-11 sm:h-11" />}
+                                        {user ? (
+                                            <div className="w-[44px] h-[44px] rounded-full bg-stone-300 dark:bg-stone-700">
+                                                {user.image ? (
+                                                    <Image src={user?.image} alt="Profile picture" width={44} height={44} className="rounded-full" />
+                                                ) : (
+                                                    <FaUserCircle size={44} className="w-8 h-8 sm:w-11 sm:h-11" />
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <FaUserCircle size={44} className="w-8 h-8 sm:w-11 sm:h-11" />
+                                        )}
                                         <span className="sr-only">Open user menu</span>
                                     </button>
                                 </div>
                                 <div className="flex sm:hidden items-center justify-center w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800">
-                                    <Image src="/Logo seul.png" alt="Artlas logo" width={40} height={40} className="rounded-full" />
+                                    {!displayReturnButton ? (
+                                        <Image src="/Logo seul.png" alt="Artlas logo" width={40} height={40} className="rounded-full" />
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            id="ReturnMobileNavigationButton"
+                                            onClick={() => handleReturnButton()}
+                                            className="flex items-center justify-center w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500"
+                                        >
+                                            <IoMdArrowRoundBack size={40} className="w-8 h-8 sm:w-11 sm:h-11" />
+                                            <span className="sr-only">Retour</span>
+                                        </button>
+                                    )}
                                 </div>
                                 {floatingSearchBar && (
                                     <div className=" md:hidden absolute mr-2 sm:mr-20 px-1 mt-[108px] sm:mt-[128px] bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-b-md border-2 border-solid border-t-0 border-stone-200 dark:border-stone-800 z-50 overflow-hidden">
