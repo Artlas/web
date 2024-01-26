@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Post from "../components/post";
+import { Oeuvre } from "@/types/oeuvre";
 import { useState, useEffect } from "react";
 
 export default function Home() {
-    const tempPost1 = {
-        id: 1,
+    const tempPost1: Oeuvre = {
+        _id: 1,
         title: "C'est très joli",
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
@@ -13,6 +14,8 @@ export default function Home() {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
+        author: "Jean-Michel",
+        likeCount: 42,
     };
     return (
         <main className="flex w-full">

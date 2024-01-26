@@ -15,12 +15,11 @@ var pjson = require("../../package.json");
 type Props = {};
 
 export default function Settings({}: Props) {
+    const { theme, setTheme } = useTheme();
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
-    const [settingsTheme, setSettingsTheme] = useState(user?.preferredTheme || "system");
+    const [settingsTheme, setSettingsTheme] = useState(theme || user?.preferredTheme || "system");
     const [acceptCookiesSettings, setacceptCookiesSettings] = useState(acceptCookies || false);
     const [autoPlayDiaporamasSettings, setautoPlayDiaporamasSettings] = useState(autoPlayDiaporamas || false);
-
-    const { theme, setTheme } = useTheme();
 
     const handleThemeChange = (selectedTheme: string) => {
         setSettingsTheme(selectedTheme);

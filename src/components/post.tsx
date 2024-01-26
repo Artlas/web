@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Oeuvre } from "@/types/oeuvre";
 import { useRouter } from "next/router";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -8,26 +9,14 @@ import ReactPlayer from "react-player";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 
-interface PostProps {
-    id: number;
-    title: string;
-    description: string;
-    category: string;
-    subCategory?: string;
-    illustration?: string[];
-    video?: string;
-    postDate: Date;
-    releaseDate?: Date;
-    isMediaTypeImages: boolean;
-    // Add other fields based on post category
-}
-
-const Post: React.FC<PostProps> = ({ id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages }) => {
+const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, likeCount }) => {
     const [liked, setLiked] = useState(false);
+    const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount); //TODO: Change this to the real like count from the database [likeCount]
     const [listed, setListed] = useState(false);
     const [index, setIndex] = useState(0);
     const handleLikeClick = () => {
         setLiked(!liked);
+        liked ? setDisplayedLikeCount(displayedLikeCount - 1) : setDisplayedLikeCount(displayedLikeCount + 1);
     };
     const handleListClick = () => {
         setListed(!listed);
@@ -37,7 +26,7 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
 
     const handlePostClick = () => {
         console.log("Clique sur l'arrière-plan de la div");
-        router.push(`/post/${id}`);
+        router.push(`/post/${_id}`);
     };
 
     const handleOpenImage = () => {
@@ -79,11 +68,11 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
                 }}
                 id="postCategoryContainer"
             >
-                <Link href={`/${category.toLowerCase()}/all`} id={`post${id}CategoryLink`}>
+                <Link href={`/${category.toLowerCase()}/all`} id={`post${_id}CategoryLink`}>
                     <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mr-2">{category}</span>
                 </Link>
                 {subCategory && (
-                    <Link href={`/${category.toLowerCase()}/${subCategory.toLowerCase()}`} id={`post${id}SubcategoryLink`}>
+                    <Link href={`/${category.toLowerCase()}/${subCategory.toLowerCase()}`} id={`post${_id}SubcategoryLink`}>
                         <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mr-2">
                             {subCategory}
                         </span>
@@ -139,13 +128,21 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
                 }}
                 id="postButtonsContainer"
             >
-                <button id={`post${id}LikeButton`} className={`flex items-center space-x-2 ${liked ? "text-red-500" : "text-gray-500 dark:text-slate-300"}`} onClick={handleLikeClick} type="button">
+                <button
+                    id={`post${_id}LikeButton`}
+                    className={`flex items-center space-x-2 ${liked ? "text-red-500 active:text-red-600" : "text-gray-800 dark:text-slate-300 active:text-gray-950 active:dark:text-gray-400"}`}
+                    onClick={handleLikeClick}
+                    type="button"
+                >
                     <FaHeart className="h-5 w-5" />
                     <span className="hidden md:flex">{"J'aime"}</span>
+                    <span className="flex">{displayedLikeCount}</span>
                 </button>
                 <button
-                    id={`post${id}AddToListButton`}
-                    className={`flex items-center space-x-2 ${listed ? "text-black dark:text-white" : "text-gray-500 dark:text-slate-300"}`}
+                    id={`post${_id}AddToListButton`}
+                    className={`flex items-center space-x-2 ${
+                        listed ? "text-black dark:text-white active:text-gray-800 active:dark:text-gray-400" : "text-gray-800 dark:text-slate-300 active:text-gray-900 active:dark:text-gray-400"
+                    }`}
                     onClick={handleListClick}
                     type="button"
                 >
@@ -160,7 +157,7 @@ const Post: React.FC<PostProps> = ({ id, title, description, category, subCatego
                         </div>
                     )}
                 </button>
-                <button id={`post${id}ShareButton`} className="flex items-center space-x-2 text-gray-500 dark:text-slate-300" type="button">
+                <button id={`post${_id}ShareButton`} className="flex items-center space-x-2 text-gray-800 dark:text-gray-300 active:text-gray-900 active:dark:text-gray-400" type="button">
                     <FaShareAlt className="h-5 w-5" />
                     <span className="hidden sm:flex">Partager</span>
                 </button>

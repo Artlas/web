@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Oeuvre } from "@/types/oeuvre";
-import Post from "../components/post";
-import DiscoverPost from "../components/discoverPost";
-import E404 from "./404";
+import Post from "../../components/post";
+import E404 from "../404";
 import Masonry from "react-masonry-css";
-import { UserContext } from "../components/userContext";
-import { Friend } from "../components/profileDes";
-import { Description } from "../components/profileDes";
-import { Liste } from "../components/profileDes";
+import { UserContext } from "../../components/userContext";
+import { Friend } from "../../components/profileDes";
+import { Description } from "../../components/profileDes";
+import { Liste } from "../../components/profileDes";
+import DiscoverPost from "@/src/components/discoverPost";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
@@ -18,8 +18,16 @@ import { Liste } from "../components/profileDes";
  * - friends
  */
 export default function Profile() {
-    const { user, connected, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
+    //! This is a temporary user, it will be replaced by the user from the database, queried by the id in the url
+    //TODO: Replace this temporary user by the user from the database
+    const user = {
+        username: "Jean-Michel",
+        birthdate: "17/11/2023",
+        address: "Paris",
+        image: "https://picsum.photos/450",
+    };
     const birthday = new Date(user?.birthdate || "17/11/2023");
+
     const [section, setSection] = useState("post");
     const handleItemClickPost = () => {
         setSection("post");
@@ -28,21 +36,11 @@ export default function Profile() {
         setSection("liked");
     };
     const handleItemClickListe = () => {
-        setSection("liste");
+        setSection("list");
     };
     const handleItemClickGalerie = () => {
         setSection("galerie");
     };
-
-    const [autoPlaying, setAutoPlaying] = useState(autoPlayDiaporamas || false);
-
-    useEffect(() => {
-        setAutoPlayDiaporamas(autoPlaying);
-    }, [autoPlaying, setAutoPlayDiaporamas]);
-
-    useEffect(() => {
-        setAutoPlaying(autoPlayDiaporamas);
-    }, [autoPlayDiaporamas]);
 
     const breakpointColumnsObj = {
         default: 1,
@@ -53,35 +51,48 @@ export default function Profile() {
         500: 1,
     };
 
-    const tempPost1: Oeuvre = {
+    const tempPost2: Oeuvre = {
         _id: 1,
         title: "C'est très joli",
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
         subCategory: "Photos",
-        illustration: ["https://picsum.photos/450", "https://picsum.photos/1455", "https://picsum.photos/464/700", "https://picsum.photos/1450/700"],
+        illustration: ["https://picsum.photos/650/1100", "https://picsum.photos/1455/500"],
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
-        author: "Jean-Michel",
         likeCount: 0,
+        author: "Jean-Michel",
     };
-
-    const tempPost2: Oeuvre = {
-        _id: 2,
-        title: "Star Wars",
-        description: "Star Wars 3 trailer",
-        category: "Cinema",
-        subCategory: "Films",
-        video: "https://youtu.be/t1qtvKYwTV0",
+    const tempPost3: Oeuvre = {
+        _id: 1,
+        title: "C'est très joli",
+        description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
+        category: "Photographie",
+        subCategory: "Photos",
+        illustration: ["https://picsum.photos/1600/900", "https://picsum.photos/1455/800", "https://picsum.photos/469/700"],
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
-        author: "Jean-Michel",
         likeCount: 0,
+        author: "Jean-Michel",
+    };
+    const tempPost4: Oeuvre = {
+        _id: 1,
+        title: "C'est très joli",
+        description:
+            "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan. On essaye avec une deco un peu plus longue pour voir ce que ça donne avec un texte plus long, et beaucoup plus de mots, parce que là c'est vraiment pas assez long. Un peu de Wikipédia : La photographie de paysage est un genre de photographie dont l'objet est la prise de vue de paysage. Elle est, avec la photographie de famille et le portrait, un des genres de photographie artistique les plus pratiqués par les photographes amateurs. Il faut distinguer la photographie de paysages naturels de celle de paysages urbains.",
+        category: "Photographie",
+        subCategory: "Photos",
+        illustration: ["https://picsum.photos/1600/800"],
+        postDate: new Date(),
+        releaseDate: new Date(),
+        likeCount: 0,
+        author: "Jean-Michel",
+        isMediaTypeImages: true,
     };
 
-    return connected ? (
+    return (
         <div className="h-full w-full">
             <main className="flex w-full">
                 <div className="h-full w-full flex flex-col lg:flex-row-reverse lg:justify-between ">
@@ -96,14 +107,17 @@ export default function Profile() {
                             account_birthday="17/11/2023"
                             address={user?.address || "Paris"}
                         />
-                        <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Mes abonnements</h2>
+                        <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Les abonnements de {user.username}</h2>
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">
+                            <Friend photoProfile="/pp-image-ex.jpg" userName="King Julian" />
+                            <Friend photoProfile="/pp-image-ex.jpg" userName="Fred" />
                             <Friend photoProfile="/pp-image-ex.jpg" userName="Anna" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Encore_Anna" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Jean-Michel" />
+                            <Friend photoProfile="/pp-image-ex.jpg" userName="Alice" />
+                            <Friend photoProfile="/pp-image-ex.jpg" userName="Bob" />
+                            <Friend photoProfile="/pp-image-ex.jpg" userName="Julia" />
                         </div>
                     </div>
-                    <div className="flex flex-col px-1 w-full">
+                    <div className="flex flex-col px-1">
                         <div className="inline-flex flex-row text-xl justify-between space-x-2 mt-2 lg:mt-0 w-full max-w-sm mx-auto">
                             <button
                                 className={`p-1 rounded-lg ${
@@ -154,39 +168,39 @@ export default function Profile() {
                         {section === "post" && (
                             <div className="">
                                 <div className="max-w-[800px] mx-auto">
-                                    <Post {...tempPost1} likeCount={42} />
-                                    <Post {...tempPost2} />
+                                    <Post {...tempPost2} likeCount={42} />
+                                    <Post {...tempPost3} />
+                                    <Post {...tempPost4} />
                                 </div>
                             </div>
                         )}
                         {section === "liked" && (
                             <div className="max-w-[800px] mx-auto">
-                                <Post {...tempPost1} likeCount={42} />
                                 <Post {...tempPost2} />
                             </div>
                         )}
-                        {section === "liste" && (
-                            <div className="max-w-[800px] mx-auto w-full">
-                                <Liste listeName="Mes sculptures préférées" picture="/pp-image-ex.jpg" author="azerty" listId="la1" />
-                                <Liste listeName="Photos stylés" picture="/pp-image-ex.jpg" author="azerty" listId="la2" />
-                                <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" author="azerty" listId="la3" />
+                        {section === "list" && (
+                            <div className="max-w-[800px] mx-auto">
+                                <Liste listeName="Mes sculptures préférées" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
+                                <Liste listeName="Photos stylés" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
+                                <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
                             </div>
                         )}
                         {section === "galerie" && (
                             <div className="">
                                 <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
+                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
                                 </Masonry>
                             </div>
                         )}
@@ -194,7 +208,5 @@ export default function Profile() {
                 </div>
             </main>
         </div>
-    ) : (
-        <E404 />
     );
 }

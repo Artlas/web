@@ -1,11 +1,28 @@
 import React, { useState, useContext, useEffect } from "react";
-import { UserContext } from "../components/userContext";
-import { useRouter } from "next/router";
+import Image from "next/image";
+import { UserContext } from "../../../components/userContext";
 import Masonry from "react-masonry-css";
 import { Oeuvre } from "@/types/oeuvre";
-import DiscoverPost from "../components/discoverPost";
+import DiscoverPost from "../../../components/discoverPost";
+import { GetStaticProps, GetStaticPaths } from "next";
+import { useRouter } from "next/router";
 
-const Profile: React.FC = () => {
+// Define the type for the list data
+type ListData = {
+    _id: string;
+    name: string;
+    author: string;
+    description: string;
+    image: string;
+    oeuvres: Oeuvre[];
+};
+
+// Define the props type for the component
+type Props = {
+    listData: ListData;
+};
+
+const Liste: React.FC<Props> = ({ listData }) => {
     const { user, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
     const [autoPlaying, setAutoPlaying] = useState(autoPlayDiaporamas || false);
 
@@ -37,7 +54,7 @@ const Profile: React.FC = () => {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
-        likeCount: 5,
+        likeCount: 0,
         author: "Jean-Michel",
     };
     const tempPost2: Oeuvre = {
@@ -63,7 +80,7 @@ const Profile: React.FC = () => {
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
-        likeCount: 3,
+        likeCount: 0,
         author: "Jean-Michel",
     };
     const tempPost4: Oeuvre = {
@@ -96,8 +113,15 @@ const Profile: React.FC = () => {
 
     return (
         <div id="discoverView">
+            <div className="flex items-center mb-4 space-x-4">
+                <Image src={listData ? listData.image : "https://picsum.photos/200/200"} alt="Liste image" width={200} height={200} className="rounded-xl" />
+                <div>
+                    <h2 className="text-2xl font-semibold">{listData ? listData.name : "LISTE NAME"}</h2>
+                    <p>{listData ? listData.description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna euismod."}</p>
+                </div>
+            </div>
             <div className="flex items-center">
-                <span className="mr-2">{"Lecture automatique des images des posts :"}</span>
+                <span className="mr-2">{"Diaporama automatique :"}</span>
                 <label className="flex items-center">
                     <div className="relative cursor-pointer">
                         <input type="checkbox" name="AutoPlay" id="AutoPlayDiaposSettingsToggle" className="peer sr-only" checked={autoPlaying} onChange={() => setAutoPlaying(!autoPlaying)} />
@@ -124,4 +148,40 @@ const Profile: React.FC = () => {
     );
 };
 
-export default Profile;
+// TODO: define the getStaticPaths function
+/*
+// Define the getStaticPaths function
+export const getStaticPaths: GetStaticPaths = async () => {
+    //TODO: fetch the list IDs from the API
+    // Fetch the list IDs from the API
+    const listIds = await fetch("API_ENDPOINT_URL");
+    const data = await listIds.json();
+
+    // Generate the paths for each list ID
+    const paths = data.map((listId: string) => ({
+        params: { listId },
+    }));
+
+    return {
+        paths,
+        fallback: false,
+    };
+};
+
+// Define the getStaticProps function
+export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
+    //TODO: fetch the list data from the API
+    const { listId } = params || {};
+
+    // Fetch the list data from the API using the listId
+    const listData = await fetch(`API_ENDPOINT_URL/${listId}`);
+    const data = await listData.json();
+
+    return {
+        props: {
+            listData: data,
+        },
+    };
+};
+*/
+export default Liste;
