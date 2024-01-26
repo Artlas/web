@@ -18,11 +18,13 @@ import { Liste } from "../components/profileDes";
  * - friends
  */
 export default function Profile() {
+
     const { user, connected, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
     const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
     const handleItemClickPost = () => {
         setSection("post");
+
     };
     const handleItemClickLiked = () => {
         setSection("liked");

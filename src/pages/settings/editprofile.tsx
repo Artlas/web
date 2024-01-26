@@ -1,7 +1,9 @@
 import React from "react";
 import E404 from "../404";
 import { useState, useContext, useEffect } from "react";
-import { UserContext } from "../../components/userContext";
+import { UserContext, UserInfo } from "../../components/userContext";
+import { validateLogin, checkParameters } from "@/src/utils/validators";
+import { checkIfUserExists, updateUserInDatabase } from "../api/userAPI";
 
 const EditProfile: React.FC = () => {
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
@@ -12,9 +14,54 @@ const EditProfile: React.FC = () => {
     const [birthDate, setBirthDate] = useState("");
     const [address, setAddress] = useState("");
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const updateUser = async (modifiedUser: UserInfo) => {
+        try {
+            await updateUserInDatabase(modifiedUser, user);
+            console.log("User updated");
+        } catch (error) {
+            console.log("Error while updating user: ", error);
+            throw error;
+        }
+    };
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        if (username != null && email != null) {
+            alert("Vous ne pouvez pas modifier votre email et nom d'utilisateur en même temps ");
+            return;
+        }
+        /**
+         *
+         */
+        let modifiedUser: UserInfo = {
+            username: username ?? user?.username,
+            email: email ?? user?.email,
+            fname: firstName ?? user?.fname,
+            lname: lastName ?? user?.lname,
+            birthdate: new Date(birthDate) ?? user?.birthdate,
+            address: address ?? user?.address,
+            token: user?.token ?? "",
+            permission: user?.permission ?? "",
+        };
+
+        if (email != null) {
+            if (validateLogin(email)) {
+                alert("Votre email saisie n'est pas valide, veuillez entrer une adresse email correcte");
+                return;
+            } else {
+                const existsUserSameEmail = await checkIfUserExists(email, username);
+                if (!existsUserSameEmail) updateUser(modifiedUser);
+            }
+        } else {
+            if (username != null) {
+                const existUserSameUsername = await checkIfUserExists(email, username);
+                if (!existUserSameUsername) updateUser(modifiedUser);
+            } else updateUser(modifiedUser);
+        }
+
         // TODO: Implement profile edit logic here
+        /**
+         *
+         */
     };
 
     return connected ? (
