@@ -1,5 +1,4 @@
 {
-    "BASE_URL_API": "https://api.fournierfamily.ovh",
     "LOGIN_USER_ENDPOINT": "/user/connect",
     "REGISTER_USER_ENDPOINT": "/user/add",
     "UPDATE_USER_ENDPOINT": "/user/update",
@@ -9,10 +8,23 @@
     "GET_ART_BASED_ID_USER_ENDPOINT": "/oeuvre/getIdUser",
     "GET_ART_BASED_ID_ENDPOINT": "/oeuvre/getId",
     "GET_ALL_ART_ENDPOINT": "/oeuvre/getAll",
+    "GET_ALL_ART_IDS_ENDPOINT": "/oeuvre/getAllIds",
     "GET_CAT_ART_ENDPOINT": "/oeuvre/getCat",
     "GET_ART_CAT_ENDPOINT": "/category/getCat",
     "GET_ARTS_BASED_CAT_ENDPOINT": "/oeuvre/getArts",
     "ADD_ART_ENDPOINT": "/oeuvre/addAdd",
     "UPDATE_ART_ENDPOINT": "/oeuvre/updateArt",
-    "DELETE_ART_ENDPOINT": "/oeuvre/deleteArt"
+    "DELETE_ART_ENDPOINT": "/oeuvre/deleteArt",
+    "LIKE_ART_ENDPOINT": "/oeuvre/likeArt",
+    "UNLIKE_ART_ENDPOINT": "/oeuvre/unlikeArt",
+    "ADD_ART_TO_LIST_ENDPOINT": "/oeuvre/addArtToList",
+    "REMOVE_ART_FROM_LIST_ENDPOINT": "/oeuvre/removeArtFromList",
+    "CREATE_NEW_LIST_ENDPOINT": "/oeuvre/createNewList",
+
+    "FOLLOW_ARTIST_ENDPOINT": "/friend/followArtist",
+    "UNFOLLOW_ARTIST_ENDPOINT": "/friend/unfollowArtist",
+    "ASK_BEFRIEND_ENDPOINT": "/friend/askBefriend",
+    "ACCEPT_BEFRIEND_ENDPOINT": "/friend/acceptBefriend",
+    "REFUSE_BEFRIEND_ENDPOINT": "/friend/refuseBefriend",
+    "BEFRIEND_ENDPOINT": "/friend/becomeFriend"
 }

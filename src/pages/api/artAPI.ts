@@ -1,15 +1,17 @@
 import apiConfig from "./apiConfig.json";
 import { UserInfo } from "../../components/userContext";
 import { getApiURL } from "./utilsAPI";
+// IMPORTANT
+// CRUD pour art
 /**
  *
  * @param id de l'oeuvre
  * @returns l'oeuvre complete avec info
  */
-export const getArtBasedOnUserIDFromDb = async (id: string) => {
+export const getArtBasedOnUserIDFromDb = async (user: any) => {
     const getArtBasedOnUserID = getApiURL() + apiConfig.GET_ART_BASED_ID_ENDPOINT;
     let requestBody = {
-        id: id,
+        user: user,
     };
     try {
         let response = await fetch(getArtBasedOnUserID, {
@@ -31,7 +33,27 @@ export const getArtBasedOnUserIDFromDb = async (id: string) => {
         throw error;
     }
 };
-
+export const getAllArtIDs = async () => {
+    const getAllArtIDs = getApiURL() + apiConfig.GET_ALL_ART_IDS_ENDPOINT;
+    try {
+        let response = await fetch(getAllArtIDs, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des oeuvres d'arts:", error);
+        throw error;
+    }
+};
 /**
  *
  * @param id de l'utilisateur

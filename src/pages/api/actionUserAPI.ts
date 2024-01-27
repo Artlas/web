@@ -1,0 +1,154 @@
+import { getApiURL } from "./utilsAPI";
+import apiConfig from "./apiConfig.json";
+
+/**
+ *
+ * @param id de l'oeuvre d'art
+ * @param idUser id de User, rajouter l'id dans le tableau du user based on ID likedList & increment +1 l'oeuvre
+ */
+export const likeArt = async (id: string, idUser: string) => {
+    const likeArtEndpoint = getApiURL() + apiConfig.LIKE_ART_ENDPOINT;
+    let requestBody = {
+        id: id,
+        idUser: idUser,
+    };
+    try {
+        let response = await fetch(likeArtEndpoint, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        console.error("Erreur lors du like de l'oeuvre d'art:", error);
+        throw error;
+    }
+};
+/**
+ *
+ * @param id oeuvre d'art
+ * @param idUser id user, retirer l'id de l'oeuvre dans le tableau et décrement oeuvre de 1
+ */
+export const unlikeArt = async (id: string, idUser: string) => {
+    const likeArtEndpoint = getApiURL() + apiConfig.UNLIKE_ART_ENDPOINT;
+    let requestBody = {
+        id: id,
+        idUser: idUser,
+    };
+    try {
+        let response = await fetch(likeArtEndpoint, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        console.error("Erreur lors du like de l'oeuvre d'art:", error);
+        throw error;
+    }
+};
+/**
+ *
+ * @param idArt id de l'oeuvre
+ * @param idList id de la liste sur laquelle mettre l'id
+ * @param idUser id user
+ *  IMPORTANT, utiliser cette fonction pour la galerie
+ */
+export const addArtToList = async (idArt: string, idList: string, idUser: string) => {
+    const addArtToListEndpoint = getApiURL() + apiConfig.ADD_ART_TO_LIST_ENDPOINT;
+    let requestBody = {
+        idArt: idArt,
+        idList: idList,
+        idUser: idUser,
+    };
+    try {
+        let response = await fetch(addArtToListEndpoint, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        console.error("Erreur lors de l'ajout de l'oeuvre d'art à la liste:", error);
+        throw error;
+    }
+};
+export const removeArtFromList = async (idArt: string, idList: string, idUser: string) => {
+    const removeArtFromListEndpoint = getApiURL() + apiConfig.REMOVE_ART_FROM_LIST_ENDPOINT;
+    let requestBody = {
+        idArt: idArt,
+        idList: idList,
+        idUser: idUser,
+    };
+    try {
+        let response = await fetch(removeArtFromListEndpoint, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        console.error("Erreur lors de la suppression de l'oeuvre d'art à la liste:", error);
+        throw error;
+    }
+};
+/**
+ *
+ * @param idList nom de la liste d'art
+ * @param idUser id user
+ */
+export const createNewList = async (idList: string, descriptionList: string, illustration: string, idUser: string) => {
+    const createNewListEndpoint = getApiURL() + apiConfig.CREATE_NEW_LIST_ENDPOINT;
+    let requestBody = {
+        idList: idList,
+        descriptionList: descriptionList,
+        illustration: illustration,
+        idUser: idUser,
+    };
+    try {
+        let response = await fetch(createNewListEndpoint, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        console.error("Erreur lors de la création de la liste:", error);
+        throw error;
+    }
+};
