@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { addArt, checkIfArtExist } from "./api/artAPI";
+import { UserContext } from "../components/userContext";
+import { ArtInfo } from "../components/artContext";
+import { ArtContext } from "../components/artContext";
+import { getRandomInt } from "../utils/tools";
 // import axios from 'axios';
 
 interface Props {
@@ -55,11 +60,16 @@ const temporaryCategories = [
 ];
 
 export default function Poster({ category, subcategory }: Props) {
+    const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
+
     const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [price, setPrice] = useState(0);
     const [categories, setCategories] = useState<string[]>([]);
     const [subCategories, setSubCategories] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState(category || "");
     const [selectedSubcategory, setSelectedSubcategory] = useState(subcategory || "");
+
     const [date, setDate] = useState("");
     const [images, setImages] = useState([]);
     const [video, setVideo] = useState("");
@@ -109,11 +119,37 @@ export default function Poster({ category, subcategory }: Props) {
         setVideo(event.target.value);
     };
 
-    const handleSubmit = (event: { preventDefault: () => void }) => {
+    const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
-
-        // TODO: Submit the form data to the server
-        // ...
+        if (title != null && selectedCategory != null && selectedSubcategory != null && date != null && (images != null || video != null)) {
+            console.log(title, selectedCategory, selectedSubcategory, date, images, video);
+            // TODO solution pour les fichiers et prix
+            let myArt: ArtInfo = {
+                id: getRandomInt(),
+                title: title,
+                categorie: selectedCategory,
+                subCategorie: selectedSubcategory,
+                description: description,
+                creation_date: new Date(date) ?? "",
+                onSale: false,
+                image_url: "",
+                video_url: "",
+                artistId: user?.username ?? "",
+            };
+            if (user) {
+                checkIfArtExist(title, user.username).then((response) => {
+                    if (!response) {
+                        console.log("Art doesn't exist");
+                        console.log(myArt);
+                        addArt(myArt, user);
+                    } else {
+                        alert("Cette oeuvre existe déjà");
+                    }
+                });
+            } else {
+                alert("Vous devez être connecté pour créer une publication");
+            }
+        }
     };
 
     return (

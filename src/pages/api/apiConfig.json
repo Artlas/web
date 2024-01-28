@@ -18,6 +18,7 @@
     "LIKE_ART_ENDPOINT": "/oeuvre/likeArt",
     "UNLIKE_ART_ENDPOINT": "/oeuvre/unlikeArt",
     "ADD_ART_TO_LIST_ENDPOINT": "/oeuvre/addArtToList",
+    "CHECK_IF_ART_EXIST_ENDPOINT": "/oeuvre/checkIfArtExist",
     "REMOVE_ART_FROM_LIST_ENDPOINT": "/oeuvre/removeArtFromList",
     "CREATE_NEW_LIST_ENDPOINT": "/oeuvre/createNewList",
     "RETRIEVE_NUMBER_OF_LISTS_SAVED_ENDPOINT": "/oeuvre/retrieveNumberOfListsSaved",
