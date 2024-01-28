@@ -22,5 +22,9 @@ export type Oeuvre = {
             scenariste?: string,
             producteur?: string,
             acteurs?: string[],
+            toSell?: boolean,
+            price?: number,
+            linkToBuy?: string,
+            canTchat?: boolean,
         },
     };
