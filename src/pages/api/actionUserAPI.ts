@@ -6,11 +6,11 @@ import apiConfig from "./apiConfig.json";
  * @param id de l'oeuvre d'art
  * @param idUser id de User, rajouter l'id dans le tableau du user based on ID likedList & increment +1 l'oeuvre
  */
-export const likeArt = async (id: string, idUser: string) => {
+export const likeArt = async (id: string, user: any) => {
     const likeArtEndpoint = getApiURL() + apiConfig.LIKE_ART_ENDPOINT;
     let requestBody = {
         id: id,
-        idUser: idUser,
+        user: user,
     };
     try {
         let response = await fetch(likeArtEndpoint, {
@@ -34,13 +34,13 @@ export const likeArt = async (id: string, idUser: string) => {
 /**
  *
  * @param id oeuvre d'art
- * @param idUser id user, retirer l'id de l'oeuvre dans le tableau et décrement oeuvre de 1
+ * @param idUser user, retirer l'id de l'oeuvre dans le tableau et décrement oeuvre de 1
  */
-export const unlikeArt = async (id: string, idUser: string) => {
+export const unlikeArt = async (id: string, user: any) => {
     const likeArtEndpoint = getApiURL() + apiConfig.UNLIKE_ART_ENDPOINT;
     let requestBody = {
         id: id,
-        idUser: idUser,
+        user: user,
     };
     try {
         let response = await fetch(likeArtEndpoint, {
@@ -65,15 +65,15 @@ export const unlikeArt = async (id: string, idUser: string) => {
  *
  * @param idArt id de l'oeuvre
  * @param idList id de la liste sur laquelle mettre l'id
- * @param idUser id user
+ * @param user correspond au user
  *  IMPORTANT, utiliser cette fonction pour la galerie
  */
-export const addArtToList = async (idArt: string, idList: string, idUser: string) => {
+export const addArtToList = async (idArt: string, idList: string, user: any) => {
     const addArtToListEndpoint = getApiURL() + apiConfig.ADD_ART_TO_LIST_ENDPOINT;
     let requestBody = {
         idArt: idArt,
         idList: idList,
-        idUser: idUser,
+        user: user,
     };
     try {
         let response = await fetch(addArtToListEndpoint, {
@@ -94,12 +94,12 @@ export const addArtToList = async (idArt: string, idList: string, idUser: string
         throw error;
     }
 };
-export const removeArtFromList = async (idArt: string, idList: string, idUser: string) => {
+export const removeArtFromList = async (idArt: string, idList: string, user: any) => {
     const removeArtFromListEndpoint = getApiURL() + apiConfig.REMOVE_ART_FROM_LIST_ENDPOINT;
     let requestBody = {
         idArt: idArt,
         idList: idList,
-        idUser: idUser,
+        user: user,
     };
     try {
         let response = await fetch(removeArtFromListEndpoint, {
@@ -125,13 +125,13 @@ export const removeArtFromList = async (idArt: string, idList: string, idUser: s
  * @param idList nom de la liste d'art
  * @param idUser id user
  */
-export const createNewList = async (idList: string, descriptionList: string, illustration: string, idUser: string) => {
+export const createNewList = async (idList: string, descriptionList: string, illustration: string, user: any) => {
     const createNewListEndpoint = getApiURL() + apiConfig.CREATE_NEW_LIST_ENDPOINT;
     let requestBody = {
         idList: idList,
         descriptionList: descriptionList,
         illustration: illustration,
-        idUser: idUser,
+        user: user,
     };
     try {
         let response = await fetch(createNewListEndpoint, {
