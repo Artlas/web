@@ -4,7 +4,7 @@ import { getApiURL } from "./utilsAPI";
 // IMPORTANT
 // CRUD pour art
 /**
- *
+ * Retourne les oeuvres d'un artiste
  * @param id de l'oeuvre
  * @returns l'oeuvre complete avec info
  */
@@ -33,6 +33,11 @@ export const getArtBasedOnUserIDFromDb = async (user: any) => {
         throw error;
     }
 };
+
+/**
+ *
+ * @returns tous les ids des oeuvres d'arts
+ */
 export const getAllArtIDs = async () => {
     const getAllArtIDs = getApiURL() + apiConfig.GET_ALL_ART_IDS_ENDPOINT;
     try {

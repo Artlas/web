@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { retrieveNumberOfListsSaved, createNewList } from "./api/actionUserAPI";
+import { getRandomInt } from "../utils/tools";
 
 const NewListForm: React.FC = () => {
     const [title, setTitle] = useState("");
@@ -6,8 +8,19 @@ const NewListForm: React.FC = () => {
     const [description, setDescription] = useState("");
 
     const handleImageChange = () => {};
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (title != null && picture != null && description != null) {
+            console.log(title, picture, description);
+            try {
+                let numberOfLists = (await retrieveNumberOfListsSaved()) ?? 0;
+                let idNewList = numberOfLists !== null ? numberOfLists + 1 : getRandomInt();
+                console.log("idNewList", idNewList);
+                await createNewList(idNewList, title, picture, description);
+            } catch (error) {
+                console.log("Erreur lors de la création de la liste:", error);
+            }
+        }
         // Handle form submission here
     };
 

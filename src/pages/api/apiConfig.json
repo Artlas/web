@@ -20,7 +20,7 @@
     "ADD_ART_TO_LIST_ENDPOINT": "/oeuvre/addArtToList",
     "REMOVE_ART_FROM_LIST_ENDPOINT": "/oeuvre/removeArtFromList",
     "CREATE_NEW_LIST_ENDPOINT": "/oeuvre/createNewList",
-
+    "RETRIEVE_NUMBER_OF_LISTS_SAVED_ENDPOINT": "/oeuvre/retrieveNumberOfListsSaved",
     "FOLLOW_ARTIST_ENDPOINT": "/friend/followArtist",
     "UNFOLLOW_ARTIST_ENDPOINT": "/friend/unfollowArtist",
     "ASK_BEFRIEND_ENDPOINT": "/friend/askBefriend",

@@ -152,3 +152,25 @@ export const createNewList = async (idList: string, descriptionList: string, ill
         throw error;
     }
 };
+
+export const retrieveNumberOfListsSaved = async () => {
+    const retrieveNumberOfListsSavedEndpoint = getApiURL() + apiConfig.RETRIEVE_NUMBER_OF_LISTS_SAVED_ENDPOINT;
+    try {
+        let response = await fetch(retrieveNumberOfListsSavedEndpoint, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la récupération du nombre de listes:", error);
+        throw error;
+    }
+};
