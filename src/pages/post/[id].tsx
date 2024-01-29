@@ -25,12 +25,10 @@ const PostPage: React.FC<{ art: Oeuvre }> = () => {
         isMediaTypeImages: true,
         author: "Gustav Klimt",
         likeCount: 2,
-        otherFields: {
-            toSell: true,
-            price: 1000000,
-            canTchat: true,
-            linkToBuy: "#",
-        },
+        toSell: true,
+        price: 1000000,
+        canTchat: true,
+        linkToBuy: "#",
     };
 
     const [liked, setLiked] = useState(false);
@@ -112,10 +110,9 @@ const PostPage: React.FC<{ art: Oeuvre }> = () => {
                         <p className="text-xl" dangerouslySetInnerHTML={{ __html: art.description.replace(/\n/g, "<br><br>") }}></p>
                     </div>
                 </div>
-                <div className="hidden xl:flex mx-2 my-2 w-[2px] h-auto bg-black dark:bg-white rounded-full"> </div>
-                <div className="flex flex-col w-full xl:w-[30%] space-y-2">
+                <div className="flex flex-col w-full xl:w-[30%] space-y-2 ml-4">
                     {/* Render like, add to list, and share buttons */}
-                    <div className="flex flex-col justify-between items-center mt-4 px-4 space-y-2 text-2xl ">
+                    <div className="flex flex-col justify-between items-center  mt-4 px-4 space-y-2 text-2xl ">
                         <button
                             id={`post${art._id}LikeButton`}
                             className={`flex items-center space-x-2 p-3 rounded-full bg-stone-100 dark:bg-stone-950  hover:bg-stone-200  hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900  shadow-md ${
@@ -159,15 +156,15 @@ const PostPage: React.FC<{ art: Oeuvre }> = () => {
                         </button>
                     </div>
                     {/* Render buy and tchat information */}
-                    {art.otherFields?.toSell || art.otherFields?.canTchat ? (
+                    {art?.toSell || art?.canTchat ? (
                         <div className="flex flex-col p-3 bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-xl shadow-xl w-full mx-auto">
-                            {art.otherFields?.toSell && (
+                            {art?.toSell && (
                                 <div>
                                     <span className="font-semibold text-2xl">{"Cette oeuvre est à vendre"} </span>
                                     <div className="flex flex-col">
-                                        <span className="text-xl ml-3">Prix : {art.otherFields?.price} €</span>
+                                        <span className="text-xl ml-3">Prix : {art?.price} €</span>
                                         <Link
-                                            href={art.otherFields?.linkToBuy || "#"}
+                                            href={art?.linkToBuy || "#"}
                                             className="flex flex-row items-center w-auto mr-auto text-xl  justify-between hover:bg-stone-200 hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900  py-1 px-3 rounded-full"
                                         >
                                             <span>Acheter</span> <IoMdArrowRoundForward className="ml-2" size={30} />
@@ -175,7 +172,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = () => {
                                     </div>
                                 </div>
                             )}
-                            {art.otherFields?.canTchat && (
+                            {art?.canTchat && (
                                 <form className="flex flex-col space-y-2" onSubmit={handleSubmit}>
                                     <label htmlFor="tchat" className="font-semibold text-2xl">
                                         {"Contacter l'artiste"}{" "}

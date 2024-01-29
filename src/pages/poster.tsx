@@ -131,12 +131,10 @@ export default function Poster({ category, subcategory }: Props) {
             releaseDate: new Date(),
             isMediaTypeImages: isMediaTypeImages,
             likeCount: 0,
-            otherFields: {
-                toSell: isArtToSell,
-                price: price,
-                canTchat: canPeopleChat,
-                linkToBuy: linkToBuy,
-            },
+            toSell: isArtToSell,
+            price: price,
+            canTchat: canPeopleChat,
+            linkToBuy: linkToBuy,
         };
         console.log(oeuvre);
         // TODO: Submit the form data to the server

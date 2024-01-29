@@ -21,6 +21,7 @@ interface UserContextState {
 
 // Define the type for the user information
 export interface UserInfo {
+    _id: string;
     username: string;
     email: string;
     fname?: string;
@@ -33,6 +34,10 @@ export interface UserInfo {
     acceptCookies?: boolean;
     autoPlayDiaporamas?: boolean;
     preferredTheme?: string;
+    friends?: string[];
+    gallery?: string[];
+    lists?: [_id: string, title: string, description: string, arts: string[]];
+    liked?: string[];
 }
 
 // Create the user context
