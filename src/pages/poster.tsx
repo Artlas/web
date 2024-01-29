@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { Oeuvre } from "@/types/oeuvre";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../components/userContext";
 // import axios from 'axios';
 
 interface Props {
@@ -55,6 +57,7 @@ const temporaryCategories = [
 ];
 
 export default function Poster({ category, subcategory }: Props) {
+    const { user, connected } = useContext(UserContext);
     const [title, setTitle] = useState("");
     const [categories, setCategories] = useState<string[]>([]);
     const [subCategories, setSubCategories] = useState<string[]>([]);
@@ -64,6 +67,11 @@ export default function Poster({ category, subcategory }: Props) {
     const [images, setImages] = useState([]);
     const [video, setVideo] = useState("");
     const [isMediaTypeImages, setIsMediaTypeImages] = useState(true);
+    const [description, setDescription] = useState("");
+    const [isArtToSell, setIsArtToSell] = useState(false);
+    const [price, setPrice] = useState(0);
+    const [canPeopleChat, setCanPeopleChat] = useState(false);
+    const [linkToBuy, setLinkToBuy] = useState("");
 
     //TODO: Fetch categories from API
     useEffect(() => {
@@ -111,7 +119,26 @@ export default function Poster({ category, subcategory }: Props) {
 
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
-
+        let oeuvre: Oeuvre = {
+            _id: 1,
+            title: title,
+            description: "",
+            author: user?.username || "Jean-Michel",
+            category: selectedCategory,
+            subCategory: selectedSubcategory,
+            illustration: [],
+            postDate: new Date(),
+            releaseDate: new Date(),
+            isMediaTypeImages: isMediaTypeImages,
+            likeCount: 0,
+            otherFields: {
+                toSell: isArtToSell,
+                price: price,
+                canTchat: canPeopleChat,
+                linkToBuy: linkToBuy,
+            },
+        };
+        console.log(oeuvre);
         // TODO: Submit the form data to the server
         // ...
     };
@@ -175,7 +202,7 @@ export default function Poster({ category, subcategory }: Props) {
                 )}
                 <div className="mb-4">
                     <label htmlFor="dateInputPostCreationForm" className="block text-sm md:text-base font-bold md:font-medium mb-2">
-                        Date de sortie
+                        {"Date de création de l'ɶuvre"}
                     </label>
                     <input
                         type="date"
@@ -248,6 +275,82 @@ export default function Poster({ category, subcategory }: Props) {
                         />
                     </div>
                 )}
+
+                <div className="mb-4">
+                    <label className="block text-sm md:text-base font-bold md:font-medium mb-2" htmlFor="descriptionPostCreationForm">
+                        Description
+                    </label>
+                    <textarea
+                        className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
+                        id="descriptionPostCreationForm"
+                        placeholder="Description de l'ɶuvre"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </div>
+
+                <label htmlFor="isArtToSellInputPostCreationForm" className="">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <span className="select-none block text-sm md:text-base font-bold md:font-medium mb-2">Est-ce une ɶuvre à vendre ?</span>
+                        </div>
+                        <div className="relative cursor-pointer ">
+                            <input type="checkbox" name="toSell" id="isArtToSellInputPostCreationForm" className="peer sr-only" checked={isArtToSell} onChange={() => setIsArtToSell(!isArtToSell)} />
+                            <div className="peer h-5 w-9 rounded-full bg-gray-400 dark:bg-stone-600 after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 dark:after:border-stone-600 after:bg-white dark:after:bg-black after:transition-all after:content-[''] peer-checked:bg-black dark:peer-checked:bg-white peer-checked:after:translate-x-full peer-checked:after:border-white dark:peer-checked:after:border-black peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#AAAAAA88]"></div>
+                        </div>
+                    </div>
+                </label>
+
+                {isArtToSell && (
+                    <div>
+                        <div className="mb-4">
+                            <label htmlFor="priceInputPostCreationForm" className="block text-sm md:text-base font-bold md:font-medium mb-2">
+                                Prix
+                            </label>
+                            <input
+                                type="number"
+                                id="priceInputPostCreationForm"
+                                value={price}
+                                onChange={(event) => setPrice(parseInt(event.target.value))}
+                                className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
+                                placeholder="Entrer le prix de l'ɶuvre"
+                                min={0}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="linkToBuyInputPostCreationForm" className="block text-sm md:text-base font-bold md:font-medium mb-2">
+                                {"Lien pour acheter l'ɶuvre"}
+                            </label>
+                            <input
+                                type="text"
+                                id="linkToBuyInputPostCreationForm"
+                                value={linkToBuy}
+                                onChange={(event) => setLinkToBuy(event.target.value)}
+                                className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
+                                placeholder="Entrer le lien pour acheter l'ɶuvre"
+                            />
+                        </div>
+                    </div>
+                )}
+
+                <label htmlFor="canPeopleChatInputPostCreationForm" className="">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <span className="select-none block text-sm md:text-base font-bold md:font-medium mb-2">Les gens peuvent-ils rentrer en contact avec vous ?</span>
+                        </div>
+                        <div className="relative cursor-pointer ">
+                            <input
+                                type="checkbox"
+                                name="canChat"
+                                id="canPeopleChatInputPostCreationForm"
+                                className="peer sr-only"
+                                checked={canPeopleChat}
+                                onChange={() => setCanPeopleChat(!canPeopleChat)}
+                            />
+                            <div className="peer h-5 w-9 rounded-full bg-gray-400 dark:bg-stone-600 after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 dark:after:border-stone-600 after:bg-white dark:after:bg-black after:transition-all after:content-[''] peer-checked:bg-black dark:peer-checked:bg-white peer-checked:after:translate-x-full peer-checked:after:border-white dark:peer-checked:after:border-black peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#AAAAAA88]"></div>
+                        </div>
+                    </div>
+                </label>
 
                 <div className="flex justify-center">
                     <button

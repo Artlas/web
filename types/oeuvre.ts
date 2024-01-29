@@ -10,18 +10,18 @@ export type Oeuvre = {
         releaseDate?: Date,
         isMediaTypeImages: boolean,
         author: string,
-        plateforme?: string,
+        plateforme?: string, //? A supprimer ?
         likeCount: number,
         otherFields?: {
-            genre?: string[],
-            artiste?: string,
-            realistateur?: string,
-            developpeur?: string,
-            editeur?: string,
-            compositeur?: string,
-            scenariste?: string,
-            producteur?: string,
-            acteurs?: string[],
+            genre?: string[], //? A supprimer ?
+            artiste?: string, //? A supprimer ?
+            realistateur?: string, //? A supprimer ?
+            developpeur?: string, //? A supprimer ?
+            editeur?: string, //? A supprimer ?
+            compositeur?: string, //? A supprimer ?
+            scenariste?: string, //? A supprimer ?
+            producteur?: string, //? A supprimer ?
+            acteurs?: string[], //? A supprimer ?
             toSell?: boolean,
             price?: number,
             linkToBuy?: string,

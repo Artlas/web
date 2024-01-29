@@ -183,7 +183,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = () => {
                                     <textarea name="tchat" id="tchat" className="w-full h-32 p-2 rounded-xl bg-stone-200 dark:bg-stone-900"></textarea>
                                     <button
                                         type="submit"
-                                        className="flex flex-row items-center w-auto mr-auto bg-black dark:bg-white border-2 py-1 px-3 rounded-full border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
+                                        className="flex flex-row items-center w-auto ml-auto bg-black dark:bg-white border-2 p-1 pl-3 rounded-full border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                                     >
                                         <span>Envoyer</span> <IoMdArrowRoundForward className="ml-2" size={30} />
                                     </button>
