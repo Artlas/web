@@ -4,22 +4,15 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { TbPhotoCircle } from "react-icons/tb";
+import { NavigationCategory } from "@/types/category";
 
 interface Props {
-    navigationInfo: {
-        categories: {
-            id: number;
-            name: string;
-            items: string[];
-            miniatureLink: string;
-            isShown: boolean;
-        }[];
-    };
+    navigationInfo: NavigationCategory[];
     reducedPanel: boolean;
 }
 
 export default function SideNavigation({ navigationInfo, reducedPanel }: Props) {
-    const [categories, setCategories] = useState(navigationInfo.categories);
+    const [categories, setCategories] = useState<NavigationCategory[]>([]);
 
     function handleCategory(name: string) {
         setCategories(categories.map((category) => (category.name === name ? { ...category, isShown: !category.isShown } : category)));
@@ -27,10 +20,11 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
     const routeName = useRouter().pathname.split("/")[1];
     const currentCategory = useRouter().query.category;
     const currentSubCategory = useRouter().query.subcategory;
-
     useEffect(() => {
-        setCategories(categories.map((category) => (category.name !== currentCategory ? { ...category, isShown: false } : category)));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (JSON.stringify(navigationInfo) !== JSON.stringify(categories)) {
+            const updatedCategories = navigationInfo.map((category) => (category.name !== currentCategory ? { ...category, isShown: false } : category));
+            setCategories(updatedCategories);
+        }
     }, [navigationInfo, currentCategory]);
 
     return (
