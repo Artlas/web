@@ -36,7 +36,7 @@ export const likeArt = async (id: string, user: any) => {
  * @param id oeuvre d'art
  * @param idUser user, retirer l'id de l'oeuvre dans le tableau et décrement oeuvre de 1
  */
-export const unlikeArt = async (id: string, user: any) => {
+export const dislikeArt = async (id: string, user: any) => {
     const likeArtEndpoint = getApiURL() + apiConfig.UNLIKE_ART_ENDPOINT;
     let requestBody = {
         id: id,
