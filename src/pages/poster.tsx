@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { addArt, checkIfArtExist } from "../api/artAPI";
-import { ArtInfo } from "../components/artContext";
+
 import { ArtContext } from "../components/artContext";
 import { getRandomInt } from "../utils/tools";
 import { Oeuvre } from "@/types/oeuvre";
@@ -14,13 +14,12 @@ interface Props {
     subcategory?: string;
 }
 export default function Poster({ category, subcategory }: Props) {
+    //#region variables
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
     const { categoryList, categoryNameList, subCategoryList, subCategoryNameList, setCategory } = useContext(CategoryContext);
     const [title, setTitle] = useState("");
-
     const [selectedCategory, setSelectedCategory] = useState(category || "");
     const [selectedSubcategory, setSelectedSubcategory] = useState(subcategory || "");
-
     const [date, setDate] = useState("");
     const [images, setImages] = useState([]);
     const [video, setVideo] = useState("");
@@ -30,14 +29,13 @@ export default function Poster({ category, subcategory }: Props) {
     const [price, setPrice] = useState(0);
     const [canPeopleChat, setCanPeopleChat] = useState(false);
     const [linkToBuy, setLinkToBuy] = useState("");
-    console.log(categoryNameList.length);
-
+    //#endregion
     useEffect(() => {
         if (selectedCategory) {
             setCategory(selectedCategory);
         }
     }, [selectedCategory]);
-
+    //#region handles
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setTitle(event.target.value);
     };
@@ -59,17 +57,18 @@ export default function Poster({ category, subcategory }: Props) {
     const handleVideoChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setVideo(event.target.value);
     };
-
+    //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
         let oeuvre: Oeuvre = {
-            _id: 1,
+            _id: getRandomInt(),
             title: title,
-            description: "",
+            description: description,
             author: user?.username || "Jean-Michel",
             category: selectedCategory,
             subCategory: selectedSubcategory,
             illustration: [],
+            video: "test",
             postDate: new Date(),
             releaseDate: new Date(),
             isMediaTypeImages: isMediaTypeImages,
@@ -80,12 +79,16 @@ export default function Poster({ category, subcategory }: Props) {
             linkToBuy: linkToBuy,
         };
         //console.log(oeuvre);
-        /* try {
-            const data = await getAllArt();
-            console.log(data);
+        try {
+            await addArt(oeuvre, user).then((response) => {
+                console.log(response);
+                if (response) {
+                    console.log("Art ajouté avec succès");
+                }
+            });
         } catch (error) {
             console.log("Erreur; ", error);
-        }*/
+        }
         // TODO: Submit the form data to the server
         // ...
     };
