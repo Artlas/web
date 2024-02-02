@@ -3,7 +3,7 @@ import E404 from "../404";
 import { useState, useContext, useEffect } from "react";
 import { UserContext, UserInfo } from "../../components/userContext";
 import { validateLogin, checkParameters } from "@/src/utils/validators";
-import { checkIfUserExists, updateUserInDatabase } from "../api/userAPI";
+import { checkIfUserExists, updateUserInDatabase } from "../../api/userAPI";
 
 const EditProfile: React.FC = () => {
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
@@ -36,6 +36,7 @@ const EditProfile: React.FC = () => {
          *
          */
         let modifiedUser: UserInfo = {
+            _id: user?._id ?? "",
             username: username !== "" ? username : user?.username ?? "",
             email: email !== "" ? email : user?.email ?? "",
             fname: firstName !== "" ? firstName : user?.fname ?? "",

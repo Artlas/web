@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getAllArt, getArtBasedOnIDFromDb } from "../api/artAPI";
+import { getAllArt, getArtBasedOnIDFromDb } from "../../api/artAPI";
 import { Oeuvre } from "../../../types/oeuvre";
 import AuthorItem from "../../components/authorItem";
 import { Carousel } from "react-responsive-carousel";

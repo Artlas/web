@@ -3,7 +3,7 @@ import E404 from "../404";
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../components/userContext";
 import { validatePassword, hashPasswordSha256 } from "@/src/utils/validators";
-import { updatePasswordUser } from "../api/userAPI";
+import { updatePasswordUser } from "../../api/userAPI";
 
 const PasswordResetPage: React.FC = () => {
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);

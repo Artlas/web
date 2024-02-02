@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { addArt, checkIfArtExist } from "./api/artAPI";
+import { addArt, checkIfArtExist } from "../api/artAPI";
 import { ArtInfo } from "../components/artContext";
 import { ArtContext } from "../components/artContext";
 import { getRandomInt } from "../utils/tools";

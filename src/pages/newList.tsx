@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { retrieveNumberOfListsSaved, createNewList } from "./api/actionUserAPI";
+import { retrieveNumberOfListsSaved, createNewList } from "../api/actionUserAPI";
 import { getRandomInt } from "../utils/tools";
 
 const NewListForm: React.FC = () => {

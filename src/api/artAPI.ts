@@ -1,5 +1,5 @@
 import apiConfig from "./apiConfig.json";
-import { UserInfo } from "../../components/userContext";
+import { UserInfo } from "../components/userContext";
 import { getApiURL } from "./utilsAPI";
 // IMPORTANT
 // CRUD pour art
