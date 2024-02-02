@@ -1,6 +1,6 @@
 import apiConfig from "./apiConfig.json";
 import { getApiURL } from "./utilsAPI";
-import { UserInfo } from "../../components/userContext";
+import { UserInfo } from "../components/userContext";
 
 export const getUserInDatabase = async (password: string, userId?: string, mail?: string) => {
     const connectEndpoint = getApiURL() + apiConfig.LOGIN_USER_ENDPOINT;
