@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Oeuvre } from "@/types/oeuvre";
+import AuthorItem from "./authorItem";
 import { useRouter } from "next/router";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -9,7 +10,7 @@ import ReactPlayer from "react-player";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 
-const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, likeCount }) => {
+const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, author, likeCount }) => {
     const [liked, setLiked] = useState(false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount); //TODO: Change this to the real like count from the database [likeCount]
     const [listed, setListed] = useState(false);
@@ -60,7 +61,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 <span className="text-gray-600 dark:text-slate-200 text-xs cursor-text">{postDate.toLocaleDateString()}</span>
             </div>
             <div
-                className="flex mb-3"
+                className="flex mb-3 items-center"
                 onClick={(e) => {
                     if (e.target === e.currentTarget) {
                         handlePostClick();
@@ -68,8 +69,9 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 }}
                 id="postCategoryContainer"
             >
+                <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate?.toLocaleDateString()} small />
                 <Link href={`/${category.toLowerCase()}/all`} id={`post${_id}CategoryLink`}>
-                    <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mr-2">{category}</span>
+                    <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mx-2">{category}</span>
                 </Link>
                 {subCategory && (
                     <Link href={`/${category.toLowerCase()}/${subCategory.toLowerCase()}`} id={`post${_id}SubcategoryLink`}>
@@ -109,14 +111,6 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 )}
             </div>
             <p className="text-gray-600 dark:text-slate-200 mb-4 cursor-text select-all">{description}</p>
-            {/*
-            //TODO: Render other information
-            */}
-
-            <div className="flex justify-between items-center cursor-default">
-                <p className=" cursor-text">Oeuvre :</p>
-                <span className="text-gray-600 dark:text-slate-200 text-xs cursor-text">{releaseDate?.toLocaleDateString()}</span>
-            </div>
 
             {/* Render like, add to list, and share buttons */}
             <div

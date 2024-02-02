@@ -75,7 +75,7 @@ export const UserProvider: React.FC = ({ children }: any) => {
             setConnected(true);
             console.log(user?.username);
         }
-    }, [cookies]);
+    }, [cookies, user?.username]);
     // Function to handle user login
 
     const login = (user: UserInfo) => {
