@@ -1,8 +1,9 @@
 import { UserInfo } from "../components/userContext";
-import { getUserInDatabase } from "../pages/api/userAPI";
+import { getUserInDatabase } from "../api/userAPI";
 
 export function setConnectedUser(userData: any): UserInfo {
     let connectedUser: UserInfo = {
+        _id: userData?._id ?? "",
         username: userData?.id ?? "",
         email: userData?.mail ?? "",
         fname: userData?.firstName ?? "",
