@@ -25,7 +25,7 @@ export default function SideNavigation({ navigationInfo, reducedPanel }: Props) 
             const updatedCategories = navigationInfo.map((category) => (category.name !== currentCategory ? { ...category, isShown: false } : category));
             setCategories(updatedCategories);
         }
-    }, [navigationInfo, currentCategory, categories]);
+    }, [navigationInfo, currentCategory]);
 
     return (
         <div className="flex flex-col w-full text-black dark:text-white mt-2 ">

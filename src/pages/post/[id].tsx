@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getAllArt, getArtBasedOnIDFromDb } from "../../api/artAPI";
+import { getAllArtIDs, getArtBasedOnID } from "../../api/artAPI";
 import { Oeuvre } from "../../../types/oeuvre";
 import AuthorItem from "../../components/authorItem";
 import { Carousel } from "react-responsive-carousel";
@@ -10,27 +10,9 @@ import { IoMdArrowRoundForward } from "react-icons/io";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 
-const PostPage: React.FC<{ art: Oeuvre }> = () => {
-    const art: Oeuvre = {
-        _id: 789,
-        title: "Le baiser",
-        description:
-            "Le Baiser est un tableau du peintre autrichien Gustav Klimt, réalisé de 1908 à 1909. Cette peinture à l'huile sur toile recouverte de feuilles d'or est conservée au palais du Belvédère à Vienne. L'œuvre fait partie du Cycle d'or de Klimt et elle est sûrement la plus célèbre du peintre autrichien.\nL'auteur lui-même et sa compagne, Emilie Flöge, en sont probablement les modèles. \nLe tableau est au format carré dont les deux personnages occupent le centre-haut. Elle représente un homme qui embrasse une femme sur la joue. Le couple est enlacé, la femme est à genou. Alors que les motifs du vêtement masculin sont des quadrilatères noirs et en or, les motifs du vêtement féminin sont ronds, colorés et font penser à des fleurs.\nSe tenant debout, et penché sur sa compagne, l'homme est vêtu d'une robe jaune avec des formes géométriques dont des rectangles gris, noir, blanc. Il porte sur la tête une couronne de feuilles de lierre et son visage tourné vers celui de sa compagne est invisible. Comme dans toutes les représentations d'étreintes de Klimt, on ne voit pas le visage de l'homme. Il semble dominer la femme.\nAgenouillée, la femme porte elle aussi une robe jaune mais différente de celle de l'homme, avec des cercles multicolores. Sa chevelure est fleurie et sa peau est pâle comme celle d'une défunte. Sa tête penchée fait penser à la décapitation, un thème cher aux peintres symbolistes. Le visage de la femme, aux yeux clos, est entièrement visible. Son regard exprime l'extase. Son vêtement cache entièrement l'homme mais celui de la femme la révèle en partie : bras gauche, mollets et pieds, courbes du corps.\nLes mains sont visibles : l'homme enserre la tête de sa compagne, dont le visage est tourné vers le spectateur, sa main droite la tenant par le menton et la joue gauche, et sa main gauche soutenant par la nuque la tête fortement rejetée en arrière. La femme quant à elle pose sa main droite sur la nuque de son compagnon et tient de sa main gauche la main droite de l'homme.\nLe sol à leurs pieds est densément couvert de fleurs et de motifs végétaux, qui tranchent avec un arrière-plan abstrait, plus uniforme, aux tonalités dorées. Cet arrière-plan a été obtenu grâce à de l'emploi de poudre dorée. Gustave Klimt aimait les fleurs qui poussaient abondamment dans son jardin. Les serpentins dorés sous les pieds de la femme font penser à des cheveux stylisés.",
-        category: "peinture",
-        subCategory: "huile",
-        illustration: ["https://picsum.photos/450", "https://picsum.photos/1455", "https://picsum.photos/464/700", "https://picsum.photos/1450/700"],
-        video: "https://www.youtube.com/watch?v=MrzIYb9VGlY&pp=ygUSbGUgYmFpc2VyIGRlIGtsaW10",
-        postDate: new Date(),
-        releaseDate: new Date("1908-01-01"),
-        isMediaTypeImages: true,
-        author: "Gustav Klimt",
-        likeCount: 2,
-        toSell: true,
-        price: 1000000,
-        canTchat: true,
-        linkToBuy: "#",
-    };
+import { GetStaticPropsContext } from "next";
 
+const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
     const [liked, setLiked] = useState(false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(art.likeCount); //TODO: Change this to the real like count from the database [likeCount]
     const [listed, setListed] = useState(false);
@@ -102,9 +84,14 @@ const PostPage: React.FC<{ art: Oeuvre }> = () => {
                                 </Link>
                             )}
                         </div>
-                        <span className="text-lg cursor-text justify-end ml-auto">Posté le {art.postDate.toLocaleDateString()}</span>
+                        <span className="text-lg cursor-text justify-end ml-auto">Posté le {art.postDate ? new Date(art.postDate).toLocaleDateString() : undefined}</span>
                     </div>
-                    <AuthorItem authorName={art.author} releaseDate={art.releaseDate?.toLocaleDateString() || undefined} imageSrc="https://picsum.photos/200" linkToProfile="#" />
+                    <AuthorItem
+                        authorName={art.author}
+                        releaseDate={art.releaseDate ? new Date(art.releaseDate).toLocaleDateString() : undefined}
+                        imageSrc="https://picsum.photos/200"
+                        linkToProfile="#"
+                    />
                     <div className="flex flex-col p-3 bg-stone-100 dark:bg-stone-950 text-black dark:text-white hover:text-gray-800 hover:bg-stone-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900 rounded-xl">
                         <span className="font-semibold text-xl ">Description : </span>
                         <p className="text-xl" dangerouslySetInnerHTML={{ __html: art.description.replace(/\n/g, "<br><br>") }}></p>
@@ -198,23 +185,25 @@ const PostPage: React.FC<{ art: Oeuvre }> = () => {
 
 export default PostPage;
 
-// export async function getStaticPaths() {
-//     const arts = await getAllArt();
-//     const paths = arts.map((art: { _id: any }) => ({
-//         params: { id: art._id },
-//     }));
+export async function getStaticPaths() {
+    const arts = await getAllArtIDs();
+    const paths = arts.map((_id: string) => ({
+        params: { id: _id.toString() },
+    }));
+    return { paths, fallback: false };
+}
 
-//     return { paths, fallback: false };
-// }
+export async function getStaticProps({ params }: GetStaticPropsContext) {
+    let art: any;
 
-// import { GetStaticPropsContext } from "next";
-
-// export async function getStaticProps({ params }: GetStaticPropsContext) {
-//     const art = await getArtBasedOnIDFromDb(params?.id as string);
-
-//     return {
-//         props: {
-//             art,
-//         },
-//     };
-// }
+    try {
+        art = await getArtBasedOnID(params?.id as any);
+    } catch (error) {
+        console.error("Error getting art: ", error);
+    }
+    return {
+        props: {
+            art,
+        },
+    };
+}

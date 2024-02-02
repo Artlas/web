@@ -3,15 +3,17 @@ import { UserInfo } from "../components/userContext";
 import { getApiURL } from "./utilsAPI";
 // IMPORTANT
 // CRUD pour art
+//TODO FAIRE UN GET ART BASED ON USER ID
 /**
- * Retourne les oeuvres d'un artiste
+ * Retourne l'oeuvre d'un artiste
  * @param id de l'oeuvre
  * @returns l'oeuvre complete avec info
  */
-export const getArtBasedOnUserIDFromDb = async (user: any) => {
+export const getArtBasedOnID = async (id: any) => {
     const getArtBasedOnUserID = getApiURL() + apiConfig.GET_ART_BASED_ID_ENDPOINT;
+    console.log(getArtBasedOnUserID);
     let requestBody = {
-        user: user,
+        id: id,
     };
     try {
         let response = await fetch(getArtBasedOnUserID, {
@@ -23,8 +25,8 @@ export const getArtBasedOnUserIDFromDb = async (user: any) => {
             body: JSON.stringify(requestBody),
         });
         const result = await response.json();
+        console.log(result);
         if (result.error) {
-            alert(result.error);
             throw new Error(result.error);
         }
         return result;
@@ -42,7 +44,7 @@ export const getAllArtIDs = async () => {
     const getAllArtIDs = getApiURL() + apiConfig.GET_ALL_ART_IDS_ENDPOINT;
     try {
         let response = await fetch(getAllArtIDs, {
-            method: "GET",
+            method: "POST",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
@@ -60,11 +62,11 @@ export const getAllArtIDs = async () => {
     }
 };
 /**
- *
+ *TODO
  * @param id de l'utilisateur
  * @returns retourne les oeuvres d'arts possédées par l'utilisateur
  */
-export const getArtBasedOnIDFromDb = async (id: string) => {
+export const getArtsBasedOnIDFromDb = async (id: string) => {
     const getArtBasedOnID = getApiURL() + apiConfig.GET_ART_BASED_ID_USER_ENDPOINT;
     let requestBody = {
         id: id,
@@ -98,7 +100,7 @@ export const getAllArt = async () => {
     const getAllArt = getApiURL() + apiConfig.GET_ALL_ART_ENDPOINT;
     try {
         let response = await fetch(getAllArt, {
-            method: "GET",
+            method: "POST",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",

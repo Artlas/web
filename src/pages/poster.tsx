@@ -5,6 +5,7 @@ import { ArtContext } from "../components/artContext";
 import { getRandomInt } from "../utils/tools";
 import { Oeuvre } from "@/types/oeuvre";
 import { UserContext } from "../components/userContext";
+import { getAllArt } from "../api/artAPI";
 // import axios from 'axios';
 
 interface Props {
@@ -142,7 +143,13 @@ export default function Poster({ category, subcategory }: Props) {
             canTchat: canPeopleChat,
             linkToBuy: linkToBuy,
         };
-        console.log(oeuvre);
+        //console.log(oeuvre);
+        /* try {
+            const data = await getAllArt();
+            console.log(data);
+        } catch (error) {
+            console.log("Erreur; ", error);
+        }*/
         // TODO: Submit the form data to the server
         // ...
     };
