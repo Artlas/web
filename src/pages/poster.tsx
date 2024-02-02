@@ -6,67 +6,18 @@ import { getRandomInt } from "../utils/tools";
 import { Oeuvre } from "@/types/oeuvre";
 import { UserContext } from "../components/userContext";
 import { getAllArt } from "../api/artAPI";
-// import axios from 'axios';
+import { fetchCategories, fetchSubCategories } from "../utils/categoriesHandler";
+import { CategoryContext } from "../components/categoryContext";
 
 interface Props {
     category?: string;
     subcategory?: string;
 }
-
-const temporaryCategories = [
-    {
-        id: 1,
-        name: "cinema",
-        items: ["all", "films", "series", "courts-metrages"],
-    },
-    {
-        id: 2,
-        name: "musique",
-        items: ["all", "musiques", "albums", "artistes"],
-    },
-    {
-        id: 3,
-        name: "arts plastiques",
-        items: ["all", "peintures", "sculptures", "dessins", "gravures"],
-    },
-    {
-        id: 4,
-        name: "arts de la scene",
-        items: ["all", "theatre", "danse", "opera", "cirque"],
-    },
-    {
-        id: 5,
-        name: "litterature",
-        items: ["all", "livres", "romans", "poesie", "bandes dessinees", "mangas"],
-    },
-    {
-        id: 6,
-        name: "photographie",
-        items: ["all", "photos", "photographes"],
-    },
-    {
-        id: 7,
-        name: "architecture",
-        items: ["all", "batiments", "architectes", "monuments"],
-    },
-    {
-        id: 8,
-        name: "jeux video",
-        items: ["all", "jeux", "developpeurs", "consoles", "steam", "pc"],
-    },
-    {
-        id: 9,
-        name: "cuisine",
-        items: ["all", "française", "italienne", "japonaise", "chinoise", "indienne", "mexicaine", "espagnole", "americaine", "vegane", "vegetarienne"],
-    },
-];
-
 export default function Poster({ category, subcategory }: Props) {
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
-
+    const { categoryList, categoryNameList, subCategoryList, subCategoryNameList, setCategory } = useContext(CategoryContext);
     const [title, setTitle] = useState("");
-    const [categories, setCategories] = useState<string[]>([]);
-    const [subCategories, setSubCategories] = useState<string[]>([]);
+
     const [selectedCategory, setSelectedCategory] = useState(category || "");
     const [selectedSubcategory, setSelectedSubcategory] = useState(subcategory || "");
 
@@ -79,27 +30,12 @@ export default function Poster({ category, subcategory }: Props) {
     const [price, setPrice] = useState(0);
     const [canPeopleChat, setCanPeopleChat] = useState(false);
     const [linkToBuy, setLinkToBuy] = useState("");
+    console.log(categoryNameList.length);
 
-    //TODO: Fetch categories from API
     useEffect(() => {
-        let categoriesNames: string[] = [];
-        temporaryCategories.forEach((category) => {
-            categoriesNames.push(category.name);
-        });
-        setCategories(categoriesNames);
-    }, []);
-
-    //TODO: Fetch subcategories from API
-    useEffect(() => {
-        let subcategoriesNames: string[] = [];
-        temporaryCategories.forEach((category) => {
-            if (category.name === selectedCategory) {
-                category.items.forEach((subcategory) => {
-                    subcategoriesNames.push(subcategory);
-                });
-            }
-        });
-        setSubCategories(subcategoriesNames);
+        if (selectedCategory) {
+            setCategory(selectedCategory);
+        }
     }, [selectedCategory]);
 
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
@@ -183,7 +119,7 @@ export default function Poster({ category, subcategory }: Props) {
                         required
                     >
                         <option value="">Choisir une catégorie</option>
-                        {categories.map((category) => (
+                        {categoryNameList.map((category) => (
                             <option key={category} value={category}>
                                 {category.replace(/^\w/, (c) => c.toUpperCase())}
                             </option>
@@ -203,7 +139,7 @@ export default function Poster({ category, subcategory }: Props) {
                             required
                         >
                             <option value="">Choisir une sous-catégorie</option>
-                            {subCategories.map((subcategory) => (
+                            {subCategoryNameList.map((subcategory) => (
                                 <option key={subcategory} value={subcategory}>
                                     {subcategory.replace(/^\w/, (c) => c.toUpperCase())}
                                 </option>

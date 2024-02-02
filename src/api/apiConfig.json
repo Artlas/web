@@ -18,7 +18,7 @@
     "DELETE_ART_ENDPOINT": "/oeuvre/deleteArt",
     "LIKE_ART_ENDPOINT": "/oeuvre/likePost",
     "UNLIKE_ART_ENDPOINT": "/oeuvre/dislikePost",
-
+    "GET_ALL_SUBCAT_FROM_ENDPOINT": "/category/getAllSubCat",
     "GET_ALL_CATEGORIES_ENDPOINT": "/category/getAllCat",
     "ADD_ART_TO_LIST_ENDPOINT": "/oeuvre/addArtToList",
     "CHECK_IF_ART_EXIST_ENDPOINT": "/oeuvre/checkIfArtExist",

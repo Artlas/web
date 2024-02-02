@@ -15,12 +15,14 @@ import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { TbLayoutSidebarLeftExpandFilled, TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
-import { getAllCategories } from "../utils/tools";
-import { fetchCategories } from "../utils/artHandler";
+import { CategoryContext } from "./categoryContext";
+import { fetchCategories } from "../utils/categoriesHandler";
 import { Category, NavigationCategory } from "../../types/category";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const { user, logout, setUserNeeded, connected, userNeeded } = useContext(UserContext);
+    const { categoryList, categoryNameList, subCategoryList, subCategoryNameList, setCategory } = useContext(CategoryContext);
+
     let name = useRouter().pathname.split("/")[1];
     const currentCategory = useRouter().query.category;
     const currentSubCategory = useRouter().query.subcategory;
@@ -89,7 +91,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const [floatingSearchBar, setFloatingSearchBar] = useState(false);
     const [outlineLibrary, setOutlineLibrary] = useState(true);
     const [displayReturnButton, setDisplayReturnButton] = useState(false);
-    const [transformedCategories, setTransformedCategories] = useState<Category[]>([]);
 
     const [navigationInfo, setNavigationInfo] = useState<NavigationCategory[]>([]);
 
@@ -139,16 +140,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "nouveau" ? setDisplayReturnButton(true) : setDisplayReturnButton(false);
     }, [sectionName]);
+
     useEffect(() => {
-        const fetchAndSetCategories = async () => {
-            const transformedCategories = await fetchCategories();
-            setTransformedCategories(transformedCategories);
-        };
-        fetchAndSetCategories();
-    }, []);
-    useEffect(() => {
-        if (transformedCategories && transformedCategories.length) {
-            const navigationCategories = transformedCategories.map(({ id, name, subcategories, miniatureLink, isShown }: Category) => ({
+        if (categoryList && categoryList.length) {
+            const navigationCategories = categoryList.map(({ id, name, subcategories, miniatureLink, isShown }: Category) => ({
                 id,
                 name,
                 items: subcategories.map((sub) => sub.name),
@@ -157,7 +152,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }));
             setNavigationInfo(navigationCategories);
         }
-    }, [transformedCategories]);
+    }, [categoryList]);
 
     const handleSidePanel = () => {
         setSidePanel(!sidePanel);
