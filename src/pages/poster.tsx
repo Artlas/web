@@ -1,5 +1,9 @@
-import { Oeuvre } from "@/types/oeuvre";
 import React, { useState, useEffect, useContext } from "react";
+import { addArt, checkIfArtExist } from "./api/artAPI";
+import { ArtInfo } from "../components/artContext";
+import { ArtContext } from "../components/artContext";
+import { getRandomInt } from "../utils/tools";
+import { Oeuvre } from "@/types/oeuvre";
 import { UserContext } from "../components/userContext";
 // import axios from 'axios';
 
@@ -57,12 +61,14 @@ const temporaryCategories = [
 ];
 
 export default function Poster({ category, subcategory }: Props) {
-    const { user, connected } = useContext(UserContext);
+    const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
+
     const [title, setTitle] = useState("");
     const [categories, setCategories] = useState<string[]>([]);
     const [subCategories, setSubCategories] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState(category || "");
     const [selectedSubcategory, setSelectedSubcategory] = useState(subcategory || "");
+
     const [date, setDate] = useState("");
     const [images, setImages] = useState([]);
     const [video, setVideo] = useState("");
@@ -117,7 +123,7 @@ export default function Poster({ category, subcategory }: Props) {
         setVideo(event.target.value);
     };
 
-    const handleSubmit = (event: { preventDefault: () => void }) => {
+    const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
         let oeuvre: Oeuvre = {
             _id: 1,

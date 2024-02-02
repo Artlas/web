@@ -1,5 +1,4 @@
 {
-    "BASE_URL_API": "https://api.fournierfamily.ovh",
     "LOGIN_USER_ENDPOINT": "/user/connect",
     "REGISTER_USER_ENDPOINT": "/user/add",
     "UPDATE_USER_ENDPOINT": "/user/update",
@@ -9,10 +8,22 @@
     "GET_ART_BASED_ID_USER_ENDPOINT": "/oeuvre/getIdUser",
     "GET_ART_BASED_ID_ENDPOINT": "/oeuvre/getId",
     "GET_ALL_ART_ENDPOINT": "/oeuvre/getAll",
+    "GET_ALL_ART_IDS_ENDPOINT": "/oeuvre/getAllIds",
     "GET_CAT_ART_ENDPOINT": "/oeuvre/getCat",
     "GET_ART_CAT_ENDPOINT": "/category/getCat",
-    "GET_ARTS_BASED_CAT_ENDPOINT": "/oeuvre/getArts",
-    "ADD_ART_ENDPOINT": "/oeuvre/addAdd",
+    "GET_ARTS_BASED_CAT_ENDPOINT": "/oeuvre/getCat",
+    "ADD_ART_ENDPOINT": "/oeuvre/addOeuvre",
     "UPDATE_ART_ENDPOINT": "/oeuvre/updateArt",
-    "DELETE_ART_ENDPOINT": "/oeuvre/deleteArt"
+    "DELETE_ART_ENDPOINT": "/oeuvre/deleteArt",
+    "LIKE_ART_ENDPOINT": "/oeuvre/likePost",
+    "UNLIKE_ART_ENDPOINT": "/oeuvre/dislikePost",
+
+    "GET_ALL_CATEGORIES_ENDPOINT": "/category/getAllCat",
+    "ADD_ART_TO_LIST_ENDPOINT": "/oeuvre/addArtToList",
+    "CHECK_IF_ART_EXIST_ENDPOINT": "/oeuvre/checkIfArtExist",
+    "REMOVE_ART_FROM_LIST_ENDPOINT": "/oeuvre/removeArtFromList",
+    "CREATE_NEW_LIST_ENDPOINT": "/oeuvre/createNewList",
+    "RETRIEVE_NUMBER_OF_LISTS_SAVED_ENDPOINT": "/oeuvre/retrieveNumberOfListsSaved",
+    "FOLLOW_ARTIST_ENDPOINT": "/friend/followArtist",
+    "UNFOLLOW_ARTIST_ENDPOINT": "/friend/unfollowArtist"
 }

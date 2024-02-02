@@ -21,13 +21,14 @@ const PasswordResetPage: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (newPassword != null) {
+            console.log(user);
             if (!validatePassword(newPassword)) {
                 alert("Votre mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre");
                 return;
             } else {
                 const hashedPassword = hashPasswordSha256(newPassword);
                 try {
-                    await updatePasswordUser(hashedPassword);
+                    await updatePasswordUser(hashPasswordSha256(previousPassword), hashedPassword, user);
                 } catch (error) {
                     console.log("Error while updating password: ", error);
                     throw error;

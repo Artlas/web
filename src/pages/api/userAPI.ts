@@ -19,7 +19,7 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
                 },
                 body: JSON.stringify(requestBody),
             });
-            const result = await response.json(); // Analyse la réponse JSON
+            const result = await response.json();
             console.log(result);
             if (result.error) {
                 alert(result.error);
@@ -45,7 +45,7 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
                 },
                 body: JSON.stringify(requestBody),
             });
-            const result = await response.json(); // Analyse la réponse JSON
+            const result = await response.json();
             if (result.error) {
                 alert(result.error);
                 throw new Error(result.error);
@@ -65,11 +65,6 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
     }
 };
 
-//TODO
-/**
- * Compléter les méthodes CRUD par rapport a NodeAPI pour la suite
- * getUserInDatabase &&  checkIfUserExists &&  createUserInDatabase OK
- */
 export const createUserInDatabase = async (userData: any) => {
     const createEndpoint = getApiURL() + apiConfig.REGISTER_USER_ENDPOINT;
     try {
@@ -113,14 +108,14 @@ export const deleteUserInDatabase = async (userData: any) => {
 
 export const updateUserInDatabase = async (userData: any, connectedUser: any) => {
     const updateEndPoint = getApiURL() + apiConfig.UPDATE_USER_ENDPOINT;
+    console.log(userData.username);
 
-    //TODO
     let requestBody;
-    if (userData.email == connectedUser.email && userData.id != connectedUser.username) {
+    if (userData.email == connectedUser.email && userData.username != connectedUser.username) {
         // je fais ma query par rapport a mon email de connected
         // check tt les autres parametres
         requestBody = {
-            username: userData.id,
+            username: userData.username,
             email: connectedUser.email,
             password: userData.password,
             firstName: userData.fname,
@@ -129,11 +124,11 @@ export const updateUserInDatabase = async (userData: any, connectedUser: any) =>
             address: userData.address,
         };
     }
-    if (userData.email != connectedUser.email && userData.id == connectedUser.username) {
+    if (userData.email != connectedUser.email && userData.username == connectedUser.username) {
         // je fais ma query par rapport a mon id de connected
         // check tt les autres parametres
         requestBody = {
-            username: connectedUser.id,
+            username: connectedUser.username,
             email: userData.email,
             password: userData.password,
             firstName: userData.fname,
@@ -143,7 +138,7 @@ export const updateUserInDatabase = async (userData: any, connectedUser: any) =>
         };
     } else {
         requestBody = {
-            username: userData.id,
+            username: userData.username,
             email: userData.email,
             password: userData.password,
             firstName: userData.fname,
@@ -152,15 +147,7 @@ export const updateUserInDatabase = async (userData: any, connectedUser: any) =>
             address: userData.address,
         };
     }
-    /**
-     * Recvoir un UserInfo, le comparer le UserInfo de la session, en fonction de
-     *  envoyer les parametres a modifier avec l'id de userInfo de base de la session
-     * Préparer nodeApi pour recevoir ce genre de requete
-     */
-    /*const newUser : UserInfo{
-
-    }*/
-
+    console.log(requestBody);
     try {
         const response = await fetch(updateEndPoint, {
             method: "POST",
@@ -181,6 +168,8 @@ export const updateUserInDatabase = async (userData: any, connectedUser: any) =>
 
 export const checkIfUserExists = async (email: any, id: any) => {
     const apiUrl = getApiURL() + apiConfig.CHECK_USER_ENDPOINT;
+    console.log("id: ", id);
+    console.log("mail: ", email);
     const body = JSON.stringify({ mail: email, id: id });
     try {
         const response = await fetch(apiUrl, {
@@ -204,15 +193,22 @@ export const checkIfUserExists = async (email: any, id: any) => {
     }
 };
 
-export const updatePasswordUser = async (password: string) => {
+export const updatePasswordUser = async (oldPassword: string, newPassword: string, user: any) => {
     const updatePasswordEndpoint = getApiURL() + apiConfig.UPDATE_USER_PASSWORD_ENDPOINT;
+    let requestBody = {
+        newPassword: newPassword,
+        token: user.token,
+        mail: user.email,
+        password: oldPassword,
+    };
+    console.log(requestBody);
     try {
         const response = await fetch(updatePasswordEndpoint, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(password),
+            body: JSON.stringify(requestBody),
         });
         if (!response.ok) {
             throw new Error(`Erreur HTTP: ${response.status}`);
