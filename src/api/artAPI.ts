@@ -1,15 +1,17 @@
 import apiConfig from "./apiConfig.json";
-import { UserInfo } from "../../components/userContext";
+import { UserInfo } from "../components/userContext";
 import { getApiURL } from "./utilsAPI";
+// IMPORTANT
+// CRUD pour art
 /**
- *
+ * Retourne les oeuvres d'un artiste
  * @param id de l'oeuvre
  * @returns l'oeuvre complete avec info
  */
-export const getArtBasedOnUserIDFromDb = async (id: string) => {
+export const getArtBasedOnUserIDFromDb = async (user: any) => {
     const getArtBasedOnUserID = getApiURL() + apiConfig.GET_ART_BASED_ID_ENDPOINT;
     let requestBody = {
-        id: id,
+        user: user,
     };
     try {
         let response = await fetch(getArtBasedOnUserID, {
@@ -32,6 +34,31 @@ export const getArtBasedOnUserIDFromDb = async (id: string) => {
     }
 };
 
+/**
+ *
+ * @returns tous les ids des oeuvres d'arts
+ */
+export const getAllArtIDs = async () => {
+    const getAllArtIDs = getApiURL() + apiConfig.GET_ALL_ART_IDS_ENDPOINT;
+    try {
+        let response = await fetch(getAllArtIDs, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des oeuvres d'arts:", error);
+        throw error;
+    }
+};
 /**
  *
  * @param id de l'utilisateur
@@ -154,10 +181,11 @@ export const getArtCat = async (cat: string) => {
 /**
  * Rajoute une oeuvre d'art ( a considérer que l'on recoit un objet de type Art)
  */
-export const addArt = async (art: any) => {
+export const addArt = async (art: any, user: any) => {
     const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
     let requestBody = {
         art: art,
+        user: user,
     };
     try {
         let response = await fetch(addArt, {
@@ -237,6 +265,34 @@ export const deleteArt = async (id: string) => {
         return result;
     } catch (error) {
         console.error("Erreur lors de la suppression de l'oeuvre d'art:", error);
+        throw error;
+    }
+};
+
+export const checkIfArtExist = async (id: string, userId: any) => {
+    const checkIfArtExist = getApiURL() + apiConfig.CHECK_IF_ART_EXIST_ENDPOINT;
+    let requestBody = {
+        id: id,
+        userId: userId,
+    };
+    try {
+        let response = await fetch(checkIfArtExist, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        console.log(result);
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la vérification de l'oeuvre d'art:", error);
         throw error;
     }
 };

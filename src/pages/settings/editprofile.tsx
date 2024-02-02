@@ -3,7 +3,7 @@ import E404 from "../404";
 import { useState, useContext, useEffect } from "react";
 import { UserContext, UserInfo } from "../../components/userContext";
 import { validateLogin, checkParameters } from "@/src/utils/validators";
-import { checkIfUserExists, updateUserInDatabase } from "../api/userAPI";
+import { checkIfUserExists, updateUserInDatabase } from "../../api/userAPI";
 
 const EditProfile: React.FC = () => {
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
@@ -25,7 +25,10 @@ const EditProfile: React.FC = () => {
     };
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (username != null && email != null) {
+        //
+        if (username !== "" && email !== "") {
+            console.log("Username:; ", username);
+            console.log("Email: ", email);
             alert("Vous ne pouvez pas modifier votre email et nom d'utilisateur en même temps ");
             return;
         }
@@ -33,12 +36,13 @@ const EditProfile: React.FC = () => {
          *
          */
         let modifiedUser: UserInfo = {
-            username: username ?? user?.username,
-            email: email ?? user?.email,
-            fname: firstName ?? user?.fname,
-            lname: lastName ?? user?.lname,
-            birthdate: new Date(birthDate) ?? user?.birthdate,
-            address: address ?? user?.address,
+            _id: user?._id ?? "",
+            username: username !== "" ? username : user?.username ?? "",
+            email: email !== "" ? email : user?.email ?? "",
+            fname: firstName !== "" ? firstName : user?.fname ?? "",
+            lname: lastName !== "" ? lastName : user?.lname ?? "",
+            birthdate: birthDate !== "" ? new Date(birthDate) : user?.birthdate ?? new Date(),
+            address: address !== "" ? address : user?.address ?? "",
             token: user?.token ?? "",
             permission: user?.permission ?? "",
         };
@@ -48,7 +52,13 @@ const EditProfile: React.FC = () => {
                 alert("Votre email saisie n'est pas valide, veuillez entrer une adresse email correcte");
                 return;
             } else {
-                const existsUserSameEmail = await checkIfUserExists(email, username);
+                var existsUserSameEmail;
+                //TODO
+                // FIXME: This is not working bcz we have 404 if user doesn't exitt
+                if (email.length != 0 && username.length != 0) {
+                    existsUserSameEmail = await checkIfUserExists(email, username);
+                }
+                console.log(modifiedUser.username);
                 if (!existsUserSameEmail) updateUser(modifiedUser);
             }
         } else {
@@ -57,11 +67,6 @@ const EditProfile: React.FC = () => {
                 if (!existUserSameUsername) updateUser(modifiedUser);
             } else updateUser(modifiedUser);
         }
-
-        // TODO: Implement profile edit logic here
-        /**
-         *
-         */
     };
 
     return connected ? (
@@ -79,7 +84,6 @@ const EditProfile: React.FC = () => {
                         className="p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="pb-4">
@@ -93,7 +97,6 @@ const EditProfile: React.FC = () => {
                         className="p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="pb-4">
@@ -107,7 +110,6 @@ const EditProfile: React.FC = () => {
                         className="p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="pb-4">
@@ -121,7 +123,6 @@ const EditProfile: React.FC = () => {
                         className="p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="pb-4">
@@ -135,7 +136,6 @@ const EditProfile: React.FC = () => {
                         className="p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
                         value={birthDate}
                         onChange={(e) => setBirthDate(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="pb-4">
@@ -149,7 +149,6 @@ const EditProfile: React.FC = () => {
                         className="p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 "
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        required
                     />
                 </div>
                 <div className="flex flex-col justify-between items-center">

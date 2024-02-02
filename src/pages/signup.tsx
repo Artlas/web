@@ -3,7 +3,7 @@ import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
 import { validatePassword, validateLogin, hashPasswordSha256, checkUserExistence } from "../utils/validators";
-import { createUserInDatabase, checkIfUserExists } from "./api/userAPI";
+import { createUserInDatabase, checkIfUserExists } from "../api/userAPI";
 import { connectUser } from "../utils/loginHandler";
 
 const SignupPage: React.FC = () => {

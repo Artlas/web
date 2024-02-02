@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Oeuvre } from "@/types/oeuvre";
+import AuthorItem from "./authorItem";
 import { useRouter } from "next/router";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
-import { Oeuvre } from "@/types/oeuvre";
 
 interface DiscoverPostProps extends Oeuvre {
     autoPlaying: boolean;
@@ -25,6 +26,7 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
     releaseDate,
     isMediaTypeImages,
     autoPlaying,
+    author,
     likeCount,
     scaleEffect,
 }) => {
@@ -117,7 +119,7 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         <span className="text-gray-800 dark:text-slate-200 text-xs cursor-text">{postDate.toLocaleDateString()}</span>
                     </div>
                     <div
-                        className="flex"
+                        className="flex items-center"
                         onClick={(e) => {
                             if (e.target === e.currentTarget) {
                                 handlePostClick();
@@ -125,14 +127,15 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         }}
                         id="discoverPostCategoryContainer"
                     >
+                        <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate?.toLocaleDateString()} small />
                         <Link href={`/${category.toLowerCase()}/all`} id={`discoverPost${_id}CategoryLink`}>
-                            <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm  px-3 rounded-full mr-2 dark:border dark:border-stone-700">
+                            <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm px-3 py-1 rounded-full mx-2 dark:border dark:border-stone-700">
                                 {category}
                             </span>
                         </Link>
                         {subCategory && (
                             <Link href={`/${category.toLowerCase()}/${subCategory.toLowerCase()}`} id={`discoverPost${_id}SubcategoryLink`}>
-                                <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm  px-3 rounded-full mr-2 dark:border dark:border-stone-700">
+                                <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm px-3 py-1 rounded-full mr-2 dark:border dark:border-stone-700">
                                     {subCategory}
                                 </span>
                             </Link>
@@ -140,22 +143,6 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                     </div>
 
                     <p className="text-black dark:text-white cursor-text select-none mt-1">{description}</p>
-                    {/*
-            //TODO: Render other information
-            */}
-
-                    <div
-                        className="flex justify-between items-center cursor-default mt-1"
-                        onClick={(e) => {
-                            if (e.target === e.currentTarget) {
-                                handlePostClick();
-                            }
-                        }}
-                        id="discoverPostOtherInfoContainer"
-                    >
-                        <p className=" cursor-text">Oeuvre :</p>
-                        <span className="text-gray-800 dark:text-slate-200 text-xs cursor-text">{releaseDate?.toLocaleDateString()}</span>
-                    </div>
                 </div>
                 <div className="hidden group-hover:block group-hover:flex-col-reverse absolute bottom-1 align-bottom w-full px-2 overflow-hidden  z-20 ">
                     {/* Render like, add to list, and share buttons */}

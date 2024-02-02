@@ -3,7 +3,7 @@ import E404 from "../404";
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../components/userContext";
 import { validatePassword, hashPasswordSha256 } from "@/src/utils/validators";
-import { updatePasswordUser } from "../api/userAPI";
+import { updatePasswordUser } from "../../api/userAPI";
 
 const PasswordResetPage: React.FC = () => {
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
@@ -21,13 +21,14 @@ const PasswordResetPage: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (newPassword != null) {
+            console.log(user);
             if (!validatePassword(newPassword)) {
                 alert("Votre mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre");
                 return;
             } else {
                 const hashedPassword = hashPasswordSha256(newPassword);
                 try {
-                    await updatePasswordUser(hashedPassword);
+                    await updatePasswordUser(hashPasswordSha256(previousPassword), hashedPassword, user);
                 } catch (error) {
                     console.log("Error while updating password: ", error);
                     throw error;

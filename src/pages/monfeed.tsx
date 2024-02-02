@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Oeuvre } from "@/types/oeuvre";
 import Post from "../components/post";
-import apiConfig from "./api/apiConfig.json";
+import apiConfig from "../api/apiConfig.json";
 import { useEffect } from "react";
 
 export default function Monfeed() {

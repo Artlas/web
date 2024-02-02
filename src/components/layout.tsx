@@ -15,6 +15,8 @@ import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { TbLayoutSidebarLeftExpandFilled, TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
+import { getAllCategories } from "../utils/tools";
+import { Category, NavigationCategory } from "../../types/category";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const { user, logout, setUserNeeded, connected, userNeeded } = useContext(UserContext);
@@ -86,6 +88,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const [floatingSearchBar, setFloatingSearchBar] = useState(false);
     const [outlineLibrary, setOutlineLibrary] = useState(true);
     const [displayReturnButton, setDisplayReturnButton] = useState(false);
+    const [transformedCategories, setTransformedCategories] = useState<Category[]>([]);
+
+    const [navigationInfo, setNavigationInfo] = useState<NavigationCategory[]>([]);
 
     const handleUserMenu = () => {
         setUserMenu(!userMenu);
@@ -133,6 +138,35 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "nouveau" ? setDisplayReturnButton(true) : setDisplayReturnButton(false);
     }, [sectionName]);
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const categories = await getAllCategories();
+
+            const transformedCategories = categories.categories.map((category) => ({
+                id: category.id,
+                name: category.name,
+                subcategories: category.subcategories,
+                miniatureLink: category.miniatureLink,
+                isShown: category.isShown,
+            }));
+            setTransformedCategories(transformedCategories);
+        };
+
+        fetchCategories();
+    }, []);
+    useEffect(() => {
+        if (transformedCategories.length > 0) {
+            let navigationCategories: NavigationCategory[];
+            navigationCategories = transformedCategories.map((category: Category) => ({
+                id: category.id,
+                name: category.name,
+                items: category.subcategories.map((sub) => sub.name),
+                miniatureLink: category.miniatureLink,
+                isShown: category.isShown,
+            }));
+            setNavigationInfo(navigationCategories);
+        }
+    }, [transformedCategories]);
 
     const handleSidePanel = () => {
         setSidePanel(!sidePanel);
@@ -145,74 +179,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     const handleReturnButton = () => {
         window.history.back();
-    };
-
-    const navigationInfo = {
-        categories: [
-            {
-                id: 1,
-                name: "cinema",
-                items: ["all", "films", "series", "courts-metrages"],
-                miniatureLink: "https://picsum.photos/100",
-                isShown: false,
-            },
-            {
-                id: 2,
-                name: "musique",
-                items: ["all", "musiques", "albums", "artistes"],
-                miniatureLink: "https://picsum.photos/200",
-                isShown: false,
-            },
-            {
-                id: 3,
-                name: "arts_plastiques",
-                items: ["all", "peintures", "sculptures", "dessins", "gravures"],
-                miniatureLink: "https://picsum.photos/201",
-                isShown: false,
-            },
-            {
-                id: 4,
-                name: "arts_de_la_scene",
-                items: ["all", "theatre", "danse", "opera", "cirque"],
-                miniatureLink: "https://picsum.photos/202",
-                isShown: false,
-            },
-            {
-                id: 5,
-                name: "litterature",
-                items: ["all", "livres", "romans", "poesie", "bandes_dessinees", "mangas"],
-                miniatureLink: "https://picsum.photos/203",
-                isShown: false,
-            },
-            {
-                id: 6,
-                name: "photographie",
-                items: ["all", "photos", "photographes"],
-                miniatureLink: "https://picsum.photos/204",
-                isShown: false,
-            },
-            {
-                id: 7,
-                name: "architecture",
-                items: ["all", "batiments", "architectes"],
-                miniatureLink: "https://picsum.photos/205",
-                isShown: false,
-            },
-            {
-                id: 8,
-                name: "jeux_video",
-                items: ["all", "jeux", "developpeurs", "consoles", "steam", "pc"],
-                miniatureLink: "https://picsum.photos/206",
-                isShown: false,
-            },
-            {
-                id: 9,
-                name: "cuisine",
-                items: ["all", "française", "italienne", "japonaise", "chinoise", "indienne", "mexicaine", "espagnole", "americaine", "vegane", "vegetarienne"],
-                miniatureLink: "https://picsum.photos/207",
-                isShown: false,
-            },
-        ],
     };
 
     return (
