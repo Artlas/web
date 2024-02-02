@@ -16,6 +16,7 @@ import { TbLayoutSidebarLeftExpandFilled, TbLayoutSidebarLeftCollapseFilled } fr
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
 import { getAllCategories } from "../utils/tools";
+import { fetchCategories } from "../utils/artHandler";
 import { Category, NavigationCategory } from "../../types/category";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -139,30 +140,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "nouveau" ? setDisplayReturnButton(true) : setDisplayReturnButton(false);
     }, [sectionName]);
     useEffect(() => {
-        const fetchCategories = async () => {
-            const categories = await getAllCategories();
-
-            const transformedCategories = categories.categories.map((category) => ({
-                id: category.id,
-                name: category.name,
-                subcategories: category.subcategories,
-                miniatureLink: category.miniatureLink,
-                isShown: category.isShown,
-            }));
+        const fetchAndSetCategories = async () => {
+            const transformedCategories = await fetchCategories();
             setTransformedCategories(transformedCategories);
         };
-
-        fetchCategories();
+        fetchAndSetCategories();
     }, []);
     useEffect(() => {
-        if (transformedCategories.length > 0) {
-            let navigationCategories: NavigationCategory[];
-            navigationCategories = transformedCategories.map((category: Category) => ({
-                id: category.id,
-                name: category.name,
-                items: category.subcategories.map((sub) => sub.name),
-                miniatureLink: category.miniatureLink,
-                isShown: category.isShown,
+        if (transformedCategories && transformedCategories.length) {
+            const navigationCategories = transformedCategories.map(({ id, name, subcategories, miniatureLink, isShown }: Category) => ({
+                id,
+                name,
+                items: subcategories.map((sub) => sub.name),
+                miniatureLink,
+                isShown,
             }));
             setNavigationInfo(navigationCategories);
         }
