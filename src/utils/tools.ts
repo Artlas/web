@@ -1,5 +1,5 @@
 import { Category, Subcategory } from "../../types/category";
-import { fetchAllCategories } from "../pages/api/categoryAPI";
+import { fetchAllCategories } from "../api/categoryAPI";
 export function getRandomInt() {
     let min = 0,
         max = 10000;

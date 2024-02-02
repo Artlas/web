@@ -1,6 +1,6 @@
 import { request } from "https";
 import { createHash } from "crypto";
-import { checkIfUserExists } from "../pages/api/userAPI";
+import { checkIfUserExists } from "../api/userAPI";
 import { MdElectricalServices } from "react-icons/md";
 // validators.ts
 export const validatePassword = (password: string): boolean => {
