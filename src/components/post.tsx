@@ -41,7 +41,6 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
     };
 
     useEffect(() => {
-        console.log("zdadazd", imageLoading);
         if (!illustration || illustration.length === 0) {
             setimageLoading(true);
         } else {
@@ -107,7 +106,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
             >
                 {
                     // Render carousel or video player based on illustration type
-                    imageLoading && <AiOutlineLoading3Quarters className="animate-spin h-10 w-10 text-gray-400 dark:text-slate-300 mx-auto my-16" />
+                    imageLoading && isMediaTypeImages && <AiOutlineLoading3Quarters className="animate-spin h-10 w-10 text-gray-400 dark:text-slate-300 mx-auto my-16" />
                 }
                 {isMediaTypeImages && illustration ? (
                     <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} showArrows={true} emulateTouch={true} dynamicHeight={true} onClickItem={handleOpenImage}>
