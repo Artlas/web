@@ -15,11 +15,14 @@ import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { TbLayoutSidebarLeftExpandFilled, TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
-import { getAllCategories } from "../utils/tools";
+import { CategoryContext } from "./categoryContext";
+import { fetchCategories } from "../utils/categoriesHandler";
 import { Category, NavigationCategory } from "../../types/category";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const { user, logout, setUserNeeded, connected, userNeeded } = useContext(UserContext);
+    const { categoryList, categoryNameList, subCategoryList, subCategoryNameList, setCategory } = useContext(CategoryContext);
+
     let name = useRouter().pathname.split("/")[1];
     const currentCategory = useRouter().query.category;
     const currentSubCategory = useRouter().query.subcategory;
@@ -29,10 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             if (currentSubCategory !== "all") name = currentCategory + " / " + currentSubCategory;
             else name = String(currentCategory);
         }
-    }
-    if (name === "post") {
-        //TODO: get the post title from the database
-        name = "post / " + currentPost; // temporary, to be replaced by the post title
     }
     if (name === "search") name = "recherche";
     if (name === "discover") name = "dé couvrir"; //NOTE: the space is intentional, it's due to the font that doesn't handle the accent properly
@@ -88,7 +87,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const [floatingSearchBar, setFloatingSearchBar] = useState(false);
     const [outlineLibrary, setOutlineLibrary] = useState(true);
     const [displayReturnButton, setDisplayReturnButton] = useState(false);
-    const [transformedCategories, setTransformedCategories] = useState<Category[]>([]);
 
     const [navigationInfo, setNavigationInfo] = useState<NavigationCategory[]>([]);
 
@@ -138,35 +136,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         sectionName !== "Artlas" && sectionName !== "artlas" && sectionName !== "dé couvrir" && sectionName !== "nouveau" ? setDisplayReturnButton(true) : setDisplayReturnButton(false);
     }, [sectionName]);
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const categories = await getAllCategories();
 
-            const transformedCategories = categories.categories.map((category) => ({
-                id: category.id,
-                name: category.name,
-                subcategories: category.subcategories,
-                miniatureLink: category.miniatureLink,
-                isShown: category.isShown,
-            }));
-            setTransformedCategories(transformedCategories);
-        };
-
-        fetchCategories();
-    }, []);
     useEffect(() => {
-        if (transformedCategories.length > 0) {
-            let navigationCategories: NavigationCategory[];
-            navigationCategories = transformedCategories.map((category: Category) => ({
-                id: category.id,
-                name: category.name,
-                items: category.subcategories.map((sub) => sub.name),
-                miniatureLink: category.miniatureLink,
-                isShown: category.isShown,
+        if (categoryList && categoryList.length) {
+            const navigationCategories = categoryList.map(({ id, name, subcategories, miniatureLink, isShown }: Category) => ({
+                id,
+                name,
+                items: subcategories.map((sub) => sub.name),
+                miniatureLink,
+                isShown,
             }));
             setNavigationInfo(navigationCategories);
         }
-    }, [transformedCategories]);
+    }, [categoryList]);
 
     const handleSidePanel = () => {
         setSidePanel(!sidePanel);

@@ -116,10 +116,10 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         id="discoverPostTitleContainer"
                     >
                         <h2 className="text-lg font-bold cursor-text">{title}</h2>
-                        <span className="text-gray-800 dark:text-slate-200 text-xs cursor-text">{postDate.toLocaleDateString()}</span>
+                        <span className="text-gray-800 dark:text-slate-200 text-xs cursor-text">{postDate ? new Date(postDate).toLocaleDateString() : undefined}</span>
                     </div>
                     <div
-                        className="flex items-center"
+                        className="flex items-center my-1"
                         onClick={(e) => {
                             if (e.target === e.currentTarget) {
                                 handlePostClick();
@@ -127,19 +127,21 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         }}
                         id="discoverPostCategoryContainer"
                     >
-                        <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate?.toLocaleDateString()} small />
                         <Link href={`/${category.toLowerCase()}/all`} id={`discoverPost${_id}CategoryLink`}>
                             <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm px-3 py-1 rounded-full mx-2 dark:border dark:border-stone-700">
-                                {category}
+                                {category.charAt(0).toUpperCase() + category.slice(1).replaceAll("_", " ")}
                             </span>
                         </Link>
-                        {subCategory && (
+                        {subCategory && subCategory !== "all" && (
                             <Link href={`/${category.toLowerCase()}/${subCategory.toLowerCase()}`} id={`discoverPost${_id}SubcategoryLink`}>
                                 <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm px-3 py-1 rounded-full mr-2 dark:border dark:border-stone-700">
-                                    {subCategory}
+                                    {subCategory.charAt(0).toUpperCase() + subCategory.slice(1).replaceAll("_", " ")}
                                 </span>
                             </Link>
                         )}
+                    </div>
+                    <div className="my-1">
+                        <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined} small />
                     </div>
 
                     <p className="text-black dark:text-white cursor-text select-none mt-1">{description}</p>

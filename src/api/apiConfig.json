@@ -5,8 +5,9 @@
     "DELETE_USER_ENDPOINT": "/user/delete",
     "CHECK_USER_ENDPOINT": "/user/check",
     "UPDATE_USER_PASSWORD_ENDPOINT": "/user/updatePassword",
+
     "GET_ART_BASED_ID_USER_ENDPOINT": "/oeuvre/getIdUser",
-    "GET_ART_BASED_ID_ENDPOINT": "/oeuvre/getId",
+    "GET_ART_BASED_ID_ENDPOINT": "/oeuvre/getArtById",
     "GET_ALL_ART_ENDPOINT": "/oeuvre/getAll",
     "GET_ALL_ART_IDS_ENDPOINT": "/oeuvre/getAllIds",
     "GET_CAT_ART_ENDPOINT": "/oeuvre/getCat",
@@ -17,7 +18,7 @@
     "DELETE_ART_ENDPOINT": "/oeuvre/deleteArt",
     "LIKE_ART_ENDPOINT": "/oeuvre/likePost",
     "UNLIKE_ART_ENDPOINT": "/oeuvre/dislikePost",
-
+    "GET_ALL_SUBCAT_FROM_ENDPOINT": "/category/getAllSubCat",
     "GET_ALL_CATEGORIES_ENDPOINT": "/category/getAllCat",
     "ADD_ART_TO_LIST_ENDPOINT": "/oeuvre/addArtToList",
     "CHECK_IF_ART_EXIST_ENDPOINT": "/oeuvre/checkIfArtExist",

@@ -1,74 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import { addArt, checkIfArtExist } from "../api/artAPI";
-import { ArtInfo } from "../components/artContext";
+
 import { ArtContext } from "../components/artContext";
 import { getRandomInt } from "../utils/tools";
 import { Oeuvre } from "@/types/oeuvre";
 import { UserContext } from "../components/userContext";
-// import axios from 'axios';
+import { CategoryContext } from "../components/categoryContext";
 
 interface Props {
     category?: string;
     subcategory?: string;
 }
-
-const temporaryCategories = [
-    {
-        id: 1,
-        name: "cinema",
-        items: ["all", "films", "series", "courts-metrages"],
-    },
-    {
-        id: 2,
-        name: "musique",
-        items: ["all", "musiques", "albums", "artistes"],
-    },
-    {
-        id: 3,
-        name: "arts plastiques",
-        items: ["all", "peintures", "sculptures", "dessins", "gravures"],
-    },
-    {
-        id: 4,
-        name: "arts de la scene",
-        items: ["all", "theatre", "danse", "opera", "cirque"],
-    },
-    {
-        id: 5,
-        name: "litterature",
-        items: ["all", "livres", "romans", "poesie", "bandes dessinees", "mangas"],
-    },
-    {
-        id: 6,
-        name: "photographie",
-        items: ["all", "photos", "photographes"],
-    },
-    {
-        id: 7,
-        name: "architecture",
-        items: ["all", "batiments", "architectes", "monuments"],
-    },
-    {
-        id: 8,
-        name: "jeux video",
-        items: ["all", "jeux", "developpeurs", "consoles", "steam", "pc"],
-    },
-    {
-        id: 9,
-        name: "cuisine",
-        items: ["all", "française", "italienne", "japonaise", "chinoise", "indienne", "mexicaine", "espagnole", "americaine", "vegane", "vegetarienne"],
-    },
-];
-
 export default function Poster({ category, subcategory }: Props) {
+    //#region variables
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
-
+    const { categoryList, categoryNameList, subCategoryList, subCategoryNameList, setCategory } = useContext(CategoryContext);
     const [title, setTitle] = useState("");
-    const [categories, setCategories] = useState<string[]>([]);
-    const [subCategories, setSubCategories] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState(category || "");
     const [selectedSubcategory, setSelectedSubcategory] = useState(subcategory || "");
-
     const [date, setDate] = useState("");
     const [images, setImages] = useState([]);
     const [video, setVideo] = useState("");
@@ -78,29 +27,13 @@ export default function Poster({ category, subcategory }: Props) {
     const [price, setPrice] = useState(0);
     const [canPeopleChat, setCanPeopleChat] = useState(false);
     const [linkToBuy, setLinkToBuy] = useState("");
-
-    //TODO: Fetch categories from API
+    //#endregion
     useEffect(() => {
-        let categoriesNames: string[] = [];
-        temporaryCategories.forEach((category) => {
-            categoriesNames.push(category.name);
-        });
-        setCategories(categoriesNames);
-    }, []);
-
-    //TODO: Fetch subcategories from API
-    useEffect(() => {
-        let subcategoriesNames: string[] = [];
-        temporaryCategories.forEach((category) => {
-            if (category.name === selectedCategory) {
-                category.items.forEach((subcategory) => {
-                    subcategoriesNames.push(subcategory);
-                });
-            }
-        });
-        setSubCategories(subcategoriesNames);
+        if (selectedCategory) {
+            setCategory(selectedCategory);
+        }
     }, [selectedCategory]);
-
+    //#region handles
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setTitle(event.target.value);
     };
@@ -117,24 +50,28 @@ export default function Poster({ category, subcategory }: Props) {
         setDate(event.target.value);
     };
 
-    const handleImageChange = () => {};
+    const handleImageChange = (event: { target: { files: any } }) => {
+        setImages(event.target.files);
+    };
 
     const handleVideoChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setVideo(event.target.value);
     };
-
+    //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
+        console.log("Form submitted");
         let oeuvre: Oeuvre = {
-            _id: 1,
+            _id: getRandomInt(),
             title: title,
-            description: "",
+            description: description,
             author: user?.username || "Jean-Michel",
             category: selectedCategory,
             subCategory: selectedSubcategory,
-            illustration: [],
+            illustration: images,
+            video: video,
             postDate: new Date(),
-            releaseDate: new Date(),
+            releaseDate: date,
             isMediaTypeImages: isMediaTypeImages,
             likeCount: 0,
             toSell: isArtToSell,
@@ -142,7 +79,19 @@ export default function Poster({ category, subcategory }: Props) {
             canTchat: canPeopleChat,
             linkToBuy: linkToBuy,
         };
-        console.log(oeuvre);
+        //console.log(oeuvre);
+        try {
+            console.log("Oeuvre: ", oeuvre);
+            console.log("User: ", user);
+            await addArt(oeuvre, user).then((response) => {
+                console.log(response);
+                if (response) {
+                    console.log("Art ajouté avec succès");
+                }
+            });
+        } catch (error) {
+            console.log("Erreur; ", error);
+        }
         // TODO: Submit the form data to the server
         // ...
     };
@@ -176,7 +125,7 @@ export default function Poster({ category, subcategory }: Props) {
                         required
                     >
                         <option value="">Choisir une catégorie</option>
-                        {categories.map((category) => (
+                        {categoryNameList.map((category) => (
                             <option key={category} value={category}>
                                 {category.replace(/^\w/, (c) => c.toUpperCase())}
                             </option>
@@ -196,7 +145,7 @@ export default function Poster({ category, subcategory }: Props) {
                             required
                         >
                             <option value="">Choisir une sous-catégorie</option>
-                            {subCategories.map((subcategory) => (
+                            {subCategoryNameList.map((subcategory) => (
                                 <option key={subcategory} value={subcategory}>
                                     {subcategory.replace(/^\w/, (c) => c.toUpperCase())}
                                 </option>

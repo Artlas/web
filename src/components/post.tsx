@@ -58,7 +58,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 id="postHeaderContainer"
             >
                 <h2 className="text-lg font-bold mb-2 cursor-text">{title}</h2>
-                <span className="text-gray-600 dark:text-slate-200 text-xs cursor-text">{postDate.toLocaleDateString()}</span>
+                <span className="text-gray-600 dark:text-slate-200 text-xs cursor-text">{postDate ? new Date(postDate).toLocaleDateString() : undefined}</span>
             </div>
             <div
                 className="flex mb-3 items-center"
@@ -69,14 +69,16 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 }}
                 id="postCategoryContainer"
             >
-                <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate?.toLocaleDateString()} small />
+                <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined} small />
                 <Link href={`/${category.toLowerCase()}/all`} id={`post${_id}CategoryLink`}>
-                    <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mx-2">{category}</span>
+                    <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mx-2">
+                        {category.charAt(0).toUpperCase() + category.slice(1).replaceAll("_", " ")}
+                    </span>
                 </Link>
-                {subCategory && (
+                {subCategory && subCategory !== "all" && (
                     <Link href={`/${category.toLowerCase()}/${subCategory.toLowerCase()}`} id={`post${_id}SubcategoryLink`}>
                         <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mr-2">
-                            {subCategory}
+                            {subCategory.charAt(0).toUpperCase() + subCategory.slice(1).replaceAll("_", " ")}
                         </span>
                     </Link>
                 )}
