@@ -220,45 +220,27 @@ export const addArt = async (art: any, user: any) => {
     }
 };*/ export const addArt = async (art: any, user: any) => {
     const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
-
-    // Convert file to Base64
-    const convertFileToBase64 = (file: File) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            console.log(file); // Add this line
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = (error) => reject(error);
-        });
-    };
-    let illustrationBase64;
-    if (art.illustration) {
-        illustrationBase64 = await convertFileToBase64(art.illustration);
+    let formdata = new FormData();
+    formdata.append("title",art.title);
+    formdata.append("description",art.description);
+    formdata.append("author",art.author);
+    formdata.append("category",art.category);
+    formdata.append("subCategory",art.subCategory);
+    for(let i=0;i<art.illustration.length;i++){
+        formdata.append("illustration",art.illustration[i]);
     }
-
-    let requestBody = {
-        title: art.title,
-        description: art.description,
-        author: art.author,
-        category: art.category,
-        subCategory: art.subCategory,
-        illustration: illustrationBase64,
-        video: art.video,
-        isMediaTypeImages: art.isMediaTypeImages,
-        toSell: art.toSell,
-        price: art.price,
-        linkToBuy: art.linkToBuy,
-        canTchat: art.canTchat,
-    };
+    formdata.append("video",art.video);
+    formdata.append("isMediaTypeImages",art.isMediaTypeImages);
+    formdata.append("toSell",art.toSell);
+    formdata.append("price",art.price);
+    formdata.append("linkToBuy",art.linkToBuy);
+    formdata.append("canTchat",art.canTchat);
 
     try {
         let response = await fetch(addArt, {
             method: "POST",
             credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
+            body: formdata,
         });
         const result = await response.json();
         if (result.error) {
