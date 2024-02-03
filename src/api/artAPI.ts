@@ -182,7 +182,7 @@ export const getArtCat = async (cat: string) => {
 
 /**
  * Rajoute une oeuvre d'art ( a considérer que l'on recoit un objet de type Art)
- */
+ */ /*
 export const addArt = async (art: any, user: any) => {
     const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
     let requestBody = {
@@ -218,8 +218,59 @@ export const addArt = async (art: any, user: any) => {
         console.error("Erreur lors de l'ajout de l'oeuvre d'art:", error);
         throw error;
     }
-};
+};*/ export const addArt = async (art: any, user: any) => {
+    const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
 
+    // Convert file to Base64
+    const convertFileToBase64 = (file: File) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            console.log(file); // Add this line
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+    let illustrationBase64;
+    if (art.illustration) {
+        illustrationBase64 = await convertFileToBase64(art.illustration);
+    }
+
+    let requestBody = {
+        title: art.title,
+        description: art.description,
+        author: art.author,
+        category: art.category,
+        subCategory: art.subCategory,
+        illustration: illustrationBase64,
+        video: art.video,
+        isMediaTypeImages: art.isMediaTypeImages,
+        toSell: art.toSell,
+        price: art.price,
+        linkToBuy: art.linkToBuy,
+        canTchat: art.canTchat,
+    };
+
+    try {
+        let response = await fetch(addArt, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de l'ajout de l'oeuvre d'art:", error);
+        throw error;
+    }
+};
 /**
  * Modifie une oeuvre d'art based on ID
  */

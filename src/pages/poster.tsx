@@ -51,7 +51,7 @@ export default function Poster({ category, subcategory }: Props) {
     };
 
     const handleImageChange = (event: { target: { files: any } }) => {
-        setImages(event.target.files);
+        setImages(event.target.files[0]);
     };
 
     const handleVideoChange = (event: { target: { value: React.SetStateAction<string> } }) => {
@@ -60,6 +60,7 @@ export default function Poster({ category, subcategory }: Props) {
     //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
+        console.log(images[0]);
         let oeuvre: Oeuvre = {
             _id: getRandomInt(),
             title: title,
@@ -67,7 +68,7 @@ export default function Poster({ category, subcategory }: Props) {
             author: user?.username || "Jean-Michel",
             category: selectedCategory,
             subCategory: selectedSubcategory,
-            illustration: images,
+            illustration: images[0],
             video: video,
             postDate: new Date(),
             releaseDate: date,
