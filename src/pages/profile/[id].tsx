@@ -14,7 +14,6 @@ import DiscoverPost from "@/src/components/discoverPost";
  * - user
  * - posts
  * - liked
- * - listes
  * - friends
  */
 export default function Profile() {
@@ -34,9 +33,6 @@ export default function Profile() {
     };
     const handleItemClickLiked = () => {
         setSection("liked");
-    };
-    const handleItemClickListe = () => {
-        setSection("list");
     };
     const handleItemClickGalerie = () => {
         setSection("galerie");
@@ -143,17 +139,6 @@ export default function Profile() {
                             </button>
                             <button
                                 className={`p-1 rounded-lg ${
-                                    section === "liste"
-                                        ? "bg-black dark:bg-white text-white dark:text-black "
-                                        : "text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900"
-                                }`}
-                                onClick={handleItemClickListe}
-                                type="button"
-                            >
-                                <span className="m-2">Listes</span>
-                            </button>
-                            <button
-                                className={`p-1 rounded-lg ${
                                     section === "galerie"
                                         ? "bg-black dark:bg-white text-white dark:text-black "
                                         : "text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900"
@@ -177,13 +162,6 @@ export default function Profile() {
                         {section === "liked" && (
                             <div className="max-w-[800px] mx-auto">
                                 <Post {...tempPost2} />
-                            </div>
-                        )}
-                        {section === "list" && (
-                            <div className="max-w-[800px] mx-auto">
-                                <Liste listeName="Mes sculptures préférées" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
-                                <Liste listeName="Photos stylés" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
-                                <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
                             </div>
                         )}
                         {section === "galerie" && (

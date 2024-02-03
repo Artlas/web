@@ -25,8 +25,9 @@ export default function Poster({ category, subcategory }: Props) {
     const [description, setDescription] = useState("");
     const [isArtToSell, setIsArtToSell] = useState(false);
     const [price, setPrice] = useState(0);
-    const [canPeopleChat, setCanPeopleChat] = useState(false);
+    const [canPeopleChat, setCanPeopleChat] = useState(true);
     const [linkToBuy, setLinkToBuy] = useState("");
+    const [addedToGallery, setAddedToGallery] = useState(true);
     //#endregion
     useEffect(() => {
         if (selectedCategory) {
@@ -78,6 +79,7 @@ export default function Poster({ category, subcategory }: Props) {
             price: price,
             canTchat: canPeopleChat,
             linkToBuy: linkToBuy,
+            isInGallery: addedToGallery,
         };
         //console.log(oeuvre);
         try {
@@ -299,6 +301,25 @@ export default function Poster({ category, subcategory }: Props) {
                                 className="peer sr-only"
                                 checked={canPeopleChat}
                                 onChange={() => setCanPeopleChat(!canPeopleChat)}
+                            />
+                            <div className="peer h-5 w-9 rounded-full bg-gray-400 dark:bg-stone-600 after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 dark:after:border-stone-600 after:bg-white dark:after:bg-black after:transition-all after:content-[''] peer-checked:bg-black dark:peer-checked:bg-white peer-checked:after:translate-x-full peer-checked:after:border-white dark:peer-checked:after:border-black peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#AAAAAA88]"></div>
+                        </div>
+                    </div>
+                </label>
+
+                <label htmlFor="addToUsersGalleryInputPostCreationForm" className="">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <span className="select-none block text-sm md:text-base font-bold md:font-medium mb-2">Ajouter à ma gallerie ?</span>
+                        </div>
+                        <div className="relative cursor-pointer ">
+                            <input
+                                type="checkbox"
+                                name="canChat"
+                                id="addToUsersGalleryInputPostCreationForm"
+                                className="peer sr-only"
+                                checked={addedToGallery}
+                                onChange={() => setAddedToGallery(!addedToGallery)}
                             />
                             <div className="peer h-5 w-9 rounded-full bg-gray-400 dark:bg-stone-600 after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 dark:after:border-stone-600 after:bg-white dark:after:bg-black after:transition-all after:content-[''] peer-checked:bg-black dark:peer-checked:bg-white peer-checked:after:translate-x-full peer-checked:after:border-white dark:peer-checked:after:border-black peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#AAAAAA88]"></div>
                         </div>
