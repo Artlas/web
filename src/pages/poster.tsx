@@ -5,8 +5,6 @@ import { ArtContext } from "../components/artContext";
 import { getRandomInt } from "../utils/tools";
 import { Oeuvre } from "@/types/oeuvre";
 import { UserContext } from "../components/userContext";
-import { getAllArt } from "../api/artAPI";
-import { fetchCategories, fetchSubCategories } from "../utils/categoriesHandler";
 import { CategoryContext } from "../components/categoryContext";
 
 interface Props {
@@ -67,10 +65,10 @@ export default function Poster({ category, subcategory }: Props) {
             author: user?.username || "Jean-Michel",
             category: selectedCategory,
             subCategory: selectedSubcategory,
-            illustration: [],
-            video: "test",
+            illustration: images,
+            video: video,
             postDate: new Date(),
-            releaseDate: new Date(),
+            releaseDate: date,
             isMediaTypeImages: isMediaTypeImages,
             likeCount: 0,
             toSell: isArtToSell,
@@ -80,6 +78,8 @@ export default function Poster({ category, subcategory }: Props) {
         };
         //console.log(oeuvre);
         try {
+            console.log("Oeuvre: ", oeuvre);
+            console.log("User: ", user);
             await addArt(oeuvre, user).then((response) => {
                 console.log(response);
                 if (response) {
