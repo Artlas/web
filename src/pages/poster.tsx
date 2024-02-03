@@ -50,7 +50,9 @@ export default function Poster({ category, subcategory }: Props) {
         setDate(event.target.value);
     };
 
-    const handleImageChange = () => {};
+    const handleImageChange = (event: { target: { files: any } }) => {
+        setImages(event.target.files);
+    };
 
     const handleVideoChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setVideo(event.target.value);
@@ -58,6 +60,7 @@ export default function Poster({ category, subcategory }: Props) {
     //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
+        console.log("Form submitted");
         let oeuvre: Oeuvre = {
             _id: getRandomInt(),
             title: title,
