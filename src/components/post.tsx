@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Oeuvre } from "@/types/oeuvre";
@@ -9,12 +9,14 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ReactPlayer from "react-player";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, author, likeCount }) => {
     const [liked, setLiked] = useState(false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount); //TODO: Change this to the real like count from the database [likeCount]
     const [listed, setListed] = useState(false);
     const [index, setIndex] = useState(0);
+    const [imageLoading, setimageLoading] = useState(false);
     const handleLikeClick = () => {
         setLiked(!liked);
         liked ? setDisplayedLikeCount(displayedLikeCount - 1) : setDisplayedLikeCount(displayedLikeCount + 1);
@@ -37,6 +39,15 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
             window.open(image);
         }
     };
+
+    useEffect(() => {
+        console.log("zdadazd", imageLoading);
+        if (!illustration || illustration.length === 0) {
+            setimageLoading(true);
+        } else {
+            setimageLoading(false);
+        }
+    }, [illustration, imageLoading]);
 
     return (
         <div
@@ -61,7 +72,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 <span className="text-gray-600 dark:text-slate-200 text-xs cursor-text">{postDate ? new Date(postDate).toLocaleDateString() : undefined}</span>
             </div>
             <div
-                className="flex mb-3 items-center"
+                className="flex flex-col md:flex-row mb-3 md:items-center"
                 onClick={(e) => {
                     if (e.target === e.currentTarget) {
                         handlePostClick();
@@ -70,18 +81,20 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 id="postCategoryContainer"
             >
                 <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined} small />
-                <Link href={`/${category.toLowerCase()}/all`} id={`post${_id}CategoryLink`}>
-                    <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mx-2">
-                        {category.charAt(0).toUpperCase() + category.slice(1).replaceAll("_", " ")}
-                    </span>
-                </Link>
-                {subCategory && subCategory !== "all" && (
-                    <Link href={`/${category.toLowerCase()}/${subCategory.toLowerCase()}`} id={`post${_id}SubcategoryLink`}>
-                        <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mr-2">
-                            {subCategory.charAt(0).toUpperCase() + subCategory.slice(1).replaceAll("_", " ")}
+                <div className="flex">
+                    <Link href={`/${category.toLowerCase()}/all`} id={`post${_id}CategoryLink`}>
+                        <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mx-2">
+                            {category.charAt(0).toUpperCase() + category.slice(1).replaceAll("_", " ")}
                         </span>
                     </Link>
-                )}
+                    {subCategory && subCategory !== "all" && (
+                        <Link href={`/${category.toLowerCase()}/${subCategory.toLowerCase()}`} id={`post${_id}SubcategoryLink`}>
+                            <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mr-2">
+                                {subCategory.charAt(0).toUpperCase() + subCategory.slice(1).replaceAll("_", " ")}
+                            </span>
+                        </Link>
+                    )}
+                </div>
             </div>
             <div
                 className="mb-4 mt-2"
@@ -92,14 +105,20 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 }}
                 id="postIllustrationContainer"
             >
-                {/* Render carousel or video player based on illustration type
-                //TODO: Add a button to open the real image in full screen
-                */}
+                {
+                    // Render carousel or video player based on illustration type
+                    imageLoading && <AiOutlineLoading3Quarters className="animate-spin h-10 w-10 text-gray-400 dark:text-slate-300 mx-auto my-16" />
+                }
                 {isMediaTypeImages && illustration ? (
                     <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} showArrows={true} emulateTouch={true} dynamicHeight={true} onClickItem={handleOpenImage}>
                         {illustration.map((image, index) => (
                             <div key={index} className="cursor-alias">
-                                <img src={image} alt={`Illustration ${index + 1}`} className="w-auto h-auto max-h-64 sm:max-h-96 max-w-full object-contain cursor-alias" />
+                                <img
+                                    src={image}
+                                    alt={`Illustration ${index + 1}`}
+                                    className={`w-auto h-auto max-h-64 sm:max-h-96 max-w-full object-contain cursor-alias ${imageLoading ? "" : "hidden"}`}
+                                    onLoad={() => setimageLoading(true)}
+                                />
                             </div>
                         ))}
                     </Carousel>
