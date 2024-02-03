@@ -186,8 +186,18 @@ export const getArtCat = async (cat: string) => {
 export const addArt = async (art: any, user: any) => {
     const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
     let requestBody = {
-        art: art,
-        user: user,
+        title: art.title,
+        description: art.description,
+        author: art.author,
+        category: art.category,
+        subCategory: art.subCategory,
+        illustration: art.illustration,
+        video: art.video,
+        isMediaTypeImages: art.isMediaTypeImages,
+        toSell: art.toSell,
+        price: art.price,
+        linkToBuy: art.linkToBuy,
+        canTchat: art.canTchat,
     };
     try {
         let response = await fetch(addArt, {

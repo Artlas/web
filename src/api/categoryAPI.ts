@@ -4,7 +4,7 @@ import apiConfig from "./apiConfig.json";
  *
  * @returns tous les categories et dedans les sub
  */
-export const fetchAllCategories = async () => {
+export const fetchAllCategoriesFromDB = async () => {
     const fetchAllCategoriesEndpoint = getApiURL() + apiConfig.GET_ALL_CATEGORIES_ENDPOINT;
 
     try {
@@ -17,7 +17,6 @@ export const fetchAllCategories = async () => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
             throw new Error(result.error);
         }
         return result;
@@ -27,7 +26,29 @@ export const fetchAllCategories = async () => {
     }
 };
 
-export const fetchAllSubCategories = async (category : string) => {
+export const fetchAllSubCategoriesFromCategoryFromDB = async (category: string) => {
+    let fetchSubCategoryEndpoint = getApiURL() + apiConfig.GET_ALL_SUBCAT_FROM_ENDPOINT;
+    let requestBody = {
+        category: category,
+    };
+    try {
+        let response = await fetch(fetchSubCategoryEndpoint, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        if (result.error) {
+            throw new Error(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des sous catégories:", error);
+        throw error;
+    }
     /**
      * Call de fetchAllCategories et je retourne uniquement les tableaux des subcategories
      */

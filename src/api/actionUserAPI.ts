@@ -125,13 +125,13 @@ export const removeArtFromList = async (idArt: string, idList: string, user: any
  * @param idList nom de la liste d'art
  * @param idUser id user
  */
-export const createNewList = async (idList: string, descriptionList: string, illustration: string, user: any) => {
+export const createNewList = async (title: string, descriptionList: string, illustration: string, user: any) => {
     const createNewListEndpoint = getApiURL() + apiConfig.CREATE_NEW_LIST_ENDPOINT;
     let requestBody = {
-        idList: idList,
+        userID: user.username,
+        listName: title,
         descriptionList: descriptionList,
         illustration: illustration,
-        user: user,
     };
     try {
         let response = await fetch(createNewListEndpoint, {

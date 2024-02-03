@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import LoginHandler from "../components/loginHandler";
 import { useState, useContext } from "react";
 import { CookiesProvider } from "react-cookie";
+import { CategoryProvider } from "../components/categoryContext";
 
 // Define a default UI theme
 function MyApp({ Component, pageProps }) {
@@ -12,11 +13,13 @@ function MyApp({ Component, pageProps }) {
     return (
         <CookiesProvider>
             <ThemeProvider attribute="class">
-                <UserProvider>
-                    <LoginHandler>
-                        <Component {...pageProps} />
-                    </LoginHandler>
-                </UserProvider>
+                <CategoryProvider>
+                    <UserProvider>
+                        <LoginHandler>
+                            <Component {...pageProps} />
+                        </LoginHandler>
+                    </UserProvider>
+                </CategoryProvider>
             </ThemeProvider>
         </CookiesProvider>
     );

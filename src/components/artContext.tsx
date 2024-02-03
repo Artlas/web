@@ -1,29 +1,19 @@
-import React, { createContext, useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
+import React, { createContext, useState } from "react";
+import { Oeuvre } from "../../types/oeuvre";
 
 interface ArtContextState {
-    art: ArtInfo | null;
-    setArt: (art: ArtInfo) => void;
-}
-export interface ArtInfo {
-    id: number;
-    title: string;
-    categorie: string;
-    subCategorie: string;
-    description: string;
-    image_url?: string;
-    video_url?: string;
-    creation_date?: Date;
-    onSale?: boolean;
-    price?: number;
-    artistId: string;
+    oeuvre: Oeuvre | null;
+    setOeuvre: (oeuvre: Oeuvre) => void;
 }
 
 export const ArtContext = createContext<ArtContextState>({
-    art: null,
-    setArt: () => {},
+    oeuvre: null,
+    setOeuvre: () => {},
 });
+
 export const ArtProvider: React.FC = ({ children }: any) => {
-    const [art, setArt] = useState<ArtInfo | null>(null);
-    return <ArtContext.Provider value={{ art, setArt }}>{children}</ArtContext.Provider>;
+    const [oeuvre, setOeuvre] = useState<Oeuvre | null>(null);
+
+    return <ArtContext.Provider value={{ oeuvre, setOeuvre }}>{children}</ArtContext.Provider>;
 };
+//? Ne sait pas encore si ca va servir
