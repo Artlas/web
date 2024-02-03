@@ -33,10 +33,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             else name = String(currentCategory);
         }
     }
-    if (name === "post") {
-        //TODO: get the post title from the database
-        name = "post / " + currentPost; // temporary, to be replaced by the post title
-    }
     if (name === "search") name = "recherche";
     if (name === "discover") name = "dé couvrir"; //NOTE: the space is intentional, it's due to the font that doesn't handle the accent properly
     if (name === "settings") name = "paramè tres";

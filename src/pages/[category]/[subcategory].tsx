@@ -1,25 +1,62 @@
 import { CategoryContext } from "@/src/components/categoryContext";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { fetchCategories } from "@/src/utils/categoriesHandler";
+import { Oeuvre } from "@/types/oeuvre";
+import { getAllArt } from "@/src/api/artAPI";
+import Post from "@/src/components/post";
 
 const SubCategoryPage = () => {
     const router = useRouter();
+    const [posts, setPosts] = useState<Oeuvre[]>([]);
     const { categoryList, categoryNameList, subCategoryList, subCategoryNameList, setCategory } = useContext(CategoryContext);
 
     const { category, subcategory } = router.query;
 
-    // Utilisez 'category' et 'subcategory' pour récupérer les données correspondantes
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getAllArt();
+            let postToDisplay: Oeuvre[] = [];
+            data.forEach((post: Oeuvre) => {
+                if (post.category === category) {
+                    if (subcategory === "all") {
+                        postToDisplay.push(post);
+                    } else if (post.subCategory === subcategory) {
+                        postToDisplay.push(post);
+                    }
+                }
+            });
+            sortPostsByMostRecentPostDate(postToDisplay);
+            setPosts(postToDisplay);
+        };
+        fetchData();
+    }, [category, subcategory]);
+
+    function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
+        return posts.sort((a, b) => {
+            if (typeof a.postDate === "string") {
+                a.postDate = new Date(a.postDate);
+            }
+            if (typeof b.postDate === "string") {
+                b.postDate = new Date(b.postDate);
+            }
+            return b.postDate.getTime() - a.postDate.getTime();
+        });
+    }
 
     return (
-        <div>
-            <h1>
-                Sous-catégorie {subcategory} de la catégorie {category}
-            </h1>
-            {/* Affichez vos articles ici */}
-        </div>
+        <main className="flex w-full">
+            <div className="h-full w-full">
+                <div className="max-w-[800px] justify-center mx-auto">
+                    {posts.map((post) => (
+                        <Post key={post._id} {...post} />
+                    ))}
+                </div>
+            </div>
+        </main>
     );
 };
+
 export async function getStaticPaths() {
     const categoryList = await fetchCategories();
 

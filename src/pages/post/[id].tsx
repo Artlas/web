@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { getAllArtIDs, getArtBasedOnID } from "../../api/artAPI";
 import { Oeuvre } from "../../../types/oeuvre";
 import AuthorItem from "../../components/authorItem";
+import E404 from "../404";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ReactPlayer from "react-player";
@@ -9,12 +10,11 @@ import Link from "next/link";
 import { IoMdArrowRoundForward } from "react-icons/io";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
-
 import { GetStaticPropsContext } from "next";
 
 const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
     const [liked, setLiked] = useState(false);
-    const [displayedLikeCount, setDisplayedLikeCount] = useState(art.likeCount); //TODO: Change this to the real like count from the database [likeCount]
+    const [displayedLikeCount, setDisplayedLikeCount] = useState(art?.likeCount || 0);
     const [listed, setListed] = useState(false);
     const [index, setIndex] = useState(0);
     const handleLikeClick = () => {
@@ -31,12 +31,14 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
         e.currentTarget.reset();
     };
 
-    return (
+    return art ? (
         <div className="flex flex-col w-full">
             <div className="flex flex-col xl:flex-row w-full">
                 <div className="flex flex-col w-full xl:w-[70%] space-y-2">
                     <div className="w-auto mr-auto">
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-smibold font-artlas-logo w-auto ">{art.title}</h2>
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-smibold font-artlas-logo w-auto ">
+                            {art.title.replaceAll("é", "é ").replaceAll("è", "è ").replaceAll("ê", "ê ").replaceAll("à", "à ")}
+                        </h2>
                         <hr className=" border-black dark:border-white border-2 rounded-full mb-1" />
                     </div>
                     <div className="m-1 rounded-xl object-contain bg-stone-50 dark:bg-[#070504] hover:bg-stone-100 hover:dark:bg-stone-950">
@@ -72,7 +74,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                                         .replaceAll("_", " ")}
                                 </span>
                             </Link>
-                            {art.subCategory && (
+                            {art.subCategory && art.subCategory !== "all" && (
                                 <Link href={`/${art.category.toLowerCase()}/${art.subCategory.toLowerCase()}`} id={`post${art._id}SubcategoryLink`}>
                                     <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-md py-1 px-3 rounded-full mr-2 text-lg">
                                         {art.subCategory
@@ -180,6 +182,8 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                 </div>
             </div>
         </div>
+    ) : (
+        <E404 />
     );
 };
 

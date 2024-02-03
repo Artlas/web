@@ -15,4 +15,5 @@ export type Oeuvre = {
     price?: number;
     linkToBuy?: string;
     canTchat?: boolean;
+    isInGallery?: boolean;
 };
