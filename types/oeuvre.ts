@@ -4,7 +4,7 @@ export type Oeuvre = {
     description: string;
     category: string;
     subCategory: string;
-    illustration?: string[];
+    illustration?: Buffer[];
     video?: string;
     postDate: Date | string;
     releaseDate?: Date | string;

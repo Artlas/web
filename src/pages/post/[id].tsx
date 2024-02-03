@@ -47,7 +47,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                                 {art.illustration.map((image, index) => (
                                     <div key={index} className="cursor-grab active:cursor-grabbing">
                                         <img
-                                            src={image}
+                                            src={"data:image/*;base64," + image}
                                             alt={`Illustration ${index + 1}`}
                                             className="w-auto h-auto max-h-56 sm:max-h-80 md:max-h-96 lg:max-h-[450px] 2xl:max-h-[550px] max-w-full object-contain rounded-xl cursor-grabbing select-none"
                                         />
