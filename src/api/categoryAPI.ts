@@ -27,7 +27,7 @@ export const fetchAllCategories = async () => {
     }
 };
 
-export const fetchAllSubCategories = async () => {
+export const fetchAllSubCategories = async (category : string) => {
     /**
      * Call de fetchAllCategories et je retourne uniquement les tableaux des subcategories
      */
