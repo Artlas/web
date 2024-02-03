@@ -50,7 +50,9 @@ export default function Poster({ category, subcategory }: Props) {
         setDate(event.target.value);
     };
 
-    const handleImageChange = () => {};
+    const handleImageChange = (event: { target: { files: any } }) => {
+        setImages(event.target.files);
+    };
 
     const handleVideoChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setVideo(event.target.value);
