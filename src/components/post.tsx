@@ -127,9 +127,11 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                     <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} showArrows={true} emulateTouch={true} dynamicHeight={true} onClickItem={handleOpenImage}>
                         {illustration.map((image, index) => (
                             <div key={index} className="cursor-alias">
-                                <img
+                                <Image
                                     src={"data:image/*;base64," + image}
                                     alt={`Illustration ${index + 1}`}
+                                    width={500}
+                                    height={500}
                                     className={`w-auto h-auto max-h-64 sm:max-h-96 max-w-full object-contain cursor-alias ${imageLoading ? "" : "hidden"}`}
                                     onLoad={() => setimageLoading(true)}
                                 />

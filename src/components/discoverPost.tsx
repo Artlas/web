@@ -106,9 +106,11 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         >
                             {illustration.map((image, index) => (
                                 <div key={index} className="select-none">
-                                    <img
+                                    <Image
                                         src={"data:image/*;base64," + image}
                                         alt={`Illustration ${index + 1}`}
+                                        width={500}
+                                        height={500}
                                         className="w-auto min-h-[150px] h-auto max-h-96 sm:max-h-none max-w-full object-contain "
                                     />
                                 </div>

@@ -12,6 +12,7 @@ import { IoMdArrowRoundForward } from "react-icons/io";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 import { GetStaticPropsContext } from "next";
+import Image from "next/image";
 
 const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
     const [liked, setLiked] = useState(false);
@@ -53,7 +54,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                 <div className="flex flex-col w-full xl:w-[70%] space-y-2">
                     <div className="w-auto mr-auto">
                         <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-smibold font-artlas-logo w-auto ">
-                            {art.title.replaceAll("é", "é ").replaceAll("è", "è ").replaceAll("ê", "ê ").replaceAll("à", "à ")}
+                            {art.title.replaceAll("é", "é ").replaceAll("è", "è ").replaceAll("ê", "ê ").replaceAll("à", "à ").replaceAll("'", "´")}
                         </h2>
                         <hr className=" border-black dark:border-white border-2 rounded-full mb-1" />
                     </div>
@@ -62,9 +63,11 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                             <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} showArrows={true} emulateTouch={true} dynamicHeight={true}>
                                 {art.illustration.map((image, index) => (
                                     <div key={index} className="cursor-grab active:cursor-grabbing">
-                                        <img
+                                        <Image
                                             src={"data:image/*;base64," + image}
                                             alt={`Illustration ${index + 1}`}
+                                            width={1000}
+                                            height={1000}
                                             className="w-auto h-auto max-h-56 sm:max-h-80 md:max-h-96 lg:max-h-[450px] 2xl:max-h-[550px] max-w-full object-contain rounded-xl cursor-grabbing select-none"
                                         />
                                     </div>
