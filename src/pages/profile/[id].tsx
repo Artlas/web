@@ -8,35 +8,34 @@ import { Friend } from "../../components/profileDes";
 import { Description } from "../../components/profileDes";
 import { Liste } from "../../components/profileDes";
 import DiscoverPost from "@/src/components/discoverPost";
+import { getAllUsers, retrieveInfoUserById } from "@/src/api/userAPI";
+import { getArtsBasedOnIDFromDb } from "@/src/api/artAPI";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
  * - user
  * - posts
  * - liked
- * - listes
  * - friends
  */
-export default function Profile() {
-    //! This is a temporary user, it will be replaced by the user from the database, queried by the id in the url
-    //TODO: Replace this temporary user by the user from the database
-    const user = {
-        username: "Jean-Michel",
-        birthdate: "17/11/2023",
-        address: "Paris",
-        image: "https://picsum.photos/450",
-    };
-    const birthday = new Date(user?.birthdate || "17/11/2023");
 
+//!
+/**
+ * DANS user on a :
+ * id
+ * la photo de profil
+ * la liste d'id des follow
+ * la galerie
+ * la liste des oeuvres liké
+ */
+export default function Profile({ user }: any) {
+    const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
     const handleItemClickPost = () => {
         setSection("post");
     };
     const handleItemClickLiked = () => {
         setSection("liked");
-    };
-    const handleItemClickListe = () => {
-        setSection("list");
     };
     const handleItemClickGalerie = () => {
         setSection("galerie");
@@ -50,14 +49,23 @@ export default function Profile() {
         1100: 1,
         500: 1,
     };
+    // variable qui contient un tableau des oeuvres d'arts du user
+    let userArts;
 
+    async function fetchUserArts() {
+        userArts = await getArtsBasedOnIDFromDb(user?.id);
+    }
+
+    fetchUserArts();
+    // TODO
+    // fetch les oeuvres de l'"artiste" pour les afficher
     const tempPost2: Oeuvre = {
         _id: 1,
         title: "C'est très joli",
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
         subCategory: "Photos",
-        illustration: ["https://picsum.photos/650/1100", "https://picsum.photos/1455/500"],
+        // illustration: ["https://picsum.photos/650/1100", "https://picsum.photos/1455/500"],
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
@@ -70,7 +78,7 @@ export default function Profile() {
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
         subCategory: "Photos",
-        illustration: ["https://picsum.photos/1600/900", "https://picsum.photos/1455/800", "https://picsum.photos/469/700"],
+        // illustration: ["https://picsum.photos/1600/900", "https://picsum.photos/1455/800", "https://picsum.photos/469/700"],
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
@@ -84,7 +92,7 @@ export default function Profile() {
             "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan. On essaye avec une deco un peu plus longue pour voir ce que ça donne avec un texte plus long, et beaucoup plus de mots, parce que là c'est vraiment pas assez long. Un peu de Wikipédia : La photographie de paysage est un genre de photographie dont l'objet est la prise de vue de paysage. Elle est, avec la photographie de famille et le portrait, un des genres de photographie artistique les plus pratiqués par les photographes amateurs. Il faut distinguer la photographie de paysages naturels de celle de paysages urbains.",
         category: "Photographie",
         subCategory: "Photos",
-        illustration: ["https://picsum.photos/1600/800"],
+        // illustration: ["https://picsum.photos/1600/800"],
         postDate: new Date(),
         releaseDate: new Date(),
         likeCount: 0,
@@ -99,7 +107,7 @@ export default function Profile() {
                     <div className="flex flex-col lg:flex-1 w-full lg:items-end lg:pl-1">
                         <Description
                             photoProfile={user?.image || "/pp-image-ex.jpg"}
-                            userName={user?.username || "Jean-Michel"}
+                            userName={user?.id || "Jean-Michel"}
                             description="Bonjour, je suis une artiste"
                             preference="Musique"
                             loisir="Peinture"
@@ -143,17 +151,6 @@ export default function Profile() {
                             </button>
                             <button
                                 className={`p-1 rounded-lg ${
-                                    section === "liste"
-                                        ? "bg-black dark:bg-white text-white dark:text-black "
-                                        : "text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900"
-                                }`}
-                                onClick={handleItemClickListe}
-                                type="button"
-                            >
-                                <span className="m-2">Listes</span>
-                            </button>
-                            <button
-                                className={`p-1 rounded-lg ${
                                     section === "galerie"
                                         ? "bg-black dark:bg-white text-white dark:text-black "
                                         : "text-black dark:text-white hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900"
@@ -179,13 +176,6 @@ export default function Profile() {
                                 <Post {...tempPost2} />
                             </div>
                         )}
-                        {section === "list" && (
-                            <div className="max-w-[800px] mx-auto">
-                                <Liste listeName="Mes sculptures préférées" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
-                                <Liste listeName="Photos stylés" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
-                                <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" author={user.username} listId={String(Math.floor(Math.random() * 255))} />
-                            </div>
-                        )}
                         {section === "galerie" && (
                             <div className="">
                                 <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
@@ -209,4 +199,35 @@ export default function Profile() {
             </main>
         </div>
     );
+}
+export async function getStaticPaths() {
+    try {
+        const users = await getAllUsers();
+        console.log(users);
+
+        if (!Array.isArray(users)) {
+            throw new Error("getAllUsers did not return an array");
+        }
+
+        const paths = users.map((id: string) => ({
+            params: { id: id },
+        }));
+
+        return { paths, fallback: false };
+    } catch (error) {
+        console.error("Error in getStaticPaths:", error);
+        throw error; // Re-throw the error to fail the build
+    }
+}
+
+export async function getStaticProps({ params }: any) {
+    // Utilisez votre fonction pour obtenir les détails de l'utilisateur
+    const user = await retrieveInfoUserById(params?.id as any);
+
+    // Si l'utilisateur n'existe pas, retournez { notFound: true }
+    if (!user) {
+        return { notFound: true };
+    }
+
+    return { props: { user } };
 }

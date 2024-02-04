@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Oeuvre } from "@/types/oeuvre";
 import AuthorItem from "./authorItem";
+import ShareMenu from "./shareMenu";
 import { useRouter } from "next/router";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -31,8 +32,9 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
     scaleEffect,
 }) => {
     const [liked, setLiked] = useState(false);
-    const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount); //TODO: Change this to the real like count from the database [likeCount]
+    const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount);
     const [listed, setListed] = useState(false);
+    const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const handleLikeClick = () => {
@@ -48,14 +50,6 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
     const handlePostClick = () => {
         //console.log("Clique sur l'arrière-plan de la div");
         router.push(`/post/${_id}`);
-    };
-
-    const handleOpenImage = () => {
-        // open the selected image in full screen
-        if (illustration) {
-            let image = illustration[index];
-            window.open(image);
-        }
     };
 
     return (
@@ -98,7 +92,13 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         >
                             {illustration.map((image, index) => (
                                 <div key={index} className="select-none">
-                                    <img src={image} alt={`Illustration ${index + 1}`} className="w-auto min-h-[150px] h-auto max-h-96 sm:max-h-none max-w-full object-contain " />
+                                    <Image
+                                        src={"data:image/*;base64," + image}
+                                        alt={`Illustration ${index + 1}`}
+                                        width={500}
+                                        height={500}
+                                        className="w-auto min-h-[150px] h-auto max-h-96 sm:max-h-none max-w-full object-contain "
+                                    />
                                 </div>
                             ))}
                         </Carousel>
@@ -195,10 +195,12 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                                 id={`discoverPost${_id}ShareButton`}
                                 className="flex items-center space-x-2 text-gray-800 dark:text-gray-300 active:text-gray-900 active:dark:text-gray-400"
                                 type="button"
+                                onClick={() => setIsShareMenuOpen(!isShareMenuOpen)}
                             >
                                 <FaShareAlt className="h-5 w-5" />
                                 <span className="sr-only">Partager</span>
                             </button>
+                            <ShareMenu postLink={`https://fournierfamily.ovh/post/${_id}`} isOpen={isShareMenuOpen} />
                         </div>
                     </div>
                 </div>

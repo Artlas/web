@@ -7,4 +7,5 @@ export const getApiURL = () => {
     // Sinon, on considère que c'est l'environnement de staging
     return "https://api.fournierfamily.ovh";
     //"https://api-staging.fournierfamily.ovh/"; // URL de développement/staging
+    // return "http://localhost:3001";
 };

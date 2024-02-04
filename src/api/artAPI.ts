@@ -182,7 +182,7 @@ export const getArtCat = async (cat: string) => {
 
 /**
  * Rajoute une oeuvre d'art ( a considérer que l'on recoit un objet de type Art)
- */
+ */ /*
 export const addArt = async (art: any, user: any) => {
     const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
     let requestBody = {
@@ -218,8 +218,43 @@ export const addArt = async (art: any, user: any) => {
         console.error("Erreur lors de l'ajout de l'oeuvre d'art:", error);
         throw error;
     }
-};
+};*/ export const addArt = async (art: any, user: any) => {
+    const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
+    let formdata = new FormData();
+    formdata.append("title",art.title);
+    formdata.append("description",art.description);
+    formdata.append("author",art.author);
+    formdata.append("category",art.category);
+    formdata.append("subCategory",art.subCategory);
+    for(let i=0;i<art.illustration.length;i++){
+        formdata.append("illustration",art.illustration[i]);
+    }
+    formdata.append("video",art.video);
+    formdata.append("isMediaTypeImages",art.isMediaTypeImages);
+    formdata.append("toSell",art.toSell);
+    formdata.append("price",art.price);
+    formdata.append("linkToBuy",art.linkToBuy);
+    formdata.append("canTchat",art.canTchat);
+    formdata.append("releaseDate",art.releaseDate);
+    formdata.append("postDate",art.postDate);
 
+    try {
+        let response = await fetch(addArt, {
+            method: "POST",
+            credentials: "include",
+            body: formdata,
+        });
+        const result = await response.json();
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de l'ajout de l'oeuvre d'art:", error);
+        throw error;
+    }
+};
 /**
  * Modifie une oeuvre d'art based on ID
  */

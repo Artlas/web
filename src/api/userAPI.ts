@@ -219,3 +219,47 @@ export const updatePasswordUser = async (oldPassword: string, newPassword: strin
         throw error;
     }
 };
+
+export const getAllUsers = async () => {
+    const getAllUsersEndpoint = getApiURL() + apiConfig.GET_ALL_USERS_ENDPOINT;
+    try {
+        const response = await fetch(getAllUsersEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des utilisateurs:", error);
+        throw error;
+    }
+};
+
+export const retrieveInfoUserById = async (id: string) => {
+    const retrieveInfoUserByIdEndpoint = getApiURL() + apiConfig.RETRIEVE_INFO_USER_BY_ID_ENDPOINT;
+    let requestBody = {
+        id: id,
+    };
+    try {
+        const response = await fetch(retrieveInfoUserByIdEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des utilisateurs:", error);
+        throw error;
+    }
+};

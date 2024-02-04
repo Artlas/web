@@ -6,6 +6,8 @@ import { getRandomInt } from "../utils/tools";
 import { Oeuvre } from "@/types/oeuvre";
 import { UserContext } from "../components/userContext";
 import { CategoryContext } from "../components/categoryContext";
+import { useRouter } from "next/router";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 interface Props {
     category?: string;
@@ -25,8 +27,10 @@ export default function Poster({ category, subcategory }: Props) {
     const [description, setDescription] = useState("");
     const [isArtToSell, setIsArtToSell] = useState(false);
     const [price, setPrice] = useState(0);
-    const [canPeopleChat, setCanPeopleChat] = useState(false);
+    const [canPeopleChat, setCanPeopleChat] = useState(true);
     const [linkToBuy, setLinkToBuy] = useState("");
+    const [addedToGallery, setAddedToGallery] = useState(true);
+    const [formSubmitted, setFormSubmitted] = useState(false);
     //#endregion
     useEffect(() => {
         if (selectedCategory) {
@@ -34,6 +38,11 @@ export default function Poster({ category, subcategory }: Props) {
         }
     }, [selectedCategory]);
     //#region handles
+
+    let router = useRouter();
+    function redirect() {
+        router.push("/");
+    }
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setTitle(event.target.value);
     };
@@ -60,7 +69,7 @@ export default function Poster({ category, subcategory }: Props) {
     //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
-        console.log("Form submitted");
+        setFormSubmitted(true);
         let oeuvre: Oeuvre = {
             _id: getRandomInt(),
             title: title,
@@ -78,22 +87,21 @@ export default function Poster({ category, subcategory }: Props) {
             price: price,
             canTchat: canPeopleChat,
             linkToBuy: linkToBuy,
+            isInGallery: addedToGallery,
         };
-        //console.log(oeuvre);
+
         try {
-            console.log("Oeuvre: ", oeuvre);
-            console.log("User: ", user);
             await addArt(oeuvre, user).then((response) => {
-                console.log(response);
                 if (response) {
                     console.log("Art ajouté avec succès");
+                    redirect();
                 }
             });
         } catch (error) {
             console.log("Erreur; ", error);
+        } finally {
+            setFormSubmitted(false);
         }
-        // TODO: Submit the form data to the server
-        // ...
     };
 
     return (
@@ -127,7 +135,7 @@ export default function Poster({ category, subcategory }: Props) {
                         <option value="">Choisir une catégorie</option>
                         {categoryNameList.map((category) => (
                             <option key={category} value={category}>
-                                {category.replace(/^\w/, (c) => c.toUpperCase())}
+                                {category.replaceAll("_", " ").replace(/^\w/, (c) => c.toUpperCase())}
                             </option>
                         ))}
                     </select>
@@ -147,7 +155,7 @@ export default function Poster({ category, subcategory }: Props) {
                             <option value="">Choisir une sous-catégorie</option>
                             {subCategoryNameList.map((subcategory) => (
                                 <option key={subcategory} value={subcategory}>
-                                    {subcategory.replace(/^\w/, (c) => c.toUpperCase())}
+                                    {subcategory.replaceAll("_", " ").replace(/^\w/, (c) => c.toUpperCase())}
                                 </option>
                             ))}
                         </select>
@@ -305,13 +313,33 @@ export default function Poster({ category, subcategory }: Props) {
                     </div>
                 </label>
 
+                <label htmlFor="addToUsersGalleryInputPostCreationForm" className="">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <span className="select-none block text-sm md:text-base font-bold md:font-medium mb-2">Ajouter à ma gallerie ?</span>
+                        </div>
+                        <div className="relative cursor-pointer ">
+                            <input
+                                type="checkbox"
+                                name="canChat"
+                                id="addToUsersGalleryInputPostCreationForm"
+                                className="peer sr-only"
+                                checked={addedToGallery}
+                                onChange={() => setAddedToGallery(!addedToGallery)}
+                            />
+                            <div className="peer h-5 w-9 rounded-full bg-gray-400 dark:bg-stone-600 after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 dark:after:border-stone-600 after:bg-white dark:after:bg-black after:transition-all after:content-[''] peer-checked:bg-black dark:peer-checked:bg-white peer-checked:after:translate-x-full peer-checked:after:border-white dark:peer-checked:after:border-black peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#AAAAAA88]"></div>
+                        </div>
+                    </div>
+                </label>
+
                 <div className="flex justify-center">
                     <button
                         type="submit"
                         id="submitButtonPostCreationForm"
+                        disabled={formSubmitted}
                         className="bg-black dark:bg-white border-2 rounded-md py-2 px-4 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                     >
-                        Créer la publication
+                        {formSubmitted ? <AiOutlineLoading3Quarters className="animate-spin h-5 w-5 mx-[58px] my-[2px]" /> : "Créer la publication"}
                     </button>
                     {
                         //? Should we add a Preview before submitting the form?

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getAllArtIDs, getArtBasedOnID } from "../../api/artAPI";
 import { Oeuvre } from "../../../types/oeuvre";
 import AuthorItem from "../../components/authorItem";
+import ShareMenu from "../../components/shareMenu";
 import E404 from "../404";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -11,11 +12,13 @@ import { IoMdArrowRoundForward } from "react-icons/io";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 import { GetStaticPropsContext } from "next";
+import Image from "next/image";
 
 const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
     const [liked, setLiked] = useState(false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(art?.likeCount || 0);
     const [listed, setListed] = useState(false);
+    const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const handleLikeClick = () => {
         setLiked(!liked);
@@ -37,7 +40,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                 <div className="flex flex-col w-full xl:w-[70%] space-y-2">
                     <div className="w-auto mr-auto">
                         <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-smibold font-artlas-logo w-auto ">
-                            {art.title.replaceAll("é", "é ").replaceAll("è", "è ").replaceAll("ê", "ê ").replaceAll("à", "à ")}
+                            {art.title.replaceAll("é", "é ").replaceAll("è", "è ").replaceAll("ê", "ê ").replaceAll("à", "à ").replaceAll("'", "´")}
                         </h2>
                         <hr className=" border-black dark:border-white border-2 rounded-full mb-1" />
                     </div>
@@ -46,9 +49,11 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                             <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} showArrows={true} emulateTouch={true} dynamicHeight={true}>
                                 {art.illustration.map((image, index) => (
                                     <div key={index} className="cursor-grab active:cursor-grabbing">
-                                        <img
-                                            src={image}
+                                        <Image
+                                            src={"data:image/*;base64," + image}
                                             alt={`Illustration ${index + 1}`}
+                                            width={1000}
+                                            height={1000}
                                             className="w-auto h-auto max-h-56 sm:max-h-80 md:max-h-96 lg:max-h-[450px] 2xl:max-h-[550px] max-w-full object-contain rounded-xl cursor-grabbing select-none"
                                         />
                                     </div>
@@ -92,7 +97,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                         authorName={art.author}
                         releaseDate={art.releaseDate ? new Date(art.releaseDate).toLocaleDateString() : undefined}
                         imageSrc="https://picsum.photos/200"
-                        linkToProfile="#"
+                        linkToProfile={"/profile/" + art.author}
                     />
                     <div className="flex flex-col p-3 bg-stone-100 dark:bg-stone-950 text-black dark:text-white hover:text-gray-800 hover:bg-stone-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900 rounded-xl">
                         <span className="font-semibold text-xl ">Description : </span>
@@ -139,10 +144,13 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                             id={`post${art._id}ShareButton`}
                             className="flex items-center space-x-2 p-3 rounded-full bg-stone-100 dark:bg-stone-950 text-black dark:text-white hover:text-gray-800 hover:bg-stone-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900 active:text-gray-900 active:dark:text-gray-400 shadow-md "
                             type="button"
+                            onClick={() => setIsShareMenuOpen(!isShareMenuOpen)}
                         >
                             <FaShareAlt className="h-7 w-7" />
                             <span className="flex">Partager</span>
                         </button>
+                        {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
+                        <ShareMenu postLink={`https://fournierfamily.ovh/post/${art._id}`} isOpen={isShareMenuOpen} detailed />
                     </div>
                     {/* Render buy and tchat information */}
                     {art?.toSell || art?.canTchat ? (

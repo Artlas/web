@@ -18,13 +18,11 @@ import { Liste } from "../components/profileDes";
  * - friends
  */
 export default function Profile() {
-
     const { user, connected, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
     const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
     const handleItemClickPost = () => {
         setSection("post");
-
     };
     const handleItemClickLiked = () => {
         setSection("liked");
@@ -61,7 +59,7 @@ export default function Profile() {
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
         subCategory: "Photos",
-        illustration: ["https://picsum.photos/450", "https://picsum.photos/1455", "https://picsum.photos/464/700", "https://picsum.photos/1450/700"],
+        // illustration: ["https://picsum.photos/450", "https://picsum.photos/1455", "https://picsum.photos/464/700", "https://picsum.photos/1450/700"],
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,
@@ -78,7 +76,7 @@ export default function Profile() {
         video: "https://youtu.be/t1qtvKYwTV0",
         postDate: new Date(),
         releaseDate: new Date(),
-        isMediaTypeImages: true,
+        isMediaTypeImages: false,
         author: "Jean-Michel",
         likeCount: 0,
     };
