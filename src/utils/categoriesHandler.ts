@@ -19,7 +19,7 @@ export async function getAllCategories(): Promise<{ categories: Category[] }> {
 }
 export const fetchCategories = async () => {
     const categories = await getAllCategories();
-    console.log(categories);
+
     const transformedCategories = categories.categories.map((category) => ({
         id: category.id,
         name: category.name,
