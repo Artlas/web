@@ -97,7 +97,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                         authorName={art.author}
                         releaseDate={art.releaseDate ? new Date(art.releaseDate).toLocaleDateString() : undefined}
                         imageSrc="https://picsum.photos/200"
-                        linkToProfile="#"
+                        linkToProfile={"/profile/" + art.author}
                     />
                     <div className="flex flex-col p-3 bg-stone-100 dark:bg-stone-950 text-black dark:text-white hover:text-gray-800 hover:bg-stone-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900 rounded-xl">
                         <span className="font-semibold text-xl ">Description : </span>
