@@ -9,7 +9,7 @@ export const validatePassword = (password: string): boolean => {
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumbers = /\d/.test(password);
-    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>\-+=/\\[\]~]/.test(password);
 
     //! TEMPORAIRE: pour permettre de se connecter avec le mot de passe "azerty"
     return (password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars) || password === "azerty";
