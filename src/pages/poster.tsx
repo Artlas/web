@@ -67,7 +67,6 @@ export default function Poster({ category, subcategory }: Props) {
     //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
-        console.log("image:", images);
         let oeuvre: Oeuvre = {
             _id: getRandomInt(),
             title: title,
@@ -87,12 +86,9 @@ export default function Poster({ category, subcategory }: Props) {
             linkToBuy: linkToBuy,
             isInGallery: addedToGallery,
         };
-        //console.log(oeuvre);
+
         try {
-            console.log("Oeuvre: ", oeuvre);
-            console.log("User: ", user);
             await addArt(oeuvre, user).then((response) => {
-                console.log(response);
                 if (response) {
                     console.log("Art ajouté avec succès");
                 }

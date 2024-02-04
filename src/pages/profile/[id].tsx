@@ -9,6 +9,7 @@ import { Description } from "../../components/profileDes";
 import { Liste } from "../../components/profileDes";
 import DiscoverPost from "@/src/components/discoverPost";
 import { getAllUsers, retrieveInfoUserById } from "@/src/api/userAPI";
+import { getArtsBasedOnIDFromDb } from "@/src/api/artAPI";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
@@ -17,17 +18,18 @@ import { getAllUsers, retrieveInfoUserById } from "@/src/api/userAPI";
  * - liked
  * - friends
  */
-export default function Profile() {
-    //! This is a temporary user, it will be replaced by the user from the database, queried by the id in the url
-    //TODO: Replace this temporary user by the user from the database
-    const user = {
-        username: "Jean-Michel",
-        birthdate: "17/11/2023",
-        address: "Paris",
-        image: "https://picsum.photos/450",
-    };
-    const birthday = new Date(user?.birthdate || "17/11/2023");
 
+//!
+/**
+ * DANS user on a :
+ * id
+ * la photo de profil
+ * la liste d'id des follow
+ * la galerie
+ * la liste des oeuvres liké
+ */
+export default function Profile({ user }: any) {
+    const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
     const handleItemClickPost = () => {
         setSection("post");
@@ -47,7 +49,16 @@ export default function Profile() {
         1100: 1,
         500: 1,
     };
+    // variable qui contient un tableau des oeuvres d'arts du user
+    let userArts;
 
+    async function fetchUserArts() {
+        userArts = await getArtsBasedOnIDFromDb(user?.id);
+    }
+
+    fetchUserArts();
+    // TODO
+    // fetch les oeuvres de l'"artiste" pour les afficher
     const tempPost2: Oeuvre = {
         _id: 1,
         title: "C'est très joli",
@@ -96,7 +107,7 @@ export default function Profile() {
                     <div className="flex flex-col lg:flex-1 w-full lg:items-end lg:pl-1">
                         <Description
                             photoProfile={user?.image || "/pp-image-ex.jpg"}
-                            userName={user?.username || "Jean-Michel"}
+                            userName={user?.id || "Jean-Michel"}
                             description="Bonjour, je suis une artiste"
                             preference="Musique"
                             loisir="Peinture"
