@@ -5,7 +5,8 @@
     "DELETE_USER_ENDPOINT": "/user/delete",
     "CHECK_USER_ENDPOINT": "/user/check",
     "UPDATE_USER_PASSWORD_ENDPOINT": "/user/updatePassword",
-
+    "GET_ALL_USERS_ENDPOINT": "/user/getUsersId",
+    "RETRIEVE_INFO_USER_BY_ID_ENDPOINT": "/user/getUser",
     "GET_ART_BASED_ID_USER_ENDPOINT": "/oeuvre/getIdUser",
     "GET_ART_BASED_ID_ENDPOINT": "/oeuvre/getArtById",
     "GET_ALL_ART_ENDPOINT": "/oeuvre/getAll",

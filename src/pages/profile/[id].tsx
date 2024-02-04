@@ -8,6 +8,7 @@ import { Friend } from "../../components/profileDes";
 import { Description } from "../../components/profileDes";
 import { Liste } from "../../components/profileDes";
 import DiscoverPost from "@/src/components/discoverPost";
+import { getAllUsers, retrieveInfoUserById } from "@/src/api/userAPI";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
@@ -187,4 +188,35 @@ export default function Profile() {
             </main>
         </div>
     );
+}
+export async function getStaticPaths() {
+    try {
+        const users = await getAllUsers();
+        console.log(users);
+
+        if (!Array.isArray(users)) {
+            throw new Error("getAllUsers did not return an array");
+        }
+
+        const paths = users.map((id: string) => ({
+            params: { id: id },
+        }));
+
+        return { paths, fallback: false };
+    } catch (error) {
+        console.error("Error in getStaticPaths:", error);
+        throw error; // Re-throw the error to fail the build
+    }
+}
+
+export async function getStaticProps({ params }: any) {
+    // Utilisez votre fonction pour obtenir les détails de l'utilisateur
+    const user = await retrieveInfoUserById(params?.id as any);
+
+    // Si l'utilisateur n'existe pas, retournez { notFound: true }
+    if (!user) {
+        return { notFound: true };
+    }
+
+    return { props: { user } };
 }

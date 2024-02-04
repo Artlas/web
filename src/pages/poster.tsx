@@ -61,7 +61,7 @@ export default function Poster({ category, subcategory }: Props) {
     //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
-        console.log("Form submitted");
+        console.log("image:",images);
         let oeuvre: Oeuvre = {
             _id: getRandomInt(),
             title: title,

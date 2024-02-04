@@ -26,7 +26,6 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
     const handleListClick = () => {
         setListed(!listed);
     };
-
     let router = useRouter();
 
     const handlePostClick = () => {
@@ -38,7 +37,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
         // open the selected image in full screen
         if (illustration) {
             let image = illustration[index];
-            window.open(image);
+            window.open("data:image/png;base64," + image.toString("base64"));
         }
     };
 
@@ -129,7 +128,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                         {illustration.map((image, index) => (
                             <div key={index} className="cursor-alias">
                                 <img
-                                    src={image}
+                                    src={"data:image/*;base64," + image}
                                     alt={`Illustration ${index + 1}`}
                                     className={`w-auto h-auto max-h-64 sm:max-h-96 max-w-full object-contain cursor-alias ${imageLoading ? "" : "hidden"}`}
                                     onLoad={() => setimageLoading(true)}
