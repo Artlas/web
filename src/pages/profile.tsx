@@ -59,7 +59,7 @@ export default function Profile() {
         description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
         category: "Photographie",
         subCategory: "Photos",
-        illustration: ["https://picsum.photos/450", "https://picsum.photos/1455", "https://picsum.photos/464/700", "https://picsum.photos/1450/700"],
+        // illustration: ["https://picsum.photos/450", "https://picsum.photos/1455", "https://picsum.photos/464/700", "https://picsum.photos/1450/700"],
         postDate: new Date(),
         releaseDate: new Date(),
         isMediaTypeImages: true,

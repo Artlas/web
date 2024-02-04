@@ -52,14 +52,6 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
         router.push(`/post/${_id}`);
     };
 
-    const handleOpenImage = () => {
-        // open the selected image in full screen
-        if (illustration) {
-            let image = illustration[index];
-            window.open(image);
-        }
-    };
-
     const useMousePosition = () => {
         const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
         useEffect(() => {
@@ -114,7 +106,11 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         >
                             {illustration.map((image, index) => (
                                 <div key={index} className="select-none">
-                                    <img src={"data:image/*;base64," + image} alt={`Illustration ${index + 1}`} className="w-auto min-h-[150px] h-auto max-h-96 sm:max-h-none max-w-full object-contain " />
+                                    <img
+                                        src={"data:image/*;base64," + image}
+                                        alt={`Illustration ${index + 1}`}
+                                        className="w-auto min-h-[150px] h-auto max-h-96 sm:max-h-none max-w-full object-contain "
+                                    />
                                 </div>
                             ))}
                         </Carousel>
