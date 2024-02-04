@@ -4,12 +4,14 @@ import { ReactNode } from "react";
 type ListElementProps = {
     icon: ReactNode;
     label: string;
-    content: ReactNode;
+    content?: ReactNode;
     href?: string;
     hideBar?: boolean;
+    onClick?: () => void;
+    smallFont?: boolean;
 };
 
-export default function ListElement({ icon, label, content, href, hideBar }: ListElementProps) {
+export default function ListElement({ icon, label, content, href, hideBar, onClick, smallFont }: ListElementProps) {
     return href ? (
         <>
             <Link
@@ -27,10 +29,15 @@ export default function ListElement({ icon, label, content, href, hideBar }: Lis
         </>
     ) : (
         <>
-            <div className="flex items-center justify-between py-2 md:py-3 xl:py-4 hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900 px-2 text-base md:text-lg rounded-md cursor-pointer">
+            <div
+                className={`flex items-center justify-between  ${
+                    smallFont ? "py-[10px]" : "py-2 md:py-3 xl:py-4"
+                }  hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900 px-2 text-base md:text-lg rounded-md cursor-pointer`}
+                onClick={onClick}
+            >
                 <div className="flex items-center overflow-hidden">
                     {icon}
-                    <span className="select-none text-ellipsis">{label}</span>
+                    <span className={`select-none text-ellipsis ${smallFont && "text-sm"}`}>{label}</span>
                 </div>
                 {content}
             </div>

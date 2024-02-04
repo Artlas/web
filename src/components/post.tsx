@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Oeuvre } from "@/types/oeuvre";
 import AuthorItem from "./authorItem";
+import ShareMenu from "./shareMenu";
 import { useRouter } from "next/router";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -13,8 +14,9 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, author, likeCount }) => {
     const [liked, setLiked] = useState(false);
-    const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount); //TODO: Change this to the real like count from the database [likeCount]
+    const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount);
     const [listed, setListed] = useState(false);
+    const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const [imageLoading, setimageLoading] = useState(false);
     const handleLikeClick = () => {
@@ -47,6 +49,20 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
             setimageLoading(false);
         }
     }, [illustration, imageLoading]);
+
+    const useMousePosition = () => {
+        const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+        useEffect(() => {
+            const updateMousePosition = (ev: any) => {
+                setMousePosition({ x: ev.clientX, y: ev.clientY });
+            };
+            window.addEventListener("mousemove", updateMousePosition);
+            return () => {
+                window.removeEventListener("mousemove", updateMousePosition);
+            };
+        }, []);
+        return mousePosition;
+    };
 
     return (
         <div
@@ -171,10 +187,16 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                         </div>
                     )}
                 </button>
-                <button id={`post${_id}ShareButton`} className="flex items-center space-x-2 text-gray-800 dark:text-gray-300 active:text-gray-900 active:dark:text-gray-400" type="button">
+                <button
+                    id={`post${_id}ShareButton`}
+                    className="flex items-center space-x-2 text-gray-800 dark:text-gray-300 active:text-gray-900 active:dark:text-gray-400"
+                    type="button"
+                    onClick={() => setIsShareMenuOpen(!isShareMenuOpen)}
+                >
                     <FaShareAlt className="h-5 w-5" />
                     <span className="hidden sm:flex">Partager</span>
                 </button>
+                <ShareMenu postLink={`https://fournierfamily.ovh/post/${_id}`} isOpen={isShareMenuOpen} x={useMousePosition().x} y={useMousePosition().y} />
             </div>
         </div>
     );

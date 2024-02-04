@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getAllArtIDs, getArtBasedOnID } from "../../api/artAPI";
 import { Oeuvre } from "../../../types/oeuvre";
 import AuthorItem from "../../components/authorItem";
+import ShareMenu from "../../components/shareMenu";
 import E404 from "../404";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -16,6 +17,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
     const [liked, setLiked] = useState(false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(art?.likeCount || 0);
     const [listed, setListed] = useState(false);
+    const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const handleLikeClick = () => {
         setLiked(!liked);
@@ -29,6 +31,20 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
         e.preventDefault();
         console.log("Envoi du message");
         e.currentTarget.reset();
+    };
+
+    const useMousePosition = () => {
+        const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+        useEffect(() => {
+            const updateMousePosition = (ev: any) => {
+                setMousePosition({ x: ev.clientX, y: ev.clientY });
+            };
+            window.addEventListener("mousemove", updateMousePosition);
+            return () => {
+                window.removeEventListener("mousemove", updateMousePosition);
+            };
+        }, []);
+        return mousePosition;
     };
 
     return art ? (
@@ -139,10 +155,13 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                             id={`post${art._id}ShareButton`}
                             className="flex items-center space-x-2 p-3 rounded-full bg-stone-100 dark:bg-stone-950 text-black dark:text-white hover:text-gray-800 hover:bg-stone-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900 active:text-gray-900 active:dark:text-gray-400 shadow-md "
                             type="button"
+                            onClick={() => setIsShareMenuOpen(!isShareMenuOpen)}
                         >
                             <FaShareAlt className="h-7 w-7" />
                             <span className="flex">Partager</span>
                         </button>
+                        {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
+                        <ShareMenu postLink={`https://fournierfamily.ovh/post/${art._id}`} isOpen={isShareMenuOpen} x={useMousePosition().x} y={useMousePosition().y} />
                     </div>
                     {/* Render buy and tchat information */}
                     {art?.toSell || art?.canTchat ? (
