@@ -52,20 +52,6 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
         router.push(`/post/${_id}`);
     };
 
-    const useMousePosition = () => {
-        const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-        useEffect(() => {
-            const updateMousePosition = (ev: any) => {
-                setMousePosition({ x: ev.clientX, y: ev.clientY });
-            };
-            window.addEventListener("mousemove", updateMousePosition);
-            return () => {
-                window.removeEventListener("mousemove", updateMousePosition);
-            };
-        }, []);
-        return mousePosition;
-    };
-
     return (
         <div className={`my-3 sm:mx-1 ${scaleEffect ? "hover:my-5" : ""} `}>
             <div
@@ -214,7 +200,7 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                                 <FaShareAlt className="h-5 w-5" />
                                 <span className="sr-only">Partager</span>
                             </button>
-                            <ShareMenu postLink={`https://fournierfamily.ovh/post/${_id}`} isOpen={isShareMenuOpen} x={useMousePosition().x} y={useMousePosition().y} />
+                            <ShareMenu postLink={`https://fournierfamily.ovh/post/${_id}`} isOpen={isShareMenuOpen} />
                         </div>
                     </div>
                 </div>

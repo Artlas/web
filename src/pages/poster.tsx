@@ -6,6 +6,7 @@ import { getRandomInt } from "../utils/tools";
 import { Oeuvre } from "@/types/oeuvre";
 import { UserContext } from "../components/userContext";
 import { CategoryContext } from "../components/categoryContext";
+import { useRouter } from "next/router";
 
 interface Props {
     category?: string;
@@ -35,6 +36,11 @@ export default function Poster({ category, subcategory }: Props) {
         }
     }, [selectedCategory]);
     //#region handles
+
+    let router = useRouter();
+    function redirect() {
+        router.push("/");
+    }
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
         setTitle(event.target.value);
     };
@@ -61,7 +67,7 @@ export default function Poster({ category, subcategory }: Props) {
     //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
-        console.log("image:",images);
+        console.log("image:", images);
         let oeuvre: Oeuvre = {
             _id: getRandomInt(),
             title: title,
@@ -93,9 +99,9 @@ export default function Poster({ category, subcategory }: Props) {
             });
         } catch (error) {
             console.log("Erreur; ", error);
+        } finally {
+            redirect();
         }
-        // TODO: Submit the form data to the server
-        // ...
     };
 
     return (

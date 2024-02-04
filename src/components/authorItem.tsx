@@ -21,7 +21,7 @@ const AuthorItem: React.FC<AuthorItemProps> = ({ imageSrc, authorName, releaseDa
                     <FaUserCircle className={`${small ? "w-8 h-8" : "w-14 h-14"} rounded-full mr-3`} />
                 )}
                 <div className="flex flex-col pr-2">
-                    <span className={`font-bold ${small ? "text-base" : "text-2xl"}`}>{authorName}</span>
+                    <span className={`font-bold ${small ? "text-base" : "text-2xl"}`}>{authorName.replaceAll("_", " ")}</span>
                     <span className={`text-gray-800 dark:text-stone-200 font-light ${small ? "text-sm" : "text-base  ml-[2px]"}`}>Le {releaseDate}</span>
                 </div>
             </Link>

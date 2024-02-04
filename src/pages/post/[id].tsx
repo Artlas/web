@@ -34,20 +34,6 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
         e.currentTarget.reset();
     };
 
-    const useMousePosition = () => {
-        const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-        useEffect(() => {
-            const updateMousePosition = (ev: any) => {
-                setMousePosition({ x: ev.clientX, y: ev.clientY });
-            };
-            window.addEventListener("mousemove", updateMousePosition);
-            return () => {
-                window.removeEventListener("mousemove", updateMousePosition);
-            };
-        }, []);
-        return mousePosition;
-    };
-
     return art ? (
         <div className="flex flex-col w-full">
             <div className="flex flex-col xl:flex-row w-full">
@@ -164,7 +150,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                             <span className="flex">Partager</span>
                         </button>
                         {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
-                        <ShareMenu postLink={`https://fournierfamily.ovh/post/${art._id}`} isOpen={isShareMenuOpen} x={useMousePosition().x} y={useMousePosition().y} />
+                        <ShareMenu postLink={`https://fournierfamily.ovh/post/${art._id}`} isOpen={isShareMenuOpen} detailed />
                     </div>
                     {/* Render buy and tchat information */}
                     {art?.toSell || art?.canTchat ? (

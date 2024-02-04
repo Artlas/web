@@ -49,20 +49,6 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
         }
     }, [illustration, imageLoading]);
 
-    const useMousePosition = () => {
-        const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-        useEffect(() => {
-            const updateMousePosition = (ev: any) => {
-                setMousePosition({ x: ev.clientX, y: ev.clientY });
-            };
-            window.addEventListener("mousemove", updateMousePosition);
-            return () => {
-                window.removeEventListener("mousemove", updateMousePosition);
-            };
-        }, []);
-        return mousePosition;
-    };
-
     return (
         <div
             className="bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-950 rounded-xl shadow-lg dark:shadow-none border dark:border-stone-700 p-4 mt-4 cursor-pointer"
@@ -197,7 +183,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                     <FaShareAlt className="h-5 w-5" />
                     <span className="hidden sm:flex">Partager</span>
                 </button>
-                <ShareMenu postLink={`https://fournierfamily.ovh/post/${_id}`} isOpen={isShareMenuOpen} x={useMousePosition().x} y={useMousePosition().y} />
+                <ShareMenu postLink={`https://fournierfamily.ovh/post/${_id}`} isOpen={isShareMenuOpen} />
             </div>
         </div>
     );
