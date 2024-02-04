@@ -135,7 +135,7 @@ export default function Poster({ category, subcategory }: Props) {
                         <option value="">Choisir une catégorie</option>
                         {categoryNameList.map((category) => (
                             <option key={category} value={category}>
-                                {category.replace(/^\w/, (c) => c.toUpperCase())}
+                                {category.replaceAll("_", " ").replace(/^\w/, (c) => c.toUpperCase())}
                             </option>
                         ))}
                     </select>
@@ -155,7 +155,7 @@ export default function Poster({ category, subcategory }: Props) {
                             <option value="">Choisir une sous-catégorie</option>
                             {subCategoryNameList.map((subcategory) => (
                                 <option key={subcategory} value={subcategory}>
-                                    {subcategory.replace(/^\w/, (c) => c.toUpperCase())}
+                                    {subcategory.replaceAll("_", " ").replace(/^\w/, (c) => c.toUpperCase())}
                                 </option>
                             ))}
                         </select>
