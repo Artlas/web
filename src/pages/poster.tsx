@@ -7,6 +7,7 @@ import { Oeuvre } from "@/types/oeuvre";
 import { UserContext } from "../components/userContext";
 import { CategoryContext } from "../components/categoryContext";
 import { useRouter } from "next/router";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 interface Props {
     category?: string;
@@ -29,6 +30,7 @@ export default function Poster({ category, subcategory }: Props) {
     const [canPeopleChat, setCanPeopleChat] = useState(true);
     const [linkToBuy, setLinkToBuy] = useState("");
     const [addedToGallery, setAddedToGallery] = useState(true);
+    const [formSubmitted, setFormSubmitted] = useState(false);
     //#endregion
     useEffect(() => {
         if (selectedCategory) {
@@ -67,6 +69,7 @@ export default function Poster({ category, subcategory }: Props) {
     //#endregion
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
+        setFormSubmitted(true);
         let oeuvre: Oeuvre = {
             _id: getRandomInt(),
             title: title,
@@ -91,12 +94,13 @@ export default function Poster({ category, subcategory }: Props) {
             await addArt(oeuvre, user).then((response) => {
                 if (response) {
                     console.log("Art ajouté avec succès");
+                    redirect();
                 }
             });
         } catch (error) {
             console.log("Erreur; ", error);
         } finally {
-            redirect();
+            setFormSubmitted(false);
         }
     };
 
@@ -332,9 +336,10 @@ export default function Poster({ category, subcategory }: Props) {
                     <button
                         type="submit"
                         id="submitButtonPostCreationForm"
+                        disabled={formSubmitted}
                         className="bg-black dark:bg-white border-2 rounded-md py-2 px-4 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                     >
-                        Créer la publication
+                        {formSubmitted ? <AiOutlineLoading3Quarters className="animate-spin h-5 w-5 mx-[58px] my-[2px]" /> : "Créer la publication"}
                     </button>
                     {
                         //? Should we add a Preview before submitting the form?
