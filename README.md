@@ -156,13 +156,13 @@ It is also possible to run the application locally. To do so, the following soft
 git clone https://github.com/Artlas/web
 ```
 
-- Installer les dépendances
+- Install the necessary packages
 
 ```bash
 npm install
 ```
 
-- Lancer l'application
+- Launch the application
 
 ```bash
 npm run dev
