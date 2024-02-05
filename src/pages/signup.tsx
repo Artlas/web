@@ -15,6 +15,8 @@ const SignupPage: React.FC = () => {
     const [lastName, setLastName] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [address, setAddress] = useState("");
+    const [image, setImage] = useState([]);
+    const [favoritCat, setFavoritCat] = useState("");
     let router = useRouter();
     interface newUser {
         id: string;
@@ -24,6 +26,8 @@ const SignupPage: React.FC = () => {
         lastName: string;
         address: string;
         birthdate: string;
+        illustration: never[];
+        favoritCat: string;
     }
     let newUser: newUser;
 
@@ -58,6 +62,8 @@ const SignupPage: React.FC = () => {
                 lastName: lastName,
                 address: address,
                 birthdate: birthDate,
+                illustration: image,
+                favoritCat: favoritCat,
             };
             try {
                 await createUserInDatabase(newUser);

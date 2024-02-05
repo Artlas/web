@@ -53,6 +53,7 @@ export default function Profile({ user }: any) {
     let userArts;
 
     async function fetchUserArts() {
+        console.log(user?.id);
         userArts = await getArtsBasedOnIDFromDb(user?.id);
     }
 
