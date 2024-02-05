@@ -13,7 +13,20 @@ const Amis: React.FC = () => {
         500: 2,
         350: 1,
     };
-
+    //! This is a function to retrieve the followed artists (id and photos)
+    //const followedArtists = await retrieveFollowedArtists(user?._id || "");
+    /*
+    useEffect(() => {
+        const fetchData = async () => {
+            if (user?.username) {
+                //! This is a function to retrieve the followed artists (id and photos)
+                const artists = await retrieveFollowedArtists(user.username);
+                setFollowedArtists(artists);
+            }
+        };
+        fetchData();
+        console.log(followedArtists);
+    }, [user?.username]);*/
     return connected ? (
         <div className="container mx-auto">
             <h2 className="text-2xl font-semibold">Mes amis</h2>

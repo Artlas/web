@@ -40,7 +40,24 @@ export default function Profile({ user }: any) {
     const handleItemClickGalerie = () => {
         setSection("galerie");
     };
+    //TODO
+    /*
+    useEffect(() => {
+        const fetchData = async () => {
+            if (user?.username) {
+                //! This is a function to retrieve the followed artists (id and photos)
+                const artists = await retrieveFollowedArtists(user.username);
+                setFollowedArtists(artists);
+                //! This function to retrieve the arts of the artist based on his id.
+                const artistArts = await getArtOfArtistBasedOnId(user.username);
+                setArts(artistArts);
+            }
+        };
 
+        fetchData();
+        console.log(followedArtists);
+        console.log(arts);
+    }, [user?.username]);*/
     const breakpointColumnsObj = {
         default: 1,
         2600: 4,
