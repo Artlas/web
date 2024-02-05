@@ -10,7 +10,7 @@ export const likeArt = async (id: string, user: any) => {
     const likeArtEndpoint = getApiURL() + apiConfig.LIKE_ART_ENDPOINT;
     let requestBody = {
         id: id,
-        user: user,
+        userId: user.username,
     };
     try {
         let response = await fetch(likeArtEndpoint, {

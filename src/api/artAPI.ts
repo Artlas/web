@@ -27,7 +27,8 @@ export const getArtBasedOnID = async (id: any) => {
         const result = await response.json();
         console.log(result);
         if (result.error) {
-            throw new Error(result.error);
+            console.log(result.error);
+            //throw new Error(result.error);
         }
         return result;
     } catch (error) {
