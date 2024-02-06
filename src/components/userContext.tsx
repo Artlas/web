@@ -38,6 +38,7 @@ export interface UserInfo {
     gallery?: string[];
     lists?: [_id: string, title: string, description: string, arts: string[]];
     liked?: string[];
+    favoritCat: string;
 }
 
 // Create the user context

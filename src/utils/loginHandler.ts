@@ -13,6 +13,11 @@ export function setConnectedUser(userData: any): UserInfo {
         birthdate: userData?.birthdate ?? "",
         token: userData?.token ?? "",
         permission: userData?.permission ?? "",
+        friends: userData?.friends ?? "",
+        gallery: userData?.gallery ?? "",
+        lists: userData?.lists ?? "",
+        liked: userData?.likedPosts ?? "",
+        favoritCat: userData?.favoritCat ?? "",
     };
     return connectedUser;
 }
@@ -27,12 +32,12 @@ export async function connectUser(hashedPassword: string, username?: string, ema
         } else {
             throw new Error("Email et username sont nuls");
         }
-
-        if (!data || !data.user) {
+        if (!data) {
             throw new Error("Aucune donnée utilisateur retournée");
         }
 
-        const connectedUser: UserInfo = setConnectedUser(data.user);
+        const connectedUser: UserInfo = setConnectedUser(data);
+
         return connectedUser;
     } catch (error) {
         console.error("Erreur lors de la récupération de l'utilisateur:", error);

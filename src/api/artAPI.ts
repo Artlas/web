@@ -362,7 +362,6 @@ export const getArtLikedByUser = async (userId: string) => {
         console.log(result);
         if (result.error) {
             alert(result.error);
-            throw new Error(result.error);
         }
         return result;
     } catch (error) {

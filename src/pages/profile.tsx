@@ -9,7 +9,7 @@ import { Friend } from "../components/profileDes";
 import { Description } from "../components/profileDes";
 import { Liste } from "../components/profileDes";
 import { retrieveFollowedArtists } from "../utils/communityHandler";
-import { getArtOfArtistBasedOnId } from "../utils/artHandler";
+import { getArtOfArtistBasedOnId, retrieveArtLikedByUser } from "../utils/artHandler";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
@@ -50,9 +50,10 @@ export default function Profile() {
             let data = await getArtOfArtistBasedOnId(user?.username || "");
             sortPostsByMostRecentPostDate(data);
             setPosts(data);
-            data = await getArtOfArtistBasedOnId(user?.username || "");
+            data = await retrieveArtLikedByUser(user?.username || "");
             sortPostsByMostRecentPostDate(data);
             setLikes(data);
+            console.log(likes);
             data = await getArtOfArtistBasedOnId(user?.username || "");
             sortPostsByMostRecentPostDate(data);
             setGalerie(data);

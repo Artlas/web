@@ -36,6 +36,7 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
             id: userId,
             password: password,
         };
+        console.log(requestBody);
         try {
             const response = await fetch(connectEndpoint, {
                 method: "POST",
@@ -46,6 +47,7 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
                 body: JSON.stringify(requestBody),
             });
             const result = await response.json();
+            console.log(result);
             if (result.error) {
                 alert(result.error);
                 throw new Error(result.error);
@@ -88,17 +90,19 @@ export const createUserInDatabase = async (userData: any) => {
 export const createUserInDatabase = async (userData: any) => {
     const createEndpoint = getApiURL() + apiConfig.REGISTER_USER_ENDPOINT;
     let formdata = new FormData();
-    formdata.append("username", userData.username);
-    formdata.append("email", userData.email);
+    console.log("Before API");
+    console.log(userData);
+    formdata.append("id", userData.id);
+    formdata.append("mail", userData.mail);
     formdata.append("password", userData.password);
-    formdata.append("firstName", userData.fname);
-    formdata.append("lastName", userData.lname);
+    formdata.append("firstName", userData.firstName);
+    formdata.append("lastName", userData.lastName);
     formdata.append("birthdate", userData.birthdate);
     formdata.append("address", userData.address);
-    for (let i = 0; i < userData.illustration; i++) {
-        formdata.append("illustration", userData.illustration[i]);
-    }
+    formdata.append("image", userData.illustration);
     formdata.append("favoritCat", userData.favoritCat);
+    formdata.append("permission", userData.permission);
+
     try {
         const response = await fetch(createEndpoint, {
             method: "POST",
@@ -213,7 +217,7 @@ export const checkIfUserExists = async (email: any, id: any) => {
         } else if (response.status === 404) {
             return { userExists: false, message: data.message };
         } else {
-            throw new Error(data.message || "Unexpected response from the server");
+            console.log(data.message || "Unexpected response from the server");
         }
     } catch (error) {
         console.error("Error checking if user exists:", error);

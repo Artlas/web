@@ -25,12 +25,12 @@ export const hashPasswordSha256 = (password: string): string => {
 };
 export async function checkUserExistence(email: string, username: string) {
     const emailCheckResult = await checkIfUserExists(email, null);
-    if (emailCheckResult.userExists) {
+    if (emailCheckResult?.userExists) {
         alert("Un compte avec cet email existe déjà.");
         return true;
     }
     const usernameCheckResult = await checkIfUserExists(null, username);
-    if (usernameCheckResult.userExists) {
+    if (usernameCheckResult?.userExists) {
         alert("Un compte avec ce nom d'utilisateur existe déjà.");
         return true;
     }
