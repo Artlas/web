@@ -28,5 +28,6 @@
     "RETRIEVE_NUMBER_OF_LISTS_SAVED_ENDPOINT": "/oeuvre/retrieveNumberOfListsSaved",
     "FOLLOW_ARTIST_ENDPOINT": "/friend/followArtist",
     "UNFOLLOW_ARTIST_ENDPOINT": "/friend/unfollowArtist",
-    "RETRIEVE_FOLLOWED_ARTISTS_ENDPOINT": "/friend/retrieveFollowedArtists"
+    "RETRIEVE_FOLLOWED_ARTISTS_ENDPOINT": "/friend/retrieveFollowedArtists",
+    "GET_ART_LIKED_BY_USER_ENDPOINT": "/oeuvre/getLikedArt"
 }

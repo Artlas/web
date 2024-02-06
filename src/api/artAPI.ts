@@ -343,3 +343,30 @@ export const checkIfArtExist = async (id: string, userId: any) => {
         throw error;
     }
 };
+
+export const getArtLikedByUser = async (userId: string) => {
+    const getArtLikedByUser = getApiURL() + apiConfig.GET_ART_LIKED_BY_USER_ENDPOINT;
+    let requestBody = {
+        userId: userId,
+    };
+    try {
+        let response = await fetch(getArtLikedByUser, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        const result = await response.json();
+        console.log(result);
+        if (result.error) {
+            alert(result.error);
+            throw new Error(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des oeuvres d'arts:", error);
+        throw error;
+    }
+};
