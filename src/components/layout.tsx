@@ -125,7 +125,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         name !== "post" &&
         name !== "nouveau" &&
         name !== "profil" &&
-        name !== "amis" &&
+        name !== "abonnements" &&
         name !== "liste" &&
         name !== "paramè tres"
             ? setOutlineLibrary(true)
@@ -324,12 +324,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                         Profil
                                                     </Link>
                                                     <Link
-                                                        href="/amis"
+                                                        href="/abonnements"
                                                         className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="openFriendsLink"
                                                     >
                                                         <FaUserFriends className="mr-2" size={16} />
-                                                        Mes amis
+                                                        Mes abonnements
                                                     </Link>
                                                     <Link
                                                         href="/mylists"
@@ -433,7 +433,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                                 id="openUserMenuMobileLink"
                             >
-                                {name === "profile" || name === "profil" || name === "amis" || name === "paramè tres" ? (
+                                {name === "profile" || name === "profil" || name === "abonnements" || name === "paramè tres" ? (
                                     <FaUser size={44} className="w-7 h-7" />
                                 ) : (
                                     <FaRegUser size={44} className="w-7 h-7" />

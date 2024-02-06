@@ -4,7 +4,7 @@ import { Friend } from "../components/profileDes";
 import { UserContext } from "../components/userContext";
 import E404 from "./404";
 
-const Amis: React.FC = () => {
+const Abonnements: React.FC = () => {
     const { user, userNeeded, connected, logout } = useContext(UserContext);
     const breakpointColumnsObj = {
         default: 6,
@@ -29,7 +29,7 @@ const Amis: React.FC = () => {
     }, [user?.username]);*/
     return connected ? (
         <div className="container mx-auto">
-            <h2 className="text-2xl font-semibold">Mes amis</h2>
+            <h2 className="text-2xl font-semibold">Mes abonnements</h2>
             <div className="mx-auto w-full">
                 <Masonry className="flex flex-wrap mt-4 mx-auto" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
                     <Friend photoProfile="https://picsum.photos/200" userName="Jean-Michel" />
@@ -47,4 +47,4 @@ const Amis: React.FC = () => {
         <E404 />
     );
 };
-export default Amis;
+export default Abonnements;
