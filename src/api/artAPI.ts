@@ -236,6 +236,7 @@ export const addArt = async (art: any, user: any) => {
     formdata.append("canTchat", art.canTchat);
     formdata.append("releaseDate", art.releaseDate);
     formdata.append("postDate", art.postDate);
+    formdata.append("isInGallery", art.isInGallery);
 
     try {
         let response = await fetch(addArt, {

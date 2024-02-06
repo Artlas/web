@@ -15,9 +15,23 @@ import { likeArt, dislikeArt } from "../api/actionUserAPI";
 import { UserContext } from "./userContext";
 import { retrieveInfoUserById } from "../api/userAPI";
 
-const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, author, likeCount }) => {
+const Post: React.FC<Oeuvre & { isLiked?: boolean }> = ({
+    _id,
+    title,
+    description,
+    category,
+    subCategory,
+    illustration,
+    video,
+    postDate,
+    releaseDate,
+    isMediaTypeImages,
+    author,
+    likeCount,
+    isLiked,
+}) => {
     const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
-    const [liked, setLiked] = useState(false);
+    const [liked, setLiked] = useState(isLiked || false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount);
     const [listed, setListed] = useState(false);
     const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
@@ -42,7 +56,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
     let router = useRouter();
 
     const handlePostClick = () => {
-        console.log("Clique sur l'arrière-plan de la div");
+        // console.log("Clique sur l'arrière-plan de la div");
         router.push(`/post/${_id}`);
     };
 
@@ -65,7 +79,6 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
     useEffect(() => {
         const fetchData = async () => {
             const data = await retrieveInfoUserById(author);
-            console.log(data);
             setImageAuthor(data.image);
         };
         fetchData();
@@ -101,13 +114,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 }}
                 id="postCategoryContainer"
             >
-                <AuthorItem
-                    imageSrc={"data:image/*;base64," + imageAuthor}
-                    authorName={author}
-                    linkToProfile={"/profile/" + author}
-                    releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined}
-                    small
-                />
+                <AuthorItem imageSrc={imageAuthor} authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined} small />
                 <div className="flex">
                     <Link href={`/${category.toLowerCase()}/all`} id={`post${_id}CategoryLink`}>
                         <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mx-2">

@@ -10,6 +10,7 @@ import { Liste } from "../../components/profileDes";
 import DiscoverPost from "@/src/components/discoverPost";
 import { getAllUsers, retrieveInfoUserById } from "@/src/api/userAPI";
 import { getArtsBasedOnIDFromDb } from "@/src/api/artAPI";
+import { getArtOfArtistBasedOnId, retrieveArtLikedByUser } from "@/src/utils/artHandler";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
@@ -29,8 +30,10 @@ import { getArtsBasedOnIDFromDb } from "@/src/api/artAPI";
  * la liste des oeuvres liké
  */
 export default function Profile({ user }: any) {
-    const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
+    const [posts, setPosts] = useState<Oeuvre[]>([]);
+    const [likes, setLikes] = useState<Oeuvre[]>([]);
+    const [galerie, setGalerie] = useState<Oeuvre[]>([]);
     const handleItemClickPost = () => {
         setSection("post");
     };
@@ -40,10 +43,64 @@ export default function Profile({ user }: any) {
     const handleItemClickGalerie = () => {
         setSection("galerie");
     };
-    const { user: currentUser } = useContext(UserContext);
+    const { user: currentUser, setUserNeeded } = useContext(UserContext);
     const handleFollowClick = () => {
-        console.log("Followed");
+        if (currentUser && currentUser.friends !== undefined) {
+            currentUser.friends = currentUser.friends.includes(user?.id) ? currentUser.friends.filter((friendId) => friendId !== user?.id) : [...currentUser.friends, user?.id];
+            //TODO: update the user in the database
+        } else if (currentUser) {
+            currentUser.friends = [user?.id];
+        } else {
+            setUserNeeded(true);
+            console.error("currentUser is undefined");
+        }
     };
+
+    useEffect(() => {
+        if (posts.length === 0 && likes.length === 0) {
+            const fetchData = async () => {
+                let data = await getArtOfArtistBasedOnId(user?.id || "");
+                sortPostsByMostRecentPostDate(data);
+                setPosts(data);
+                console.log("Posts:", data);
+                data = await retrieveArtLikedByUser(user?.id || "");
+                sortPostsByMostRecentPostDate(data);
+                setLikes(data);
+                console.log("Likes:", data);
+            };
+            fetchData();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (galerie.length === 0) {
+            const fetchData = async () => {
+                let data = [] as Oeuvre[];
+                posts.forEach((post) => {
+                    post.isInGallery && data.push(post);
+                });
+                sortPostsByMostRecentPostDate(data);
+                setGalerie(data);
+                console.log("Galerie:", data);
+            };
+            fetchData();
+        }
+    }, [posts]);
+
+    function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
+        if (posts.length > 0) {
+            return posts.sort((a, b) => {
+                if (typeof a.postDate === "string") {
+                    a.postDate = new Date(a.postDate);
+                }
+                if (typeof b.postDate === "string") {
+                    b.postDate = new Date(b.postDate);
+                }
+                return b.postDate.getTime() - a.postDate.getTime();
+            });
+        }
+    }
+
     //TODO
     /*
     useEffect(() => {
@@ -137,14 +194,14 @@ export default function Profile({ user }: any) {
                                     type="button"
                                     id="followButton"
                                     onClick={handleFollowClick}
-                                    className="bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900 px-4 p-2 font-semibold"
+                                    className="bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-stone-800 dark:hover:bg-gray-200 dark:active:bg-gray-300 active:bg-stone-900 px-4 p-2 font-semibold"
                                 >
                                     {/*user && user.following.contains */}
                                     Suivre
                                 </button>
                             }
                         />
-                        <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Les abonnements de {user.username}</h2>
+                        <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Les abonnements de {user?.id}</h2>
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">
                             <Friend photoProfile="/pp-image-ex.jpg" userName="King Julian" />
                             <Friend photoProfile="/pp-image-ex.jpg" userName="Fred" />
@@ -193,33 +250,16 @@ export default function Profile({ user }: any) {
                         <hr className="rounded-full border-2 mt-1 border-black dark:border-white w-full max-w-sm mx-auto" />
                         {section === "post" && (
                             <div className="">
-                                <div className="max-w-[800px] mx-auto">
-                                    <Post {...tempPost2} likeCount={42} />
-                                    <Post {...tempPost3} />
-                                    <Post {...tempPost4} />
-                                </div>
+                                <div className="max-w-[800px] mx-auto">{posts && posts.length > 0 && posts.map((post) => <Post key={post._id} {...post} />)}</div>
                             </div>
                         )}
-                        {section === "liked" && (
-                            <div className="max-w-[800px] mx-auto">
-                                <Post {...tempPost2} />
-                            </div>
-                        )}
+                        {section === "liked" && <div className="max-w-[800px] mx-auto">{likes && likes.length > 0 && likes.map((post) => <Post key={post._id} {...post} />)}</div>}
                         {section === "galerie" && (
                             <div className="">
                                 <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
+                                    {galerie &&
+                                        galerie.length > 0 &&
+                                        galerie.map((post) => <DiscoverPost key={post._id} {...post} autoPlaying={currentUser?.autoPlayDiaporamas || false} scaleEffect={false} />)}
                                 </Masonry>
                             </div>
                         )}

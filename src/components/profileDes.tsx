@@ -32,7 +32,13 @@ export function Description({ photoProfile, userName, preference, account_birthd
             <span className="text-xl font-semibold m-2">{userName}</span>
             <div className="flex flex-row p-2 space-x-1">
                 <QuillPenLine />
-                <span>{preference}</span>
+                <span>
+                    {preference
+                        .split(" ")
+                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(" ")
+                        .replaceAll("_", " ")}
+                </span>
             </div>
             <div className="flex flex-row p-2 space-x-1">
                 <CalendarLineIcon />

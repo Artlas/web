@@ -27,7 +27,6 @@ export default function Profile() {
     const [posts, setPosts] = useState<Oeuvre[]>([]);
     const [likes, setLikes] = useState<Oeuvre[]>([]);
     const [galerie, setGalerie] = useState<Oeuvre[]>([]);
-    const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
     const [followedArtists, setFollowedArtists] = useState(null);
     const [arts, setArts] = useState(null);
@@ -46,7 +45,7 @@ export default function Profile() {
     const [autoPlaying, setAutoPlaying] = useState(autoPlayDiaporamas || false);
 
     useEffect(() => {
-        if (user?.username && posts.length === 0 && likes.length === 0 && galerie.length === 0) {
+        if (user?.username && posts.length === 0 && likes.length === 0) {
             const fetchData = async () => {
                 let data = await getArtOfArtistBasedOnId(user?.username || "");
                 sortPostsByMostRecentPostDate(data);
@@ -56,17 +55,25 @@ export default function Profile() {
                 sortPostsByMostRecentPostDate(data);
                 setLikes(data);
                 console.log("Likes:", data);
-                data = [] as Oeuvre[];
-                posts.forEach((post) => {
-                    if (post.isInGallery) data.push(post);
-                });
-                sortPostsByMostRecentPostDate(data);
-                setGalerie(data);
-                console.log("Gallerie:", data);
             };
             fetchData();
         }
     }, [user?.username]);
+
+    useEffect(() => {
+        if (user?.username && galerie.length === 0) {
+            const fetchData = async () => {
+                let data = [] as Oeuvre[];
+                posts.forEach((post) => {
+                    post.isInGallery && data.push(post);
+                });
+                sortPostsByMostRecentPostDate(data);
+                setGalerie(data);
+                console.log("Galerie:", data);
+            };
+            fetchData();
+        }
+    }, [posts]);
 
     function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
         if (posts.length > 0) {
@@ -218,9 +225,9 @@ export default function Profile() {
                         )}
                         {section === "liked" && (
                             <div className="max-w-[800px] mx-auto">
-                                {likes && likes.length > 0 && likes.map((post) => <Post key={post._id} {...post} />)}
-                                <Post {...tempPost1} likeCount={42} />
-                                <Post {...tempPost2} />
+                                {likes && likes.length > 0 && likes.map((post) => <Post key={post._id} {...post} isLiked />)}
+                                <Post {...tempPost1} likeCount={42} isLiked />
+                                <Post {...tempPost2} isLiked />
                             </div>
                         )}
                         {section === "liste" && (

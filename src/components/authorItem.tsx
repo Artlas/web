@@ -4,7 +4,7 @@ import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 
 interface AuthorItemProps {
-    imageSrc?: string | undefined;
+    imageSrc?: any | undefined;
     authorName: string;
     releaseDate?: string;
     linkToProfile?: string;
