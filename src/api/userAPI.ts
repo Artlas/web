@@ -99,7 +99,7 @@ export const createUserInDatabase = async (userData: any) => {
     formdata.append("lastName", userData.lastName);
     formdata.append("birthdate", userData.birthdate);
     formdata.append("address", userData.address);
-    formdata.append("image", userData.illustration);
+    formdata.append("image", userData.illustration[0]);
     formdata.append("favoritCat", userData.favoritCat);
     formdata.append("permission", userData.permission);
 
