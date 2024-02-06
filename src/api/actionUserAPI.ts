@@ -9,9 +9,10 @@ import apiConfig from "./apiConfig.json";
 export const likeArt = async (id: string, user: any) => {
     const likeArtEndpoint = getApiURL() + apiConfig.LIKE_ART_ENDPOINT;
     let requestBody = {
-        id: id,
+        postId: id,
         userId: user.username,
     };
+    console.log(requestBody);
     try {
         let response = await fetch(likeArtEndpoint, {
             method: "POST",
@@ -23,8 +24,7 @@ export const likeArt = async (id: string, user: any) => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
     } catch (error) {
         console.error("Erreur lors du like de l'oeuvre d'art:", error);
@@ -39,8 +39,8 @@ export const likeArt = async (id: string, user: any) => {
 export const dislikeArt = async (id: string, user: any) => {
     const likeArtEndpoint = getApiURL() + apiConfig.UNLIKE_ART_ENDPOINT;
     let requestBody = {
-        id: id,
-        user: user,
+        postId: id,
+        userId: user.username,
     };
     try {
         let response = await fetch(likeArtEndpoint, {
@@ -53,8 +53,7 @@ export const dislikeArt = async (id: string, user: any) => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
     } catch (error) {
         console.error("Erreur lors du like de l'oeuvre d'art:", error);
@@ -86,8 +85,7 @@ export const addArtToList = async (idArt: string, idList: string, user: any) => 
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
     } catch (error) {
         console.error("Erreur lors de l'ajout de l'oeuvre d'art à la liste:", error);
@@ -112,8 +110,7 @@ export const removeArtFromList = async (idArt: string, idList: string, user: any
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
     } catch (error) {
         console.error("Erreur lors de la suppression de l'oeuvre d'art à la liste:", error);
@@ -144,8 +141,7 @@ export const createNewList = async (title: string, descriptionList: string, illu
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
     } catch (error) {
         console.error("Erreur lors de la création de la liste:", error);

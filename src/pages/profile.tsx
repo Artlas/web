@@ -51,19 +51,22 @@ export default function Profile() {
                 let data = await getArtOfArtistBasedOnId(user?.username || "");
                 sortPostsByMostRecentPostDate(data);
                 setPosts(data);
+                console.log("Posts:", data);
                 data = await retrieveArtLikedByUser(user?.username || "");
                 sortPostsByMostRecentPostDate(data);
                 setLikes(data);
+                console.log("Likes:", data);
                 data = [] as Oeuvre[];
                 posts.forEach((post) => {
                     if (post.isInGallery) data.push(post);
                 });
                 sortPostsByMostRecentPostDate(data);
                 setGalerie(data);
+                console.log("Gallerie:", data);
             };
             fetchData();
         }
-    }, [user?.username, posts]);
+    }, []); // Retirez posts du tableau de dépendances
 
     function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
         return posts.sort((a, b) => {

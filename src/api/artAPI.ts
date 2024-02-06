@@ -83,8 +83,7 @@ export const getArtsBasedOnIDFromDb = async (id: string) => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
         return result;
     } catch (error) {
@@ -246,8 +245,7 @@ export const addArt = async (art: any, user: any) => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
         return result;
     } catch (error) {
