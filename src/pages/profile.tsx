@@ -24,6 +24,9 @@ import { getArtOfArtistBasedOnId } from "../utils/artHandler";
 // REMOVE bday and city from the user card
 export default function Profile() {
     const { user, connected, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
+    const [posts, setPosts] = useState<Oeuvre[]>([]);
+    const [likes, setLikes] = useState<Oeuvre[]>([]);
+    const [galerie, setGalerie] = useState<Oeuvre[]>([]);
     const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
     const [followedArtists, setFollowedArtists] = useState(null);
@@ -41,6 +44,33 @@ export default function Profile() {
         setSection("galerie");
     };
     const [autoPlaying, setAutoPlaying] = useState(autoPlayDiaporamas || false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let data = await getArtOfArtistBasedOnId(user?.username || "");
+            sortPostsByMostRecentPostDate(data);
+            setPosts(data);
+            data = await getArtOfArtistBasedOnId(user?.username || "");
+            sortPostsByMostRecentPostDate(data);
+            setPosts(data);
+            data = await getArtOfArtistBasedOnId(user?.username || "");
+            sortPostsByMostRecentPostDate(data);
+            setPosts(data);
+        };
+        fetchData();
+    }, [user?.username]);
+
+    function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
+        return posts.sort((a, b) => {
+            if (typeof a.postDate === "string") {
+                a.postDate = new Date(a.postDate);
+            }
+            if (typeof b.postDate === "string") {
+                b.postDate = new Date(b.postDate);
+            }
+            return b.postDate.getTime() - a.postDate.getTime();
+        });
+    }
 
     //TODO
     /*useEffect(() => {
@@ -178,6 +208,10 @@ export default function Profile() {
                         {section === "post" && (
                             <div className="">
                                 <div className="max-w-[800px] mx-auto">
+                                    {posts.map((post) => (
+                                        <Post key={post._id} {...post} />
+                                    ))}
+
                                     <Post {...tempPost1} likeCount={42} />
                                     <Post {...tempPost2} />
                                 </div>
@@ -185,6 +219,9 @@ export default function Profile() {
                         )}
                         {section === "liked" && (
                             <div className="max-w-[800px] mx-auto">
+                                {likes.map((post) => (
+                                    <Post key={post._id} {...post} />
+                                ))}
                                 <Post {...tempPost1} likeCount={42} />
                                 <Post {...tempPost2} />
                             </div>
@@ -199,6 +236,9 @@ export default function Profile() {
                         {section === "galerie" && (
                             <div className="">
                                 <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
+                                    {galerie.map((post) => (
+                                        <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={false} />
+                                    ))}
                                     <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
                                     <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
                                     <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
