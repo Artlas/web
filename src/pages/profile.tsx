@@ -46,7 +46,7 @@ export default function Profile() {
     const [autoPlaying, setAutoPlaying] = useState(autoPlayDiaporamas || false);
 
     useEffect(() => {
-        if (user?.username) {
+        if (user?.username && posts.length === 0 && likes.length === 0 && galerie.length === 0) {
             const fetchData = async () => {
                 let data = await getArtOfArtistBasedOnId(user?.username || "");
                 sortPostsByMostRecentPostDate(data);
@@ -66,18 +66,20 @@ export default function Profile() {
             };
             fetchData();
         }
-    }, []); // Retirez posts du tableau de dépendances
+    }, [user?.username]);
 
     function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
-        return posts.sort((a, b) => {
-            if (typeof a.postDate === "string") {
-                a.postDate = new Date(a.postDate);
-            }
-            if (typeof b.postDate === "string") {
-                b.postDate = new Date(b.postDate);
-            }
-            return b.postDate.getTime() - a.postDate.getTime();
-        });
+        if (posts.length > 0) {
+            return posts.sort((a, b) => {
+                if (typeof a.postDate === "string") {
+                    a.postDate = new Date(a.postDate);
+                }
+                if (typeof b.postDate === "string") {
+                    b.postDate = new Date(b.postDate);
+                }
+                return b.postDate.getTime() - a.postDate.getTime();
+            });
+        }
     }
 
     //TODO
@@ -207,9 +209,7 @@ export default function Profile() {
                         {section === "post" && (
                             <div className="">
                                 <div className="max-w-[800px] mx-auto">
-                                    {posts.map((post) => (
-                                        <Post key={post._id} {...post} />
-                                    ))}
+                                    {posts && posts.length > 0 && posts.map((post) => <Post key={post._id} {...post} />)}
 
                                     <Post {...tempPost1} likeCount={42} />
                                     <Post {...tempPost2} />
@@ -218,9 +218,7 @@ export default function Profile() {
                         )}
                         {section === "liked" && (
                             <div className="max-w-[800px] mx-auto">
-                                {likes.map((post) => (
-                                    <Post key={post._id} {...post} />
-                                ))}
+                                {likes && likes.length > 0 && likes.map((post) => <Post key={post._id} {...post} />)}
                                 <Post {...tempPost1} likeCount={42} />
                                 <Post {...tempPost2} />
                             </div>
@@ -235,9 +233,7 @@ export default function Profile() {
                         {section === "galerie" && (
                             <div className="">
                                 <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
-                                    {galerie.map((post) => (
-                                        <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    ))}
+                                    {galerie && galerie.length > 0 && galerie.map((post) => <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={false} />)}
                                     <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
                                     <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
                                     <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
