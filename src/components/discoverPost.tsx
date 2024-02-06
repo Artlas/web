@@ -9,6 +9,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 interface DiscoverPostProps extends Oeuvre {
     autoPlaying: boolean;
@@ -37,6 +38,7 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
     const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [imageLoading, setimageLoading] = useState(false);
     const handleLikeClick = () => {
         setLiked(!liked);
         liked ? setDisplayedLikeCount(displayedLikeCount - 1) : setDisplayedLikeCount(displayedLikeCount + 1);
@@ -51,6 +53,14 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
         //console.log("Clique sur l'arrière-plan de la div");
         router.push(`/post/${_id}`);
     };
+
+    useEffect(() => {
+        if (!illustration || illustration.length === 0) {
+            setimageLoading(true);
+        } else {
+            setimageLoading(false);
+        }
+    }, [illustration, imageLoading]);
 
     return (
         <div className={`my-3 sm:mx-1 ${scaleEffect ? "hover:my-5" : ""} `}>
@@ -78,6 +88,10 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                     {/* Render carousel or video player based on illustration type
                 //TODO: Add a button to open the real image in full screen
                 */}
+                    {
+                        // Render carousel or video player based on illustration type
+                        imageLoading && isMediaTypeImages && <AiOutlineLoading3Quarters className="animate-spin h-10 w-10 text-gray-400 dark:text-slate-300 mx-auto my-16" />
+                    }
                     {isMediaTypeImages && illustration && (
                         <Carousel
                             showThumbs={false}

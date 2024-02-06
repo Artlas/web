@@ -15,6 +15,7 @@ const SignupPage: React.FC = () => {
     const [lastName, setLastName] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [address, setAddress] = useState("");
+    const [image, setImage] = useState(null);
     let router = useRouter();
     interface newUser {
         id: string;
@@ -31,8 +32,12 @@ const SignupPage: React.FC = () => {
         router.push("/");
     }
 
+    const handleImageChange = (event: { target: { files: any } }) => {
+        setImage(event.target.files);
+    };
+
     const handleLogin = async (event: { preventDefault: () => void }) => {
-        event.preventDefault(); // empêche un reload
+        event.preventDefault();
         let hashedPassword;
         if (!validatePassword(password)) {
             alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
@@ -58,6 +63,7 @@ const SignupPage: React.FC = () => {
                 lastName: lastName,
                 address: address,
                 birthdate: birthDate,
+                // image: image,
             };
             try {
                 await createUserInDatabase(newUser);
@@ -193,6 +199,21 @@ const SignupPage: React.FC = () => {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 required
+                            />
+                        </div>
+                        <div className="">
+                            <label htmlFor="profilePictureSignupInput" className="block text-sm md:text-base font-bold md:font-medium mb-2">
+                                Photo de profil
+                            </label>
+                            <input
+                                type="file"
+                                id="profilePictureSignupInput"
+                                multiple={false}
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-pointer
+                            file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-1 file:border-solid file:border-black dark:file:border-white file:text-sm file:font-semibold file:bg-white dark:file:bg-black file:text-gray-700 hover:file:bg-stone-200
+                            dark:file:text-gray-100 dark:hover:file:bg-stone-800 file:cursor-pointer"
                             />
                         </div>
                         <div>
