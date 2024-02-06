@@ -40,6 +40,10 @@ export default function Profile({ user }: any) {
     const handleItemClickGalerie = () => {
         setSection("galerie");
     };
+    const { user: currentUser } = useContext(UserContext);
+    const handleFollowClick = () => {
+        console.log("Followed");
+    };
     //TODO
     /*
     useEffect(() => {
@@ -126,12 +130,19 @@ export default function Profile({ user }: any) {
                         <Description
                             photoProfile={user?.image || "/pp-image-ex.jpg"}
                             userName={user?.id || "Jean-Michel"}
-                            description="Bonjour, je suis une artiste"
-                            preference="Musique"
-                            loisir="Peinture"
-                            birthday={birthday.toLocaleDateString()}
+                            preference={user?.favoritCat || "Photographie"}
                             account_birthday="17/11/2023"
-                            address={user?.address || "Paris"}
+                            FollowButton={
+                                <button
+                                    type="button"
+                                    id="followButton"
+                                    onClick={handleFollowClick}
+                                    className="bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-200 hover:dark:bg-stone-800 active:bg-gray-300 active:dark:bg-stone-900 px-4 p-2 font-semibold"
+                                >
+                                    {/*user && user.following.contains */}
+                                    Suivre
+                                </button>
+                            }
                         />
                         <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Les abonnements de {user.username}</h2>
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">

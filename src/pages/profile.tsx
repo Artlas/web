@@ -46,20 +46,24 @@ export default function Profile() {
     const [autoPlaying, setAutoPlaying] = useState(autoPlayDiaporamas || false);
 
     useEffect(() => {
-        const fetchData = async () => {
-            let data = await getArtOfArtistBasedOnId(user?.username || "");
-            sortPostsByMostRecentPostDate(data);
-            setPosts(data);
-            data = await retrieveArtLikedByUser(user?.username || "");
-            sortPostsByMostRecentPostDate(data);
-            setLikes(data);
-            console.log(likes);
-            data = await getArtOfArtistBasedOnId(user?.username || "");
-            sortPostsByMostRecentPostDate(data);
-            setGalerie(data);
-        };
-        fetchData();
-    }, [user?.username]);
+        if (user?.username) {
+            const fetchData = async () => {
+                let data = await getArtOfArtistBasedOnId(user?.username || "");
+                sortPostsByMostRecentPostDate(data);
+                setPosts(data);
+                data = await retrieveArtLikedByUser(user?.username || "");
+                sortPostsByMostRecentPostDate(data);
+                setLikes(data);
+                data = [] as Oeuvre[];
+                posts.forEach((post) => {
+                    if (post.isInGallery) data.push(post);
+                });
+                sortPostsByMostRecentPostDate(data);
+                setGalerie(data);
+            };
+            fetchData();
+        }
+    }, [user?.username, posts]);
 
     function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
         return posts.sort((a, b) => {
@@ -141,16 +145,7 @@ export default function Profile() {
             <main className="flex w-full">
                 <div className="h-full w-full flex flex-col lg:flex-row-reverse lg:justify-between ">
                     <div className="flex flex-col lg:flex-1 w-full lg:items-end lg:pl-1">
-                        <Description
-                            photoProfile={user?.image || "/pp-image-ex.jpg"}
-                            userName={user?.username || "Jean-Michel"}
-                            description="Bonjour, je suis une artiste"
-                            preference="Musique"
-                            loisir="Peinture"
-                            birthday={birthday.toLocaleDateString()}
-                            account_birthday="17/11/2023"
-                            address={user?.address || "Paris"}
-                        />
+                        <Description photoProfile={user?.image || "/pp-image-ex.jpg"} userName={user?.username || "Jean-Michel"} preference={user?.favoritCat || "Art"} account_birthday="17/11/2023" />
                         <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Mes abonnements</h2>
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">
                             <Friend photoProfile="/pp-image-ex.jpg" userName="Anna" />
