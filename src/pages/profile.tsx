@@ -8,6 +8,8 @@ import { UserContext } from "../components/userContext";
 import { Friend } from "../components/profileDes";
 import { Description } from "../components/profileDes";
 import { Liste } from "../components/profileDes";
+import { retrieveFollowedArtists } from "../utils/communityHandler";
+import { getArtOfArtistBasedOnId } from "../utils/artHandler";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
@@ -17,10 +19,15 @@ import { Liste } from "../components/profileDes";
  * - listes
  * - friends
  */
+
+//TODO
+// REMOVE bday and city from the user card
 export default function Profile() {
     const { user, connected, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
     const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
+    const [followedArtists, setFollowedArtists] = useState(null);
+    const [arts, setArts] = useState(null);
     const handleItemClickPost = () => {
         setSection("post");
     };
@@ -33,9 +40,26 @@ export default function Profile() {
     const handleItemClickGalerie = () => {
         setSection("galerie");
     };
-
     const [autoPlaying, setAutoPlaying] = useState(autoPlayDiaporamas || false);
 
+    //TODO
+    /*useEffect(() => {
+        const fetchData = async () => {
+            if (user?.username) {
+                //! This is a function to retrieve the followed artists (id and photos)
+                const artists = await retrieveFollowedArtists(user.username);
+                setFollowedArtists(artists);
+                //! This function to retrieve the arts of the artist based on his id.
+                const artistArts = await getArtOfArtistBasedOnId(user.username);
+                setArts(artistArts);
+            }
+        };
+
+        fetchData();
+        console.log(followedArtists);
+        console.log(arts);
+    }, [user?.username]);
+*/
     useEffect(() => {
         setAutoPlayDiaporamas(autoPlaying);
     }, [autoPlaying, setAutoPlayDiaporamas]);

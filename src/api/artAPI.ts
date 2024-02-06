@@ -27,7 +27,8 @@ export const getArtBasedOnID = async (id: any) => {
         const result = await response.json();
         console.log(result);
         if (result.error) {
-            throw new Error(result.error);
+            console.log(result.error);
+            //throw new Error(result.error);
         }
         return result;
     } catch (error) {
@@ -69,7 +70,7 @@ export const getAllArtIDs = async () => {
 export const getArtsBasedOnIDFromDb = async (id: string) => {
     const getArtBasedOnID = getApiURL() + apiConfig.GET_ART_BASED_ID_USER_ENDPOINT;
     let requestBody = {
-        id: id,
+        author: id,
     };
     try {
         let response = await fetch(getArtBasedOnID, {
@@ -108,8 +109,7 @@ export const getAllArt = async () => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
         return result;
     } catch (error) {
@@ -221,22 +221,22 @@ export const addArt = async (art: any, user: any) => {
 };*/ export const addArt = async (art: any, user: any) => {
     const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
     let formdata = new FormData();
-    formdata.append("title",art.title);
-    formdata.append("description",art.description);
-    formdata.append("author",art.author);
-    formdata.append("category",art.category);
-    formdata.append("subCategory",art.subCategory);
-    for(let i=0;i<art.illustration.length;i++){
-        formdata.append("illustration",art.illustration[i]);
+    formdata.append("title", art.title);
+    formdata.append("description", art.description);
+    formdata.append("author", art.author);
+    formdata.append("category", art.category);
+    formdata.append("subCategory", art.subCategory);
+    for (let i = 0; i < art.illustration.length; i++) {
+        formdata.append("illustration", art.illustration[i]);
     }
-    formdata.append("video",art.video);
-    formdata.append("isMediaTypeImages",art.isMediaTypeImages);
-    formdata.append("toSell",art.toSell);
-    formdata.append("price",art.price);
-    formdata.append("linkToBuy",art.linkToBuy);
-    formdata.append("canTchat",art.canTchat);
-    formdata.append("releaseDate",art.releaseDate);
-    formdata.append("postDate",art.postDate);
+    formdata.append("video", art.video);
+    formdata.append("isMediaTypeImages", art.isMediaTypeImages);
+    formdata.append("toSell", art.toSell);
+    formdata.append("price", art.price);
+    formdata.append("linkToBuy", art.linkToBuy);
+    formdata.append("canTchat", art.canTchat);
+    formdata.append("releaseDate", art.releaseDate);
+    formdata.append("postDate", art.postDate);
 
     try {
         let response = await fetch(addArt, {

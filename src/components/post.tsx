@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Oeuvre } from "@/types/oeuvre";
@@ -11,17 +11,28 @@ import ReactPlayer from "react-player";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { likeArt, dislikeArt } from "../api/actionUserAPI";
+import { UserContext } from "./userContext";
 
 const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, author, likeCount }) => {
+    const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
     const [liked, setLiked] = useState(false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount);
     const [listed, setListed] = useState(false);
     const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const [imageLoading, setimageLoading] = useState(false);
-    const handleLikeClick = () => {
-        setLiked(!liked);
-        liked ? setDisplayedLikeCount(displayedLikeCount - 1) : setDisplayedLikeCount(displayedLikeCount + 1);
+    const handleLikeClick = async () => {
+        // handle the like button click
+        const newLikedState = !liked;
+        setLiked(newLikedState);
+        if (newLikedState) {
+            setDisplayedLikeCount(displayedLikeCount + 1);
+            await likeArt(_id.toString(), user); // Appelle la fonction likeArt si on aime l'oeuvre
+        } else {
+            setDisplayedLikeCount(displayedLikeCount - 1);
+            await dislikeArt(_id.toString(), user); // Appelle la fonction dislikeArt si on enlève le like
+        }
     };
     const handleListClick = () => {
         setListed(!listed);
