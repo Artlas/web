@@ -52,10 +52,10 @@ export default function Profile() {
             setPosts(data);
             data = await getArtOfArtistBasedOnId(user?.username || "");
             sortPostsByMostRecentPostDate(data);
-            setPosts(data);
+            setLikes(data);
             data = await getArtOfArtistBasedOnId(user?.username || "");
             sortPostsByMostRecentPostDate(data);
-            setPosts(data);
+            setGalerie(data);
         };
         fetchData();
     }, [user?.username]);
