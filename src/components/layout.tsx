@@ -275,7 +275,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         {user ? (
                                             <div className="w-[44px] h-[44px] rounded-full bg-stone-300 dark:bg-stone-700">
                                                 {user.image ? (
-                                                    <Image src={user?.image} alt="Profile picture" width={44} height={44} className="rounded-full" />
+                                                    <Image src={"data:image/*;base64," + user?.image} alt="Profile picture" width={44} height={44} className="rounded-full" />
                                                 ) : (
                                                     <FaUserCircle size={44} className="w-8 h-8 sm:w-11 sm:h-11" />
                                                 )}
