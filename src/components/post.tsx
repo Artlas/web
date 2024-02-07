@@ -30,7 +30,7 @@ const Post: React.FC<Oeuvre & { isLiked?: boolean }> = ({
     likeCount,
     isLiked,
 }) => {
-    const { user, userNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
+    const { user, userNeeded, setUserNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
     const [liked, setLiked] = useState(isLiked || false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount);
     const [listed, setListed] = useState(false);
@@ -40,14 +40,17 @@ const Post: React.FC<Oeuvre & { isLiked?: boolean }> = ({
     const [imageAuthor, setImageAuthor] = useState("");
     const handleLikeClick = async () => {
         // handle the like button click
-        const newLikedState = !liked;
-        setLiked(newLikedState);
-        if (newLikedState) {
-            setDisplayedLikeCount(displayedLikeCount + 1);
-            await likeArt(_id.toString(), user); // Appelle la fonction likeArt si on aime l'oeuvre
-        } else {
-            setDisplayedLikeCount(displayedLikeCount - 1);
-            await dislikeArt(_id.toString(), user); // Appelle la fonction dislikeArt si on enlève le like
+        setUserNeeded(true);
+        if (connected) {
+            const newLikedState = !liked;
+            setLiked(newLikedState);
+            if (newLikedState) {
+                setDisplayedLikeCount(displayedLikeCount + 1);
+                await likeArt(_id.toString(), user); // Appelle la fonction likeArt si on aime l'oeuvre
+            } else {
+                setDisplayedLikeCount(displayedLikeCount - 1);
+                await dislikeArt(_id.toString(), user); // Appelle la fonction dislikeArt si on enlève le like
+            }
         }
     };
     const handleListClick = () => {
