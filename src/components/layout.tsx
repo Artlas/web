@@ -309,7 +309,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 {userMenu && (
                                     <div
                                         className={`absolute right-0 ${
-                                            user ? "mt-[262px]" : "mt-[118px]"
+                                            user ? "mt-[227px]" : "mt-[118px]"
                                         } w-48 bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-b-md border-2 border-solid border-t-0 border-stone-200 dark:border-stone-800 z-50 overflow-hidden`}
                                     >
                                         <div className="py-1">
@@ -330,14 +330,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                     >
                                                         <FaUserFriends className="mr-2" size={16} />
                                                         Mes abonnements
-                                                    </Link>
-                                                    <Link
-                                                        href="/mylists"
-                                                        className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
-                                                        id="openMyListsLink"
-                                                    >
-                                                        <FaTableList className="mr-2" size={16} />
-                                                        Mes listes
                                                     </Link>
                                                     <Link
                                                         href="/settings"
