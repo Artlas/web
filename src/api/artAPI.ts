@@ -357,7 +357,14 @@ export const getArtLikedByUser = async (userId: string) => {
             },
             body: JSON.stringify(requestBody),
         });
-        const result = await response.json();
+        let result;
+        if (response.status == 201) {
+            console.log(response);
+            result = await response.json();
+        }
+        if (response.status == 401) {
+            return undefined;
+        }
         console.log(result);
         if (result.error) {
             alert(result.error);

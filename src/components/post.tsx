@@ -70,7 +70,11 @@ const Post: React.FC<Oeuvre & { isLiked?: boolean }> = ({
             window.open("data:image/png;base64," + image.toString("base64"));
         }
     };
-
+    useEffect(() => {
+        if (user && user?.liked?.includes(_id.toString())) {
+            setLiked(true);
+        }
+    }, []);
     useEffect(() => {
         if (!illustration || illustration.length === 0) {
             setimageLoading(true);

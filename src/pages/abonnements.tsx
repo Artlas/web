@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import { Friend } from "../components/profileDes";
 import { UserContext } from "../components/userContext";
 import E404 from "./404";
+import { retrieveFollowedArtists } from "../utils/communityHandler";
 
 const Abonnements: React.FC = () => {
     const { user, userNeeded, connected, logout } = useContext(UserContext);
+
+    const [followedArtists, setFollowedArtists] = useState(null);
     const breakpointColumnsObj = {
         default: 6,
         1100: 6,
@@ -15,18 +18,22 @@ const Abonnements: React.FC = () => {
     };
     //! This is a function to retrieve the followed artists (id and photos)
     //const followedArtists = await retrieveFollowedArtists(user?._id || "");
-    /*
+
     useEffect(() => {
         const fetchData = async () => {
             if (user?.username) {
-                //! This is a function to retrieve the followed artists (id and photos)
                 const artists = await retrieveFollowedArtists(user.username);
-                setFollowedArtists(artists);
+                if (artists !== undefined) {
+                    setFollowedArtists(artists);
+                } else {
+                    console.log("No artists found");
+                }
             }
         };
         fetchData();
         console.log(followedArtists);
-    }, [user?.username]);*/
+    }, [user?.username]);
+
     return connected ? (
         <div className="container mx-auto">
             <h2 className="text-2xl font-semibold">Mes abonnements</h2>

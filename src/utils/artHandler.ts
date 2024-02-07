@@ -2,11 +2,18 @@ import { getArtsBasedOnIDFromDb, getArtLikedByUser } from "../api/artAPI";
 
 export const getArtOfArtistBasedOnId = async (id: string) => {
     const artByArtist = await getArtsBasedOnIDFromDb(id);
-    console.log(artByArtist);
-    return artByArtist;
+    if (artByArtist === undefined) {
+        return undefined;
+    } else {
+        return artByArtist;
+    }
 };
 export const retrieveArtLikedByUser = async (userId: string) => {
     const artLikedByArtist = await getArtLikedByUser(userId);
-    console.log(artLikedByArtist);
-    return artLikedByArtist;
+    console.log("type of", typeof artLikedByArtist);
+    if (artLikedByArtist === undefined) {
+        return undefined;
+    } else {
+        return artLikedByArtist;
+    }
 };

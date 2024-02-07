@@ -48,13 +48,21 @@ export default function Profile() {
         if (user?.username && posts.length === 0 && likes.length === 0) {
             const fetchData = async () => {
                 let data = await getArtOfArtistBasedOnId(user?.username || "");
-                sortPostsByMostRecentPostDate(data);
-                setPosts(data);
-                console.log("Posts:", data);
+                if (data !== undefined) {
+                    sortPostsByMostRecentPostDate(data);
+                    setPosts(data);
+                    console.log("Posts:", data);
+                } else {
+                    console.log("No posts found");
+                }
                 data = await retrieveArtLikedByUser(user?.username || "");
-                sortPostsByMostRecentPostDate(data);
-                setLikes(data);
-                console.log("Likes:", data);
+                if (data !== undefined) {
+                    sortPostsByMostRecentPostDate(data);
+                    setLikes(data);
+                    console.log("Likes:", data);
+                } else {
+                    console.log("No liked posts found");
+                }
             };
             fetchData();
         }
@@ -90,23 +98,23 @@ export default function Profile() {
     }
 
     //TODO
-    /*useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
             if (user?.username) {
                 //! This is a function to retrieve the followed artists (id and photos)
                 const artists = await retrieveFollowedArtists(user.username);
-                setFollowedArtists(artists);
-                //! This function to retrieve the arts of the artist based on his id.
-                const artistArts = await getArtOfArtistBasedOnId(user.username);
-                setArts(artistArts);
+                if (artists !== undefined) {
+                    setFollowedArtists(artists);
+                } else {
+                    console.log("Error while retrieving followed artists");
+                }
             }
         };
 
         fetchData();
-        console.log(followedArtists);
-        console.log(arts);
-    }, [user?.username]);
-*/
+        console.log("Follow:", followedArtists);
+    }, []);
+
     useEffect(() => {
         setAutoPlayDiaporamas(autoPlaying);
     }, [autoPlaying, setAutoPlayDiaporamas]);

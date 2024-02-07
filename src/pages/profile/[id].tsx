@@ -64,9 +64,13 @@ export default function Profile({ user }: any) {
                 setPosts(data);
                 console.log("Posts:", data);
                 data = await retrieveArtLikedByUser(user?.id || "");
-                sortPostsByMostRecentPostDate(data);
-                setLikes(data);
-                console.log("Likes:", data);
+                if (data.length > 0) {
+                    sortPostsByMostRecentPostDate(data);
+                    setLikes(data);
+                    console.log("Likes:", data);
+                } else {
+                    console.log("No likes found");
+                }
             };
             fetchData();
         }

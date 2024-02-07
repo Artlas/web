@@ -55,7 +55,7 @@ export const unfollowArtist = async (id: string, user: any) => {
 export const retrieveFollowedArtistsFromDB = async (userId: string) => {
     const retrieveFollowedArtistsEndpoint = getApiURL() + apiConfig.RETRIEVE_FOLLOWED_ARTISTS_ENDPOINT;
     let requestBody = {
-        userId: userId,
+        id: userId,
     };
     try {
         let response = await fetch(retrieveFollowedArtistsEndpoint, {
@@ -68,8 +68,7 @@ export const retrieveFollowedArtistsFromDB = async (userId: string) => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
         return result;
     } catch (error) {
