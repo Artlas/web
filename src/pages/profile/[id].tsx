@@ -12,29 +12,16 @@ import { getAllUsers, retrieveInfoUserById } from "@/src/api/userAPI";
 import { getArtsBasedOnIDFromDb } from "@/src/api/artAPI";
 import { getArtOfArtistBasedOnId, retrieveArtLikedByUser } from "@/src/utils/artHandler";
 import { followArtist, unfollowArtist } from "@/src/api/commuAPI";
+import { FaUserPlus, FaUserCheck } from "react-icons/fa6";
+import { retrieveFollowedArtists } from "@/src/utils/communityHandler";
 
-//TODO: replace every temporary item by the real data from the database:
-/*
- * - user
- * - posts
- * - liked
- * - friends
- */
-
-//!
-/**
- * DANS user on a :
- * id
- * la photo de profil
- * la liste d'id des follow
- * la galerie
- * la liste des oeuvres liké
- */
 export default function Profile({ user }: any) {
     const [section, setSection] = useState("post");
     const [posts, setPosts] = useState<Oeuvre[]>([]);
     const [likes, setLikes] = useState<Oeuvre[]>([]);
     const [galerie, setGalerie] = useState<Oeuvre[]>([]);
+    const [following, setFollowing] = useState<boolean>(false);
+    const [followings, setFollowings] = useState<any[]>([]);
     const handleItemClickPost = () => {
         setSection("post");
     };
@@ -53,10 +40,10 @@ export default function Profile({ user }: any) {
             try {
                 if (isFollowing) {
                     await unfollowArtist(user?.id, currentUser);
-                    //TODO changer l'apparence de suivi a suivre
+                    setFollowing(false);
                 } else {
                     await followArtist(user?.id, currentUser);
-                    //TODO changer l'apparence de suivre a suivi
+                    setFollowing(true);
                 }
             } catch (error) {
                 console.error("Erreur lors de la mise à jour de l'état de suivi :", error);
@@ -93,10 +80,14 @@ export default function Profile({ user }: any) {
             };
             fetchData();
         }
+        if (currentUser && currentUser.friends !== undefined) {
+            setFollowing(currentUser.friends.includes(user?.id));
+            console.log("Utilisateurs suivis:", currentUser.friends);
+        }
     }, []);
 
     useEffect(() => {
-        if (galerie.length === 0) {
+        if (galerie.length === 0 && posts.length > 0) {
             const fetchData = async () => {
                 let data = [] as Oeuvre[];
                 posts.forEach((post) => {
@@ -124,24 +115,21 @@ export default function Profile({ user }: any) {
         }
     }
 
-    //TODO
-    /*
     useEffect(() => {
         const fetchData = async () => {
-            if (user?.username) {
-                //! This is a function to retrieve the followed artists (id and photos)
-                const artists = await retrieveFollowedArtists(user.username);
-                setFollowedArtists(artists);
-                //! This function to retrieve the arts of the artist based on his id.
-                const artistArts = await getArtOfArtistBasedOnId(user.username);
-                setArts(artistArts);
+            if (user?.id) {
+                const artists = await retrieveFollowedArtists(user?.id);
+                if (artists !== undefined) {
+                    console.log("Artists found:", artists);
+                    setFollowings(artists);
+                } else {
+                    console.log("No artists found");
+                }
             }
         };
-
         fetchData();
-        console.log(followedArtists);
-        console.log(arts);
-    }, [user?.username]);*/
+    }, [user?.id]);
+
     const breakpointColumnsObj = {
         default: 1,
         2600: 4,
@@ -159,48 +147,6 @@ export default function Profile({ user }: any) {
     }
 
     fetchUserArts();
-    // TODO
-    // fetch les oeuvres de l'"artiste" pour les afficher
-    const tempPost2: Oeuvre = {
-        _id: 1,
-        title: "C'est très joli",
-        description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
-        category: "Photographie",
-        subCategory: "Photos",
-        // illustration: ["https://picsum.photos/650/1100", "https://picsum.photos/1455/500"],
-        postDate: new Date(),
-        releaseDate: new Date(),
-        isMediaTypeImages: true,
-        likeCount: 0,
-        author: "Jean-Michel",
-    };
-    const tempPost3: Oeuvre = {
-        _id: 1,
-        title: "C'est très joli",
-        description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
-        category: "Photographie",
-        subCategory: "Photos",
-        // illustration: ["https://picsum.photos/1600/900", "https://picsum.photos/1455/800", "https://picsum.photos/469/700"],
-        postDate: new Date(),
-        releaseDate: new Date(),
-        isMediaTypeImages: true,
-        likeCount: 0,
-        author: "Jean-Michel",
-    };
-    const tempPost4: Oeuvre = {
-        _id: 1,
-        title: "C'est très joli",
-        description:
-            "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan. On essaye avec une deco un peu plus longue pour voir ce que ça donne avec un texte plus long, et beaucoup plus de mots, parce que là c'est vraiment pas assez long. Un peu de Wikipédia : La photographie de paysage est un genre de photographie dont l'objet est la prise de vue de paysage. Elle est, avec la photographie de famille et le portrait, un des genres de photographie artistique les plus pratiqués par les photographes amateurs. Il faut distinguer la photographie de paysages naturels de celle de paysages urbains.",
-        category: "Photographie",
-        subCategory: "Photos",
-        // illustration: ["https://picsum.photos/1600/800"],
-        postDate: new Date(),
-        releaseDate: new Date(),
-        likeCount: 0,
-        author: "Jean-Michel",
-        isMediaTypeImages: true,
-    };
 
     return (
         <div className="h-full w-full">
@@ -213,25 +159,33 @@ export default function Profile({ user }: any) {
                             preference={user?.favoritCat || "Photographie"}
                             account_birthday="17/11/2023"
                             FollowButton={
-                                <button
-                                    type="button"
-                                    id="followButton"
-                                    onClick={handleFollowClick}
-                                    className="bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-stone-800 dark:hover:bg-gray-200 dark:active:bg-gray-300 active:bg-stone-900 px-4 p-2 font-semibold"
-                                >
-                                    {/*user && user.following.contains */}
-                                    Suivre
-                                </button>
+                                currentUser?.username !== user?.id && (
+                                    <button
+                                        type="button"
+                                        id="followButton"
+                                        onClick={handleFollowClick}
+                                        className={`bg-black dark:bg-white text-white dark:text-black rounded-lg ${
+                                            following
+                                                ? "hover:bg-red-700 dark:hover:bg-red-300 dark:active:bg-red-400 active:bg-red-800 "
+                                                : "hover:bg-stone-800 dark:hover:bg-gray-200 dark:active:bg-gray-300 active:bg-stone-900"
+                                        } px-4 p-2 font-semibold`}
+                                    >
+                                        {following ? (
+                                            <span className="flex flex-row items-center">
+                                                Suivi <FaUserCheck className="ml-2" />
+                                            </span>
+                                        ) : (
+                                            <span className="flex flex-row items-center">
+                                                Suivre <FaUserPlus className="ml-2" />
+                                            </span>
+                                        )}
+                                    </button>
+                                )
                             }
                         />
                         <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Les abonnements de {user?.id}</h2>
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="King Julian" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Fred" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Anna" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Alice" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Bob" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Julia" />
+                            {followings && followings.length > 0 && followings.map((artist) => <Friend key={artist.id} photoProfile={artist.image} userName={artist.id} />)}
                         </div>
                     </div>
                     <div className="flex flex-col px-1">

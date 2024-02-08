@@ -28,7 +28,7 @@ export default function Profile() {
     const [likes, setLikes] = useState<Oeuvre[]>([]);
     const [galerie, setGalerie] = useState<Oeuvre[]>([]);
     const [section, setSection] = useState("post");
-    const [followedArtists, setFollowedArtists] = useState(null);
+    const [followings, setFollowings] = useState<any[]>([]);
     const [arts, setArts] = useState(null);
     const handleItemClickPost = () => {
         setSection("post");
@@ -103,7 +103,7 @@ export default function Profile() {
                 const artists = await retrieveFollowedArtists(user.username);
                 if (artists !== undefined) {
                     console.log("Artists found:", artists);
-                    setFollowedArtists(artists);
+                    setFollowings(artists);
                 } else {
                     console.log("No artists found");
                 }
@@ -165,9 +165,7 @@ export default function Profile() {
                         <Description photoProfile={user?.image || "/pp-image-ex.jpg"} userName={user?.username || "Jean-Michel"} preference={user?.favoritCat || "Art"} account_birthday="17/11/2023" />
                         <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Mes abonnements</h2>
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Anna" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Encore_Anna" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Jean-Michel" />
+                            {followings && followings.length > 0 && followings.map((artist) => <Friend key={artist.id} userName={artist.id} photoProfile={artist.image} />)}
                         </div>
                     </div>
                     <div className="flex flex-col px-1 w-full">
@@ -242,25 +240,13 @@ export default function Profile() {
                                 <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" author="azerty" listId="la3" />
                             </div>
                         )}
-                        {/*section === "galerie" && (
+                        {section === "galerie" && (
                             <div className="">
                                 <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
                                     {galerie && galerie.length > 0 && galerie.map((post) => <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={false} />)}
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
                                 </Masonry>
                             </div>
-                        )*/}
+                        )}
                     </div>
                 </div>
             </main>
