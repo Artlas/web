@@ -97,23 +97,20 @@ export default function Profile() {
         }
     }
 
-    //TODO
     useEffect(() => {
         const fetchData = async () => {
             if (user?.username) {
-                //! This is a function to retrieve the followed artists (id and photos)
                 const artists = await retrieveFollowedArtists(user.username);
                 if (artists !== undefined) {
+                    console.log("Artists found:", artists);
                     setFollowedArtists(artists);
                 } else {
-                    console.log("Error while retrieving followed artists");
+                    console.log("No artists found");
                 }
             }
         };
-
         fetchData();
-        console.log("Follow:", followedArtists);
-    }, []);
+    }, [user?.username]);
 
     useEffect(() => {
         setAutoPlayDiaporamas(autoPlaying);
@@ -245,7 +242,7 @@ export default function Profile() {
                                 <Liste listeName="Liste des oeuvres à voir" picture="/pp-image-ex.jpg" author="azerty" listId="la3" />
                             </div>
                         )}
-                        {section === "galerie" && (
+                        {/*section === "galerie" && (
                             <div className="">
                                 <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
                                     {galerie && galerie.length > 0 && galerie.map((post) => <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={false} />)}
@@ -263,7 +260,7 @@ export default function Profile() {
                                     <DiscoverPost {...tempPost1} autoPlaying={autoPlaying} scaleEffect={false} />
                                 </Masonry>
                             </div>
-                        )}
+                        )*/}
                     </div>
                 </div>
             </main>

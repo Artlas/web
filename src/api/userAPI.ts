@@ -36,7 +36,7 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
             id: userId,
             password: password,
         };
-        console.log(requestBody);
+
         try {
             const response = await fetch(connectEndpoint, {
                 method: "POST",

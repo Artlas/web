@@ -11,6 +11,7 @@ import DiscoverPost from "@/src/components/discoverPost";
 import { getAllUsers, retrieveInfoUserById } from "@/src/api/userAPI";
 import { getArtsBasedOnIDFromDb } from "@/src/api/artAPI";
 import { getArtOfArtistBasedOnId, retrieveArtLikedByUser } from "@/src/utils/artHandler";
+import { followArtist, unfollowArtist } from "@/src/api/commuAPI";
 
 //TODO: replace every temporary item by the real data from the database:
 /*
@@ -44,12 +45,29 @@ export default function Profile({ user }: any) {
         setSection("galerie");
     };
     const { user: currentUser, setUserNeeded } = useContext(UserContext);
-    const handleFollowClick = () => {
+
+    const handleFollowClick = async () => {
         if (currentUser && currentUser.friends !== undefined) {
-            currentUser.friends = currentUser.friends.includes(user?.id) ? currentUser.friends.filter((friendId) => friendId !== user?.id) : [...currentUser.friends, user?.id];
-            //TODO: update the user in the database
+            const isFollowing = currentUser.friends.includes(user?.id);
+            currentUser.friends = isFollowing ? currentUser.friends.filter((friendId) => friendId !== user?.id) : [...currentUser.friends, user?.id];
+            try {
+                if (isFollowing) {
+                    await unfollowArtist(user?.id, currentUser);
+                    //TODO changer l'apparence de suivi a suivre
+                } else {
+                    await followArtist(user?.id, currentUser);
+                    //TODO changer l'apparence de suivre a suivi
+                }
+            } catch (error) {
+                console.error("Erreur lors de la mise à jour de l'état de suivi :", error);
+            }
         } else if (currentUser) {
             currentUser.friends = [user?.id];
+            try {
+                await followArtist(user?.id, currentUser);
+            } catch (error) {
+                console.error("Erreur lors du suivi de l'utilisateur :", error);
+            }
         } else {
             setUserNeeded(true);
             console.error("currentUser is undefined");
@@ -64,7 +82,8 @@ export default function Profile({ user }: any) {
                 setPosts(data);
                 console.log("Posts:", data);
                 data = await retrieveArtLikedByUser(user?.id || "");
-                if (data.length > 0) {
+
+                if (data !== undefined && data.length > 0) {
                     sortPostsByMostRecentPostDate(data);
                     setLikes(data);
                     console.log("Likes:", data);

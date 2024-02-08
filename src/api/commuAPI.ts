@@ -3,9 +3,10 @@ import apiConfig from "./apiConfig.json";
 
 export const followArtist = async (id: string, user: any) => {
     const followArtistEndpoint = getApiURL() + apiConfig.FOLLOW_ARTIST_ENDPOINT;
+    console.log("In follow");
     let requestBody = {
-        id: id,
-        user: user,
+        artistId: id,
+        userId: user.username,
     };
     try {
         let response = await fetch(followArtistEndpoint, {
@@ -28,9 +29,10 @@ export const followArtist = async (id: string, user: any) => {
 };
 export const unfollowArtist = async (id: string, user: any) => {
     const unfollowArtistEndpoint = getApiURL() + apiConfig.UNFOLLOW_ARTIST_ENDPOINT;
+    console.log("In unfollow");
     let requestBody = {
-        id: id,
-        user: user,
+        artistId: id,
+        userId: user.username,
     };
     try {
         let response = await fetch(unfollowArtistEndpoint, {
@@ -54,6 +56,7 @@ export const unfollowArtist = async (id: string, user: any) => {
 
 export const retrieveFollowedArtistsFromDB = async (userId: string) => {
     const retrieveFollowedArtistsEndpoint = getApiURL() + apiConfig.RETRIEVE_FOLLOWED_ARTISTS_ENDPOINT;
+
     let requestBody = {
         id: userId,
     };

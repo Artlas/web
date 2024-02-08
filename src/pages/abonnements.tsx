@@ -24,14 +24,15 @@ const Abonnements: React.FC = () => {
             if (user?.username) {
                 const artists = await retrieveFollowedArtists(user.username);
                 if (artists !== undefined) {
+                    console.log(artists);
                     setFollowedArtists(artists);
+                    console.log(followedArtists);
                 } else {
                     console.log("No artists found");
                 }
             }
         };
         fetchData();
-        console.log(followedArtists);
     }, [user?.username]);
 
     return connected ? (

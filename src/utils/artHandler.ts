@@ -10,7 +10,7 @@ export const getArtOfArtistBasedOnId = async (id: string) => {
 };
 export const retrieveArtLikedByUser = async (userId: string) => {
     const artLikedByArtist = await getArtLikedByUser(userId);
-    console.log("type of", typeof artLikedByArtist);
+
     if (artLikedByArtist === undefined) {
         return undefined;
     } else {

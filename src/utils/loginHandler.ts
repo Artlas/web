@@ -32,7 +32,7 @@ export async function connectUser(hashedPassword: string, username?: string, ema
         } else {
             throw new Error("Email et username sont nuls");
         }
-        console.log("data", data);
+
         if (!data) {
             throw new Error("Aucune donnée utilisateur retournée");
         }

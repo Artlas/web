@@ -10,7 +10,7 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getAllArt();
-            console.log(data);
+
             sortPostsByMostRecentPostDate(data);
             setPosts(data);
         };
