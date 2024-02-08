@@ -184,6 +184,7 @@ export default function Profile({ user }: any) {
                             }
                         />
                         <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Les abonnements de {user?.id}</h2>
+                        {!followings || followings.length === 0 ? <p>Cet utilisateur ne suit personne pour le moment</p> : null}
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">
                             {followings && followings.length > 0 && followings.map((artist) => <Friend key={artist.id} photoProfile={artist.image} userName={artist.id} />)}
                         </div>

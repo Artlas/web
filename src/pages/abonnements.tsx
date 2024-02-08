@@ -8,7 +8,7 @@ import { retrieveFollowedArtists } from "../utils/communityHandler";
 const Abonnements: React.FC = () => {
     const { user, userNeeded, connected, logout } = useContext(UserContext);
 
-    const [followedArtists, setFollowedArtists] = useState(null);
+    const [followedArtists, setFollowedArtists] = useState<any[] | undefined>(undefined);
     const breakpointColumnsObj = {
         default: 6,
         1100: 6,
@@ -40,14 +40,7 @@ const Abonnements: React.FC = () => {
             <h2 className="text-2xl font-semibold">Mes abonnements</h2>
             <div className="mx-auto w-full">
                 <Masonry className="flex flex-wrap mt-4 mx-auto" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
-                    <Friend photoProfile="https://picsum.photos/200" userName="Jean-Michel" />
-                    <Friend photoProfile="https://picsum.photos/201" userName="Anna" />
-                    <Friend photoProfile="https://picsum.photos/202" userName="Aurélien" />
-                    <Friend photoProfile="https://picsum.photos/203" userName="Nicolas_UwU" />
-                    <Friend photoProfile="https://picsum.photos/204" userName="Adrien" />
-                    <Friend photoProfile="https://picsum.photos/205" userName="Gertrude" />
-                    <Friend photoProfile="https://picsum.photos/206" userName="Tyril" />
-                    <Friend photoProfile="https://picsum.photos/207" userName="Quentin" />
+                    {followedArtists && followedArtists?.map((artist) => <Friend key={artist._id} photoProfile={artist.image} userName={artist.id} />)}
                 </Masonry>
             </div>
         </div>

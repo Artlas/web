@@ -164,6 +164,7 @@ export default function Profile() {
                     <div className="flex flex-col lg:flex-1 w-full lg:items-end lg:pl-1">
                         <Description photoProfile={user?.image || "/pp-image-ex.jpg"} userName={user?.username || "Jean-Michel"} preference={user?.favoritCat || "Art"} account_birthday="17/11/2023" />
                         <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Mes abonnements</h2>
+                        {!followings || followings.length === 0 ? <p>Vous ne suivez personne pour le moment</p> : null}
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">
                             {followings && followings.length > 0 && followings.map((artist) => <Friend key={artist.id} userName={artist.id} photoProfile={artist.image} />)}
                         </div>
