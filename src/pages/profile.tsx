@@ -129,34 +129,6 @@ export default function Profile() {
         500: 1,
     };
 
-    const tempPost1: Oeuvre = {
-        _id: 1,
-        title: "C'est très joli",
-        description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
-        category: "Photographie",
-        subCategory: "Photos",
-        // illustration: ["https://picsum.photos/450", "https://picsum.photos/1455", "https://picsum.photos/464/700", "https://picsum.photos/1450/700"],
-        postDate: new Date(),
-        releaseDate: new Date(),
-        isMediaTypeImages: true,
-        author: "Jean-Michel",
-        likeCount: 0,
-    };
-
-    const tempPost2: Oeuvre = {
-        _id: 2,
-        title: "Star Wars",
-        description: "Star Wars 3 trailer",
-        category: "Cinema",
-        subCategory: "Films",
-        video: "https://youtu.be/t1qtvKYwTV0",
-        postDate: new Date(),
-        releaseDate: new Date(),
-        isMediaTypeImages: false,
-        author: "Jean-Michel",
-        likeCount: 0,
-    };
-
     return connected ? (
         <div className="h-full w-full">
             <main className="flex w-full">
@@ -219,21 +191,10 @@ export default function Profile() {
                         <hr className="rounded-full border-2 mt-1 border-black dark:border-white w-full max-w-sm mx-auto" />
                         {section === "post" && (
                             <div className="">
-                                <div className="max-w-[800px] mx-auto">
-                                    {posts && posts.length > 0 && posts.map((post) => <Post key={post._id} {...post} />)}
-
-                                    <Post {...tempPost1} likeCount={42} />
-                                    <Post {...tempPost2} />
-                                </div>
+                                <div className="max-w-[800px] mx-auto">{posts && posts.length > 0 && posts.map((post) => <Post key={post._id} {...post} />)}</div>
                             </div>
                         )}
-                        {section === "liked" && (
-                            <div className="max-w-[800px] mx-auto">
-                                {likes && likes.length > 0 && likes.map((post) => <Post key={post._id} {...post} isLiked />)}
-                                <Post {...tempPost1} likeCount={42} isLiked />
-                                <Post {...tempPost2} isLiked />
-                            </div>
-                        )}
+                        {section === "liked" && <div className="max-w-[800px] mx-auto">{likes && likes.length > 0 && likes.map((post) => <Post key={post._id} {...post} isLiked />)}</div>}
                         {section === "liste" && (
                             <div className="max-w-[800px] mx-auto w-full">
                                 <Liste listeName="Mes sculptures préférées" picture="/pp-image-ex.jpg" author="azerty" listId="la1" />
