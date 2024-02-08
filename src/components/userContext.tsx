@@ -34,7 +34,7 @@ export interface UserInfo {
     acceptCookies?: boolean;
     autoPlayDiaporamas?: boolean;
     preferredTheme?: string;
-    friends?: string[];
+    following?: string[];
     gallery?: string[];
     lists?: [_id: string, title: string, description: string, arts: string[]];
     liked?: string[];

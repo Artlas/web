@@ -13,7 +13,7 @@ export function setConnectedUser(userData: any): UserInfo {
         birthdate: userData?.birthdate ?? "",
         token: userData?.token ?? "",
         permission: userData?.permission ?? "",
-        friends: userData?.friends ?? "",
+        following: userData?.folowing ?? "",
         gallery: userData?.gallery ?? "",
         lists: userData?.lists ?? "",
         liked: userData?.likedPosts ?? "",

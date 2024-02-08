@@ -34,9 +34,9 @@ export default function Profile({ user }: any) {
     const { user: currentUser, setUserNeeded } = useContext(UserContext);
 
     const handleFollowClick = async () => {
-        if (currentUser && currentUser.friends !== undefined) {
-            const isFollowing = currentUser.friends.includes(user?.id);
-            currentUser.friends = isFollowing ? currentUser.friends.filter((friendId) => friendId !== user?.id) : [...currentUser.friends, user?.id];
+        if (currentUser && currentUser.following !== undefined) {
+            const isFollowing = currentUser.following.includes(user?.id);
+            currentUser.following = isFollowing ? currentUser.following.filter((friendId) => friendId !== user?.id) : [...currentUser.following, user?.id];
             try {
                 if (isFollowing) {
                     await unfollowArtist(user?.id, currentUser);
@@ -49,7 +49,7 @@ export default function Profile({ user }: any) {
                 console.error("Erreur lors de la mise à jour de l'état de suivi :", error);
             }
         } else if (currentUser) {
-            currentUser.friends = [user?.id];
+            currentUser.following = [user?.id];
             try {
                 await followArtist(user?.id, currentUser);
             } catch (error) {
@@ -80,9 +80,9 @@ export default function Profile({ user }: any) {
             };
             fetchData();
         }
-        if (currentUser && currentUser.friends !== undefined) {
-            setFollowing(currentUser.friends.includes(user?.id));
-            console.log("Utilisateurs suivis:", currentUser.friends);
+        if (currentUser && currentUser.following !== undefined) {
+            setFollowing(currentUser.following.includes(user?.id));
+            console.log("Utilisateurs suivis:", currentUser.following);
         }
     }, []);
 
