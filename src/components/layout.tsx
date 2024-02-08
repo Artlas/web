@@ -125,7 +125,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         name !== "post" &&
         name !== "nouveau" &&
         name !== "profil" &&
-        name !== "amis" &&
+        name !== "abonnements" &&
         name !== "liste" &&
         name !== "paramè tres"
             ? setOutlineLibrary(true)
@@ -275,7 +275,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         {user ? (
                                             <div className="w-[44px] h-[44px] rounded-full bg-stone-300 dark:bg-stone-700">
                                                 {user.image ? (
-                                                    <Image src={user?.image} alt="Profile picture" width={44} height={44} className="rounded-full" />
+                                                    <Image src={"data:image/*;base64," + user?.image} alt="Profile picture" width={44} height={44} className="rounded-full" />
                                                 ) : (
                                                     <FaUserCircle size={44} className="w-8 h-8 sm:w-11 sm:h-11" />
                                                 )}
@@ -309,7 +309,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 {userMenu && (
                                     <div
                                         className={`absolute right-0 ${
-                                            user ? "mt-[262px]" : "mt-[118px]"
+                                            user ? "mt-[227px]" : "mt-[118px]"
                                         } w-48 bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-b-md border-2 border-solid border-t-0 border-stone-200 dark:border-stone-800 z-50 overflow-hidden`}
                                     >
                                         <div className="py-1">
@@ -324,20 +324,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                                         Profil
                                                     </Link>
                                                     <Link
-                                                        href="/amis"
+                                                        href="/abonnements"
                                                         className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
                                                         id="openFriendsLink"
                                                     >
                                                         <FaUserFriends className="mr-2" size={16} />
-                                                        Mes amis
-                                                    </Link>
-                                                    <Link
-                                                        href="/mylists"
-                                                        className="flex px-4 py-2 text-sm hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800"
-                                                        id="openMyListsLink"
-                                                    >
-                                                        <FaTableList className="mr-2" size={16} />
-                                                        Mes listes
+                                                        Mes abonnements
                                                     </Link>
                                                     <Link
                                                         href="/settings"
@@ -433,7 +425,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 className="hover:text-gray-800 hover:bg-gray-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 hover:rounded-full z-30 focus:rounded-full focus:text-grey-darker p-1 my-1 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-stone-500 px-[7px]"
                                 id="openUserMenuMobileLink"
                             >
-                                {name === "profile" || name === "profil" || name === "amis" || name === "paramè tres" ? (
+                                {name === "profile" || name === "profil" || name === "abonnements" || name === "paramè tres" ? (
                                     <FaUser size={44} className="w-7 h-7" />
                                 ) : (
                                     <FaRegUser size={44} className="w-7 h-7" />

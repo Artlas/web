@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Oeuvre } from "@/types/oeuvre";
@@ -11,17 +11,47 @@ import ReactPlayer from "react-player";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { likeArt, dislikeArt } from "../api/actionUserAPI";
+import { UserContext } from "./userContext";
+import { retrieveInfoUserById } from "../api/userAPI";
 
-const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory, illustration, video, postDate, releaseDate, isMediaTypeImages, author, likeCount }) => {
-    const [liked, setLiked] = useState(false);
+const Post: React.FC<Oeuvre & { isLiked?: boolean }> = ({
+    _id,
+    title,
+    description,
+    category,
+    subCategory,
+    illustration,
+    video,
+    postDate,
+    releaseDate,
+    isMediaTypeImages,
+    author,
+    likeCount,
+    isLiked,
+}) => {
+    const { user, userNeeded, setUserNeeded, connected, logout, acceptCookies, setAcceptCookies, autoPlayDiaporamas, setAutoPlayDiaporamas } = useContext(UserContext);
+    const [liked, setLiked] = useState(isLiked || false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount);
     const [listed, setListed] = useState(false);
     const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const [imageLoading, setimageLoading] = useState(false);
-    const handleLikeClick = () => {
-        setLiked(!liked);
-        liked ? setDisplayedLikeCount(displayedLikeCount - 1) : setDisplayedLikeCount(displayedLikeCount + 1);
+    const [imageAuthor, setImageAuthor] = useState("");
+    const handleLikeClick = async () => {
+        // handle the like button click
+        setUserNeeded(true);
+        if (connected) {
+            const newLikedState = !liked;
+            setLiked(newLikedState);
+            if (newLikedState) {
+                setDisplayedLikeCount(displayedLikeCount + 1);
+                await likeArt(_id.toString(), user); // Appelle la fonction likeArt si on aime l'oeuvre
+            } else {
+                setDisplayedLikeCount(displayedLikeCount - 1);
+                await dislikeArt(_id.toString(), user); // Appelle la fonction dislikeArt si on enlève le like
+            }
+        }
     };
     const handleListClick = () => {
         setListed(!listed);
@@ -29,7 +59,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
     let router = useRouter();
 
     const handlePostClick = () => {
-        console.log("Clique sur l'arrière-plan de la div");
+        // console.log("Clique sur l'arrière-plan de la div");
         router.push(`/post/${_id}`);
     };
 
@@ -41,6 +71,13 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
         }
     }, [illustration, imageLoading]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await retrieveInfoUserById(author);
+            setImageAuthor(data.image);
+        };
+        fetchData();
+    }, [author]); // Ajoutez author comme dépendance
     return (
         <div
             className="bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-950 rounded-xl shadow-lg dark:shadow-none border dark:border-stone-700 p-4 mt-4 cursor-pointer"
@@ -72,7 +109,7 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                 }}
                 id="postCategoryContainer"
             >
-                <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined} small />
+                <AuthorItem imageSrc={imageAuthor} authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined} small />
                 <div className="flex">
                     <Link href={`/${category.toLowerCase()}/all`} id={`post${_id}CategoryLink`}>
                         <span className="bg-stone-200 text-gray-700 dark:bg-stone-800 dark:text-gray-200 hover:bg-stone-300 hover:dark:bg-stone-700 shadow-sm py-1 px-3 rounded-full mx-2">

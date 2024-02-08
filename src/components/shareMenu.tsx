@@ -32,7 +32,7 @@ const ShareComponent = ({ postLink, isOpen, detailed }: { postLink: string; isOp
             <div
                 className={`fixed ${
                     detailed ? "mt-[35%] ml-[16%]" : "mt-56 ml-[35%] sm:ml-[50%] md:ml-[60%] xl:ml-[35%]"
-                } flex flex-col p-1 bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-md border-2 border-solid border-stone-200 dark:border-stone-800 z-50 overflow-hidden`}
+                } flex flex-col p-1 bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-md border-2 border-solid border-stone-200 dark:border-stone-800 z-50 overflow-visible`}
                 ref={catMenu}
             >
                 <ListElement icon={<FaLink size={16} className="inline mr-2" />} label="Copier le lien" onClick={handleCopyLinkButtonClick} smallFont />

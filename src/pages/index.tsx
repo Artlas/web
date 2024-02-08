@@ -10,6 +10,7 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getAllArt();
+
             sortPostsByMostRecentPostDate(data);
             setPosts(data);
         };
@@ -17,26 +18,24 @@ export default function Home() {
     }, []);
 
     function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
-        return posts.sort((a, b) => {
-            if (typeof a.postDate === "string") {
-                a.postDate = new Date(a.postDate);
-            }
-            if (typeof b.postDate === "string") {
-                b.postDate = new Date(b.postDate);
-            }
-            return b.postDate.getTime() - a.postDate.getTime();
-        });
+        if (posts.length > 0) {
+            return posts.sort((a, b) => {
+                if (typeof a.postDate === "string") {
+                    a.postDate = new Date(a.postDate);
+                }
+                if (typeof b.postDate === "string") {
+                    b.postDate = new Date(b.postDate);
+                }
+                return b.postDate.getTime() - a.postDate.getTime();
+            });
+        }
     }
 
     return (
         <main className="flex w-full">
             <div className="h-full w-full">
                 <h1 className="text-4xl font-bold dark:text-white">Bienvenue sur Artlas</h1>
-                <div className="max-w-[800px] justify-center mx-auto">
-                    {posts.map((post) => (
-                        <Post key={post._id} {...post} />
-                    ))}
-                </div>
+                <div className="max-w-[800px] justify-center mx-auto">{posts && posts.length > 0 && posts.map((post) => <Post key={post._id} {...post} />)}</div>
             </div>
         </main>
     );

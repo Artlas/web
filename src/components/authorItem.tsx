@@ -4,7 +4,7 @@ import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 
 interface AuthorItemProps {
-    imageSrc?: string;
+    imageSrc?: any | undefined;
     authorName: string;
     releaseDate?: string;
     linkToProfile?: string;
@@ -16,7 +16,7 @@ const AuthorItem: React.FC<AuthorItemProps> = ({ imageSrc, authorName, releaseDa
         <div className="flex items-center ">
             <Link href={linkToProfile || "#"} className="flex p-2 rounded-full hover:bg-stone-200 hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900 items-center">
                 {imageSrc ? (
-                    <Image src={imageSrc} alt="Author" width={small ? 32 : 56} height={small ? 32 : 56} className={`${small ? "w-8 h-8" : "w-14 h-14"} rounded-full mr-3`} />
+                    <Image src={"data:image/*;base64," + imageSrc} alt="Author" width={small ? 32 : 56} height={small ? 32 : 56} className={`${small ? "w-8 h-8" : "w-14 h-14"} rounded-full mr-3`} />
                 ) : (
                     <FaUserCircle className={`${small ? "w-8 h-8" : "w-14 h-14"} rounded-full mr-3`} />
                 )}

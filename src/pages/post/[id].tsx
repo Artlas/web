@@ -13,12 +13,14 @@ import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
 import { GetStaticPropsContext } from "next";
 import Image from "next/image";
+import { retrieveInfoUserById } from "@/src/api/userAPI";
 
 const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
     const [liked, setLiked] = useState(false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(art?.likeCount || 0);
     const [listed, setListed] = useState(false);
     const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
+    const [imageAuthor, setImageAuthor] = useState("");
     const [index, setIndex] = useState(0);
     const handleLikeClick = () => {
         setLiked(!liked);
@@ -33,6 +35,14 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
         console.log("Envoi du message");
         e.currentTarget.reset();
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await retrieveInfoUserById(art.author);
+            setImageAuthor(data.image);
+        };
+        fetchData();
+    }, [art.author]); // A
 
     return art ? (
         <div className="flex flex-col w-full">
@@ -96,7 +106,7 @@ const PostPage: React.FC<{ art: Oeuvre }> = ({ art }) => {
                     <AuthorItem
                         authorName={art.author}
                         releaseDate={art.releaseDate ? new Date(art.releaseDate).toLocaleDateString() : undefined}
-                        imageSrc="https://picsum.photos/200"
+                        imageSrc={imageAuthor}
                         linkToProfile={"/profile/" + art.author}
                     />
                     <div className="flex flex-col p-3 bg-stone-100 dark:bg-stone-950 text-black dark:text-white hover:text-gray-800 hover:bg-stone-200 hover:dark:text-gray-200 hover:dark:bg-stone-800 active:bg-stone-300 active:dark:bg-stone-900 rounded-xl">

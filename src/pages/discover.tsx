@@ -45,15 +45,17 @@ const Profile: React.FC = () => {
     }, []);
 
     function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
-        return posts.sort((a, b) => {
-            if (typeof a.postDate === "string") {
-                a.postDate = new Date(a.postDate);
-            }
-            if (typeof b.postDate === "string") {
-                b.postDate = new Date(b.postDate);
-            }
-            return b.postDate.getTime() - a.postDate.getTime();
-        });
+        if (posts.length > 0) {
+            return posts.sort((a, b) => {
+                if (typeof a.postDate === "string") {
+                    a.postDate = new Date(a.postDate);
+                }
+                if (typeof b.postDate === "string") {
+                    b.postDate = new Date(b.postDate);
+                }
+                return b.postDate.getTime() - a.postDate.getTime();
+            });
+        }
     }
 
     return (
@@ -69,15 +71,9 @@ const Profile: React.FC = () => {
                 </label>
             </div>
             <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
-                {posts.map((post) => (
-                    <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={true} />
-                ))}
-                {posts.map((post) => (
-                    <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={true} />
-                ))}
-                {posts.map((post) => (
-                    <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={true} />
-                ))}
+                {posts && posts.length > 0 && posts.map((post) => <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={true} />)}
+                {posts && posts.length > 0 && posts.map((post) => <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={true} />)}
+                {posts && posts.length > 0 && posts.map((post) => <DiscoverPost key={post._id} {...post} autoPlaying={autoPlaying} scaleEffect={true} />)}
             </Masonry>
         </div>
     );

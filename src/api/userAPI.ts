@@ -36,6 +36,7 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
             id: userId,
             password: password,
         };
+
         try {
             const response = await fetch(connectEndpoint, {
                 method: "POST",
@@ -46,6 +47,7 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
                 body: JSON.stringify(requestBody),
             });
             const result = await response.json();
+            console.log(result);
             if (result.error) {
                 alert(result.error);
                 throw new Error(result.error);
@@ -64,7 +66,7 @@ export const getUserInDatabase = async (password: string, userId?: string, mail?
         return null;
     }
 };
-
+/*
 export const createUserInDatabase = async (userData: any) => {
     const createEndpoint = getApiURL() + apiConfig.REGISTER_USER_ENDPOINT;
     try {
@@ -84,8 +86,38 @@ export const createUserInDatabase = async (userData: any) => {
         console.error("Erreur lors de la création de l’utilisateur:", error);
         throw error;
     }
-};
+};*/
+export const createUserInDatabase = async (userData: any) => {
+    const createEndpoint = getApiURL() + apiConfig.REGISTER_USER_ENDPOINT;
+    let formdata = new FormData();
+    console.log("Before API");
+    console.log(userData);
+    formdata.append("id", userData.id);
+    formdata.append("mail", userData.mail);
+    formdata.append("password", userData.password);
+    formdata.append("firstName", userData.firstName);
+    formdata.append("lastName", userData.lastName);
+    formdata.append("birthdate", userData.birthdate);
+    formdata.append("address", userData.address);
+    formdata.append("image", userData.illustration[0]);
+    formdata.append("favoritCat", userData.favoritCat);
+    formdata.append("permission", userData.permission);
 
+    try {
+        const response = await fetch(createEndpoint, {
+            method: "POST",
+            credentials: "include",
+            body: formdata,
+        });
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur lors de la création de l’utilisateur:", error);
+        throw error;
+    }
+};
 export const deleteUserInDatabase = async (userData: any) => {
     const deleteEndpoint = getApiURL() + apiConfig.DELETE_USER_ENDPOINT;
     try {
@@ -185,7 +217,7 @@ export const checkIfUserExists = async (email: any, id: any) => {
         } else if (response.status === 404) {
             return { userExists: false, message: data.message };
         } else {
-            throw new Error(data.message || "Unexpected response from the server");
+            console.log(data.message || "Unexpected response from the server");
         }
     } catch (error) {
         console.error("Error checking if user exists:", error);

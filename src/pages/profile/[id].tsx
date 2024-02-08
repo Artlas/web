@@ -10,27 +10,18 @@ import { Liste } from "../../components/profileDes";
 import DiscoverPost from "@/src/components/discoverPost";
 import { getAllUsers, retrieveInfoUserById } from "@/src/api/userAPI";
 import { getArtsBasedOnIDFromDb } from "@/src/api/artAPI";
+import { getArtOfArtistBasedOnId, retrieveArtLikedByUser } from "@/src/utils/artHandler";
+import { followArtist, unfollowArtist } from "@/src/api/commuAPI";
+import { FaUserPlus, FaUserCheck } from "react-icons/fa6";
+import { retrieveFollowedArtists } from "@/src/utils/communityHandler";
 
-//TODO: replace every temporary item by the real data from the database:
-/*
- * - user
- * - posts
- * - liked
- * - friends
- */
-
-//!
-/**
- * DANS user on a :
- * id
- * la photo de profil
- * la liste d'id des follow
- * la galerie
- * la liste des oeuvres liké
- */
 export default function Profile({ user }: any) {
-    const birthday = new Date(user?.birthdate || "17/11/2023");
     const [section, setSection] = useState("post");
+    const [posts, setPosts] = useState<Oeuvre[]>([]);
+    const [likes, setLikes] = useState<Oeuvre[]>([]);
+    const [galerie, setGalerie] = useState<Oeuvre[]>([]);
+    const [following, setFollowing] = useState<boolean>(false);
+    const [followings, setFollowings] = useState<any[]>([]);
     const handleItemClickPost = () => {
         setSection("post");
     };
@@ -40,6 +31,104 @@ export default function Profile({ user }: any) {
     const handleItemClickGalerie = () => {
         setSection("galerie");
     };
+    const { user: currentUser, setUserNeeded } = useContext(UserContext);
+
+    const handleFollowClick = async () => {
+        if (currentUser && currentUser.following !== undefined) {
+            const isFollowing = currentUser.following.includes(user?.id);
+            currentUser.following = isFollowing ? currentUser.following.filter((friendId) => friendId !== user?.id) : [...currentUser.following, user?.id];
+            try {
+                if (isFollowing) {
+                    await unfollowArtist(user?.id, currentUser);
+                    setFollowing(false);
+                } else {
+                    await followArtist(user?.id, currentUser);
+                    setFollowing(true);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la mise à jour de l'état de suivi :", error);
+            }
+        } else if (currentUser) {
+            currentUser.following = [user?.id];
+            try {
+                await followArtist(user?.id, currentUser);
+            } catch (error) {
+                console.error("Erreur lors du suivi de l'utilisateur :", error);
+            }
+        } else {
+            setUserNeeded(true);
+            console.error("currentUser is undefined");
+        }
+    };
+
+    useEffect(() => {
+        if (posts.length === 0 && likes.length === 0) {
+            const fetchData = async () => {
+                let data = await getArtOfArtistBasedOnId(user?.id || "");
+                sortPostsByMostRecentPostDate(data);
+                setPosts(data);
+                // console.log("Posts:", data);
+                data = await retrieveArtLikedByUser(user?.id || "");
+
+                if (data !== undefined && data.length > 0) {
+                    sortPostsByMostRecentPostDate(data);
+                    setLikes(data);
+                    // console.log("Likes:", data);
+                } else {
+                    // console.log("No likes found");
+                }
+            };
+            fetchData();
+        }
+        if (currentUser && currentUser.following !== undefined) {
+            setFollowing(currentUser.following.includes(user?.id));
+            // console.log("Utilisateurs suivis:", currentUser.following);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (galerie.length === 0 && posts.length > 0) {
+            const fetchData = async () => {
+                let data = [] as Oeuvre[];
+                posts.forEach((post) => {
+                    post.isInGallery && data.push(post);
+                });
+                sortPostsByMostRecentPostDate(data);
+                setGalerie(data);
+                // console.log("Galerie:", data);
+            };
+            fetchData();
+        }
+    }, [posts]);
+
+    function sortPostsByMostRecentPostDate(posts: Oeuvre[]) {
+        if (posts.length > 0) {
+            return posts.sort((a, b) => {
+                if (typeof a.postDate === "string") {
+                    a.postDate = new Date(a.postDate);
+                }
+                if (typeof b.postDate === "string") {
+                    b.postDate = new Date(b.postDate);
+                }
+                return b.postDate.getTime() - a.postDate.getTime();
+            });
+        }
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (user?.id) {
+                const artists = await retrieveFollowedArtists(user?.id);
+                if (artists !== undefined) {
+                    console.log("Artists found:", artists);
+                    setFollowings(artists);
+                } else {
+                    console.log("No artists found");
+                }
+            }
+        };
+        fetchData();
+    }, [user?.id]);
 
     const breakpointColumnsObj = {
         default: 1,
@@ -53,52 +142,11 @@ export default function Profile({ user }: any) {
     let userArts;
 
     async function fetchUserArts() {
+        console.log(user?.id);
         userArts = await getArtsBasedOnIDFromDb(user?.id);
     }
 
     fetchUserArts();
-    // TODO
-    // fetch les oeuvres de l'"artiste" pour les afficher
-    const tempPost2: Oeuvre = {
-        _id: 1,
-        title: "C'est très joli",
-        description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
-        category: "Photographie",
-        subCategory: "Photos",
-        // illustration: ["https://picsum.photos/650/1100", "https://picsum.photos/1455/500"],
-        postDate: new Date(),
-        releaseDate: new Date(),
-        isMediaTypeImages: true,
-        likeCount: 0,
-        author: "Jean-Michel",
-    };
-    const tempPost3: Oeuvre = {
-        _id: 1,
-        title: "C'est très joli",
-        description: "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan",
-        category: "Photographie",
-        subCategory: "Photos",
-        // illustration: ["https://picsum.photos/1600/900", "https://picsum.photos/1455/800", "https://picsum.photos/469/700"],
-        postDate: new Date(),
-        releaseDate: new Date(),
-        isMediaTypeImages: true,
-        likeCount: 0,
-        author: "Jean-Michel",
-    };
-    const tempPost4: Oeuvre = {
-        _id: 1,
-        title: "C'est très joli",
-        description:
-            "J'aime vraiment beaucoup trop ces photos, elles sont absolument magnifiques, je suis fan. On essaye avec une deco un peu plus longue pour voir ce que ça donne avec un texte plus long, et beaucoup plus de mots, parce que là c'est vraiment pas assez long. Un peu de Wikipédia : La photographie de paysage est un genre de photographie dont l'objet est la prise de vue de paysage. Elle est, avec la photographie de famille et le portrait, un des genres de photographie artistique les plus pratiqués par les photographes amateurs. Il faut distinguer la photographie de paysages naturels de celle de paysages urbains.",
-        category: "Photographie",
-        subCategory: "Photos",
-        // illustration: ["https://picsum.photos/1600/800"],
-        postDate: new Date(),
-        releaseDate: new Date(),
-        likeCount: 0,
-        author: "Jean-Michel",
-        isMediaTypeImages: true,
-    };
 
     return (
         <div className="h-full w-full">
@@ -108,21 +156,37 @@ export default function Profile({ user }: any) {
                         <Description
                             photoProfile={user?.image || "/pp-image-ex.jpg"}
                             userName={user?.id || "Jean-Michel"}
-                            description="Bonjour, je suis une artiste"
-                            preference="Musique"
-                            loisir="Peinture"
-                            birthday={birthday.toLocaleDateString()}
+                            preference={user?.favoritCat || "Photographie"}
                             account_birthday="17/11/2023"
-                            address={user?.address || "Paris"}
+                            FollowButton={
+                                currentUser?.username !== user?.id && (
+                                    <button
+                                        type="button"
+                                        id="followButton"
+                                        onClick={handleFollowClick}
+                                        className={`bg-black dark:bg-white text-white dark:text-black rounded-lg ${
+                                            following
+                                                ? "hover:bg-red-700 dark:hover:bg-red-300 dark:active:bg-red-400 active:bg-red-800 "
+                                                : "hover:bg-stone-800 dark:hover:bg-gray-200 dark:active:bg-gray-300 active:bg-stone-900"
+                                        } px-4 p-2 font-semibold`}
+                                    >
+                                        {following ? (
+                                            <span className="flex flex-row items-center">
+                                                Suivi <FaUserCheck className="ml-2" />
+                                            </span>
+                                        ) : (
+                                            <span className="flex flex-row items-center">
+                                                Suivre <FaUserPlus className="ml-2" />
+                                            </span>
+                                        )}
+                                    </button>
+                                )
+                            }
                         />
-                        <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Les abonnements de {user.username}</h2>
+                        <h2 className="text-xl font-bold mb-2 cursor-text mt-3">Les abonnements de {user?.id}</h2>
+                        {!followings || followings.length === 0 ? <p>Cet utilisateur ne suit personne pour le moment</p> : null}
                         <div className="flex flex-row lg:flex-col w-full lg:w-48 overflow-x-scroll lg:overflow-hidden">
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="King Julian" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Fred" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Anna" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Alice" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Bob" />
-                            <Friend photoProfile="/pp-image-ex.jpg" userName="Julia" />
+                            {followings && followings.length > 0 && followings.map((artist) => <Friend key={artist.id} photoProfile={artist.image} userName={artist.id} />)}
                         </div>
                     </div>
                     <div className="flex flex-col px-1">
@@ -164,33 +228,16 @@ export default function Profile({ user }: any) {
                         <hr className="rounded-full border-2 mt-1 border-black dark:border-white w-full max-w-sm mx-auto" />
                         {section === "post" && (
                             <div className="">
-                                <div className="max-w-[800px] mx-auto">
-                                    <Post {...tempPost2} likeCount={42} />
-                                    <Post {...tempPost3} />
-                                    <Post {...tempPost4} />
-                                </div>
+                                <div className="max-w-[800px] mx-auto">{posts && posts.length > 0 && posts.map((post) => <Post key={post._id} {...post} />)}</div>
                             </div>
                         )}
-                        {section === "liked" && (
-                            <div className="max-w-[800px] mx-auto">
-                                <Post {...tempPost2} />
-                            </div>
-                        )}
+                        {section === "liked" && <div className="max-w-[800px] mx-auto">{likes && likes.length > 0 && likes.map((post) => <Post key={post._id} {...post} />)}</div>}
                         {section === "galerie" && (
                             <div className="">
                                 <Masonry className="flex flex-wrap mt-4" columnClassName="my-masonry-grid_column" breakpointCols={breakpointColumnsObj}>
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost4} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
-                                    <DiscoverPost {...tempPost3} autoPlaying={false} scaleEffect={false} />
+                                    {galerie &&
+                                        galerie.length > 0 &&
+                                        galerie.map((post) => <DiscoverPost key={post._id} {...post} autoPlaying={currentUser?.autoPlayDiaporamas || false} scaleEffect={false} />)}
                                 </Masonry>
                             </div>
                         )}
