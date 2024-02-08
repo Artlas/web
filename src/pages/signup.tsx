@@ -1,13 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../components/userContext";
 import { FaGithub, FaMicrosoft, FaGoogle, FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
 import { validatePassword, validateLogin, hashPasswordSha256, checkUserExistence } from "../utils/validators";
 import { createUserInDatabase, checkIfUserExists } from "../api/userAPI";
 import { connectUser } from "../utils/loginHandler";
+import { CategoryContext } from "../components/categoryContext";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const SignupPage: React.FC = () => {
     const { login, setSignup, setUserNeeded } = useContext(UserContext);
+    const { categoryNameList, setCategory } = useContext(CategoryContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -15,6 +18,9 @@ const SignupPage: React.FC = () => {
     const [lastName, setLastName] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [address, setAddress] = useState("");
+    const [image, setImage] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [formSubmitted, setFormSubmitted] = useState(false);
     let router = useRouter();
     interface newUser {
         id: string;
@@ -24,15 +30,33 @@ const SignupPage: React.FC = () => {
         lastName: string;
         address: string;
         birthdate: string;
+        illustration: never[];
+        favoritCat: string;
     }
     let newUser: newUser;
+
+    //#endregion
+    useEffect(() => {
+        if (selectedCategory) {
+            setCategory(selectedCategory);
+        }
+    }, [selectedCategory]);
+    //#region handles
 
     function redirect() {
         router.push("/");
     }
 
+    const handleImageChange = (event: { target: { files: any } }) => {
+        setImage(event.target.files);
+    };
+    const handleCategoryChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+        setSelectedCategory(event.target.value);
+    };
+
     const handleLogin = async (event: { preventDefault: () => void }) => {
-        event.preventDefault(); // empêche un reload
+        event.preventDefault();
+        setFormSubmitted(true);
         let hashedPassword;
         if (!validatePassword(password)) {
             alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
@@ -58,6 +82,8 @@ const SignupPage: React.FC = () => {
                 lastName: lastName,
                 address: address,
                 birthdate: birthDate,
+                illustration: image,
+                favoritCat: selectedCategory,
             };
             try {
                 await createUserInDatabase(newUser);
@@ -70,6 +96,8 @@ const SignupPage: React.FC = () => {
                 }
             } catch (error) {
                 console.error("Erreur lors de la création ou de la connexion de l'utilisateur:", error);
+            } finally {
+                setFormSubmitted(false);
             }
         }
     };
@@ -96,7 +124,7 @@ const SignupPage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-black text-black dark:text-white">
-            <div className="bg-white dark:bg-stone-900 p-2 rounded shadow-md">
+            <div className="bg-white dark:bg-stone-900 p-2 rounded shadow-md md:my-2">
                 <button
                     id="signupCloseButton"
                     className=" dark:bg-black bg-stone-100 dark:border-black border-white dark:hover:bg-stone-800 hover:bg-stone-200 dark:text-white text-black px-3 py-2 rounded-full"
@@ -195,6 +223,41 @@ const SignupPage: React.FC = () => {
                                 required
                             />
                         </div>
+                        <div className="">
+                            <label htmlFor="profilePictureSignupInput" className="block text-sm md:text-base font-bold md:font-medium mb-2">
+                                Photo de profil
+                            </label>
+                            <input
+                                type="file"
+                                id="profilePictureSignupInput"
+                                multiple={false}
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-pointer
+                            file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-1 file:border-solid file:border-black dark:file:border-white file:text-sm file:font-semibold file:bg-white dark:file:bg-black file:text-gray-700 hover:file:bg-stone-200
+                            dark:file:text-gray-100 dark:hover:file:bg-stone-800 file:cursor-pointer"
+                                required
+                            />
+                        </div>
+                        <div className="">
+                            <label htmlFor="categorySignupInput" className="block text-sm md:text-base font-bold md:font-medium mb-2">
+                                Catégorie favorite
+                            </label>
+                            <select
+                                id="categorySignupInput"
+                                value={selectedCategory}
+                                onChange={handleCategoryChange}
+                                className="shadow p-2 w-full rounded-md border bg-stone-100 dark:bg-stone-950 border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-0 focus:border-stone-500 dark:focus:border-stone-400 cursor-pointer appearance-none"
+                                required
+                            >
+                                <option value="">Choisir une catégorie</option>
+                                {categoryNameList.map((category) => (
+                                    <option key={category} value={category}>
+                                        {category.replaceAll("_", " ").replace(/^\w/, (c) => c.toUpperCase())}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         <div>
                             <label htmlFor="password" className="block font-medium">
                                 Mot de passe
@@ -216,7 +279,7 @@ const SignupPage: React.FC = () => {
                                 className="bg-black dark:bg-white border-2 rounded-md py-2 px-4 border-black dark:border-white hover:bg-stone-800 dark:hover:bg-stone-200 text-white dark:text-black focus:ring-opacity-50 focus:outline-none focus:ring-1 focus:ring-stone-500 dark:focus:ring-stone-400 "
                                 onClick={handleLogin}
                             >
-                                {"S'inscrire"}
+                                {formSubmitted ? <AiOutlineLoading3Quarters className="animate-spin h-5 w-5 mx-[22px] my-[2px]" /> : "S'inscrire"}
                             </button>
                         </div>
                     </form>

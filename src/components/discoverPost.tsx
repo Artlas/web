@@ -9,10 +9,13 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { FaHeart } from "react-icons/fa6";
 import { FaCheckCircle, FaPlusCircle, FaShareAlt } from "react-icons/fa";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { retrieveInfoUserById } from "../api/userAPI";
 
 interface DiscoverPostProps extends Oeuvre {
     autoPlaying: boolean;
     scaleEffect: boolean;
+    isLiked?: boolean;
 }
 
 const DiscoverPost: React.FC<DiscoverPostProps> = ({
@@ -30,13 +33,16 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
     author,
     likeCount,
     scaleEffect,
+    isLiked,
 }) => {
-    const [liked, setLiked] = useState(false);
+    const [liked, setLiked] = useState(isLiked || false);
     const [displayedLikeCount, setDisplayedLikeCount] = useState(likeCount);
     const [listed, setListed] = useState(false);
     const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
     const [index, setIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [imageLoading, setimageLoading] = useState(false);
+    const [imageAuthor, setImageAuthor] = useState("");
     const handleLikeClick = () => {
         setLiked(!liked);
         liked ? setDisplayedLikeCount(displayedLikeCount - 1) : setDisplayedLikeCount(displayedLikeCount + 1);
@@ -51,6 +57,22 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
         //console.log("Clique sur l'arrière-plan de la div");
         router.push(`/post/${_id}`);
     };
+
+    useEffect(() => {
+        if (!illustration || illustration.length === 0) {
+            setimageLoading(true);
+        } else {
+            setimageLoading(false);
+        }
+    }, [illustration, imageLoading]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await retrieveInfoUserById(author);
+            setImageAuthor(data.image);
+        };
+        fetchData();
+    }, [author]); // A
 
     return (
         <div className={`my-3 sm:mx-1 ${scaleEffect ? "hover:my-5" : ""} `}>
@@ -78,6 +100,10 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                     {/* Render carousel or video player based on illustration type
                 //TODO: Add a button to open the real image in full screen
                 */}
+                    {
+                        // Render carousel or video player based on illustration type
+                        imageLoading && isMediaTypeImages && <AiOutlineLoading3Quarters className="animate-spin h-10 w-10 text-gray-400 dark:text-slate-300 mx-auto my-16" />
+                    }
                     {isMediaTypeImages && illustration && (
                         <Carousel
                             showThumbs={false}
@@ -141,7 +167,13 @@ const DiscoverPost: React.FC<DiscoverPostProps> = ({
                         )}
                     </div>
                     <div className="my-1">
-                        <AuthorItem imageSrc="" authorName={author} linkToProfile={"/profile/" + author} releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined} small />
+                        <AuthorItem
+                            imageSrc={imageAuthor}
+                            authorName={author}
+                            linkToProfile={"/profile/" + author}
+                            releaseDate={releaseDate ? new Date(releaseDate).toLocaleDateString() : undefined}
+                            small
+                        />
                     </div>
 
                     <p className="text-black dark:text-white cursor-text select-none mt-1">{description}</p>

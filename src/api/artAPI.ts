@@ -11,7 +11,7 @@ import { getApiURL } from "./utilsAPI";
  */
 export const getArtBasedOnID = async (id: any) => {
     const getArtBasedOnUserID = getApiURL() + apiConfig.GET_ART_BASED_ID_ENDPOINT;
-    console.log(getArtBasedOnUserID);
+    // console.log(getArtBasedOnUserID);
     let requestBody = {
         id: id,
     };
@@ -25,9 +25,10 @@ export const getArtBasedOnID = async (id: any) => {
             body: JSON.stringify(requestBody),
         });
         const result = await response.json();
-        console.log(result);
+        // console.log(result);
         if (result.error) {
-            throw new Error(result.error);
+            console.error(result.error);
+            //throw new Error(result.error);
         }
         return result;
     } catch (error) {
@@ -69,7 +70,7 @@ export const getAllArtIDs = async () => {
 export const getArtsBasedOnIDFromDb = async (id: string) => {
     const getArtBasedOnID = getApiURL() + apiConfig.GET_ART_BASED_ID_USER_ENDPOINT;
     let requestBody = {
-        id: id,
+        author: id,
     };
     try {
         let response = await fetch(getArtBasedOnID, {
@@ -82,8 +83,7 @@ export const getArtsBasedOnIDFromDb = async (id: string) => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
         return result;
     } catch (error) {
@@ -108,8 +108,7 @@ export const getAllArt = async () => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
         return result;
     } catch (error) {
@@ -221,22 +220,23 @@ export const addArt = async (art: any, user: any) => {
 };*/ export const addArt = async (art: any, user: any) => {
     const addArt = getApiURL() + apiConfig.ADD_ART_ENDPOINT;
     let formdata = new FormData();
-    formdata.append("title",art.title);
-    formdata.append("description",art.description);
-    formdata.append("author",art.author);
-    formdata.append("category",art.category);
-    formdata.append("subCategory",art.subCategory);
-    for(let i=0;i<art.illustration.length;i++){
-        formdata.append("illustration",art.illustration[i]);
+    formdata.append("title", art.title);
+    formdata.append("description", art.description);
+    formdata.append("author", art.author);
+    formdata.append("category", art.category);
+    formdata.append("subCategory", art.subCategory);
+    for (let i = 0; i < art.illustration.length; i++) {
+        formdata.append("illustration", art.illustration[i]);
     }
-    formdata.append("video",art.video);
-    formdata.append("isMediaTypeImages",art.isMediaTypeImages);
-    formdata.append("toSell",art.toSell);
-    formdata.append("price",art.price);
-    formdata.append("linkToBuy",art.linkToBuy);
-    formdata.append("canTchat",art.canTchat);
-    formdata.append("releaseDate",art.releaseDate);
-    formdata.append("postDate",art.postDate);
+    formdata.append("video", art.video);
+    formdata.append("isMediaTypeImages", art.isMediaTypeImages);
+    formdata.append("toSell", art.toSell);
+    formdata.append("price", art.price);
+    formdata.append("linkToBuy", art.linkToBuy);
+    formdata.append("canTchat", art.canTchat);
+    formdata.append("releaseDate", art.releaseDate);
+    formdata.append("postDate", art.postDate);
+    formdata.append("isInGallery", art.isInGallery);
 
     try {
         let response = await fetch(addArt, {
@@ -246,8 +246,7 @@ export const addArt = async (art: any, user: any) => {
         });
         const result = await response.json();
         if (result.error) {
-            alert(result.error);
-            throw new Error(result.error);
+            console.log(result.error);
         }
         return result;
     } catch (error) {
@@ -340,6 +339,39 @@ export const checkIfArtExist = async (id: string, userId: any) => {
         return result;
     } catch (error) {
         console.error("Erreur lors de la vérification de l'oeuvre d'art:", error);
+        throw error;
+    }
+};
+
+export const getArtLikedByUser = async (userId: string) => {
+    const getArtLikedByUser = getApiURL() + apiConfig.GET_ART_LIKED_BY_USER_ENDPOINT;
+    let requestBody = {
+        userId: userId,
+    };
+    try {
+        let response = await fetch(getArtLikedByUser, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+        let result;
+        if (response.status == 201) {
+            console.log(response);
+            result = await response.json();
+        }
+        if (response.status == 401) {
+            return undefined;
+        }
+        console.log(result);
+        if (result.error) {
+            alert(result.error);
+        }
+        return result;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des oeuvres d'arts:", error);
         throw error;
     }
 };

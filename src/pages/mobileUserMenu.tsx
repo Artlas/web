@@ -29,8 +29,7 @@ export default function MobileUserMenu({}: Props) {
         <div className={`container xl:max-w-4xl mx-auto bg-stone-100 dark:bg-stone-950 text-black dark:text-white rounded-md border-2 border-solid  border-stone-200 dark:border-stone-800 py-4 ${""}`}>
             <div className="px-2 justify-center w-full">
                 <ListElement icon={<FaUser className="mr-2" size={25} />} label="Profil" content={<IoMdArrowRoundForward size={30} />} href="/profile" />
-                <ListElement icon={<FaUserFriends className="mr-2" size={25} />} label="Amis" content={<IoMdArrowRoundForward size={30} />} href="/amis" />
-                <ListElement icon={<FaTableList className="mr-2" size={25} />} label="Mes listes" content={<IoMdArrowRoundForward size={30} />} href="/mylists" />
+                <ListElement icon={<FaUserFriends className="mr-2" size={25} />} label="Abonnements" content={<IoMdArrowRoundForward size={30} />} href="/abonnements" />
                 <ListElement icon={<FaCog className="mr-2" size={25} />} label="Paramètres" content={<IoMdArrowRoundForward size={30} />} href="/settings" />
                 <button id="mobileLogoutButton" type="button" onClick={() => handleLogout()} className="w-full text-red-700 dark:text-red-400">
                     <ListElement icon={<FaUserSlash className="mr-2" size={25} />} label="Déconnexion" content={<FaDoorOpen size={30} />} hideBar={true} />
