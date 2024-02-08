@@ -67,22 +67,22 @@ export default function Profile({ user }: any) {
                 let data = await getArtOfArtistBasedOnId(user?.id || "");
                 sortPostsByMostRecentPostDate(data);
                 setPosts(data);
-                console.log("Posts:", data);
+                // console.log("Posts:", data);
                 data = await retrieveArtLikedByUser(user?.id || "");
 
                 if (data !== undefined && data.length > 0) {
                     sortPostsByMostRecentPostDate(data);
                     setLikes(data);
-                    console.log("Likes:", data);
+                    // console.log("Likes:", data);
                 } else {
-                    console.log("No likes found");
+                    // console.log("No likes found");
                 }
             };
             fetchData();
         }
         if (currentUser && currentUser.following !== undefined) {
             setFollowing(currentUser.following.includes(user?.id));
-            console.log("Utilisateurs suivis:", currentUser.following);
+            // console.log("Utilisateurs suivis:", currentUser.following);
         }
     }, []);
 
@@ -95,7 +95,7 @@ export default function Profile({ user }: any) {
                 });
                 sortPostsByMostRecentPostDate(data);
                 setGalerie(data);
-                console.log("Galerie:", data);
+                // console.log("Galerie:", data);
             };
             fetchData();
         }

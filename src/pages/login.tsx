@@ -24,9 +24,9 @@ const LoginPage: React.FC = () => {
                 alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
                 return;
             } else {
-                console.log("Password validated");
+                // console.log("Password validated");
                 hashedPassword = hashPasswordSha256(password);
-                console.log(hashedPassword);
+                // console.log(hashedPassword);
             }
             if (validateLogin(username)) {
                 connectUser(hashedPassword, username)

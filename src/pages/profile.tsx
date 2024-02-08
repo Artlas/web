@@ -51,15 +51,15 @@ export default function Profile() {
                 if (data !== undefined) {
                     sortPostsByMostRecentPostDate(data);
                     setPosts(data);
-                    console.log("Posts:", data);
+                    // console.log("Posts:", data);
                 } else {
-                    console.log("No posts found");
+                    // console.log("No posts found");
                 }
                 data = await retrieveArtLikedByUser(user?.username || "");
                 if (data !== undefined) {
                     sortPostsByMostRecentPostDate(data);
                     setLikes(data);
-                    console.log("Likes:", data);
+                    // console.log("Likes:", data);
                 } else {
                     console.log("No liked posts found");
                 }
@@ -77,7 +77,7 @@ export default function Profile() {
                 });
                 sortPostsByMostRecentPostDate(data);
                 setGalerie(data);
-                console.log("Galerie:", data);
+                // console.log("Galerie:", data);
             };
             fetchData();
         }

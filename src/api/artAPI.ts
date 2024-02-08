@@ -11,7 +11,7 @@ import { getApiURL } from "./utilsAPI";
  */
 export const getArtBasedOnID = async (id: any) => {
     const getArtBasedOnUserID = getApiURL() + apiConfig.GET_ART_BASED_ID_ENDPOINT;
-    console.log(getArtBasedOnUserID);
+    // console.log(getArtBasedOnUserID);
     let requestBody = {
         id: id,
     };
@@ -25,9 +25,9 @@ export const getArtBasedOnID = async (id: any) => {
             body: JSON.stringify(requestBody),
         });
         const result = await response.json();
-        console.log(result);
+        // console.log(result);
         if (result.error) {
-            console.log(result.error);
+            console.error(result.error);
             //throw new Error(result.error);
         }
         return result;

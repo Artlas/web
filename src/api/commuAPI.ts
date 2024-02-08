@@ -3,7 +3,6 @@ import apiConfig from "./apiConfig.json";
 
 export const followArtist = async (id: string, user: any) => {
     const followArtistEndpoint = getApiURL() + apiConfig.FOLLOW_ARTIST_ENDPOINT;
-    console.log("In follow");
     let requestBody = {
         artistId: id,
         userId: user.username,
@@ -29,7 +28,6 @@ export const followArtist = async (id: string, user: any) => {
 };
 export const unfollowArtist = async (id: string, user: any) => {
     const unfollowArtistEndpoint = getApiURL() + apiConfig.UNFOLLOW_ARTIST_ENDPOINT;
-    console.log("In unfollow");
     let requestBody = {
         artistId: id,
         userId: user.username,

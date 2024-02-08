@@ -91,8 +91,8 @@ export const UserProvider: React.FC = ({ children }: any) => {
         setPreferredTheme(user.preferredTheme || "system");
         setTheme(user.preferredTheme || "system");
 
-        console.log("Login successful with username: " + user.username + " and email: " + user.email);
-        console.log("User info: ", user);
+        // console.log("Login successful with username: " + user.username + " and email: " + user.email);
+        // console.log("User info: ", user);
     };
     const ssoLogin = (userInfo: UserInfo) => {
         setUser(userInfo);
