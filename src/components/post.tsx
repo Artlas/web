@@ -33,14 +33,6 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
         router.push(`/post/${_id}`);
     };
 
-    const handleOpenImage = () => {
-        // open the selected image in full screen
-        if (illustration) {
-            let image = illustration[index];
-            window.open("data:image/png;base64," + image.toString("base64"));
-        }
-    };
-
     useEffect(() => {
         if (!illustration || illustration.length === 0) {
             setimageLoading(true);
@@ -110,15 +102,15 @@ const Post: React.FC<Oeuvre> = ({ _id, title, description, category, subCategory
                     imageLoading && isMediaTypeImages && <AiOutlineLoading3Quarters className="animate-spin h-10 w-10 text-gray-400 dark:text-slate-300 mx-auto my-16" />
                 }
                 {isMediaTypeImages && illustration ? (
-                    <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} showArrows={true} emulateTouch={true} dynamicHeight={true} onClickItem={handleOpenImage}>
+                    <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} showArrows={true} emulateTouch={true} dynamicHeight={true}>
                         {illustration.map((image, index) => (
-                            <div key={index} className="cursor-alias">
+                            <div key={index}>
                                 <Image
                                     src={"data:image/*;base64," + image}
                                     alt={`Illustration ${index + 1}`}
                                     width={500}
                                     height={500}
-                                    className={`w-auto h-auto max-h-64 sm:max-h-96 max-w-full object-contain cursor-alias ${imageLoading ? "" : "hidden"}`}
+                                    className={`w-auto h-auto max-h-64 sm:max-h-96 max-w-full object-contain  ${imageLoading ? "" : "hidden"}`}
                                     onLoad={() => setimageLoading(true)}
                                 />
                             </div>
